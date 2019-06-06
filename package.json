@@ -1,0 +1,25 @@
+{
+  "name": "csci4177",
+  "version": "1.0.0",
+  "description": "Group project for CSCI4177 Advanced Web Services @ Dalhousie University",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "author": "kirby",
+  "license": "ISC",
+  "dependencies": {
+    "@zeit/next-css": "^1.0.1",
+    "bootstrap": "^4.3.1",
+    "jquery": "^3.4.1",
+    "next": "^8.1.0",
+    "react": "^16.8.6",
+    "react-bootstrap": "^1.0.0-beta.8",
+    "react-dom": "^16.8.6",
+    "react-dropzone": "^10.1.5",
+    "react-toastify": "^5.2.1",
+    "superagent": "^5.0.5"
+  }
+}

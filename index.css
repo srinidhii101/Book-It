@@ -1,0 +1,135 @@
+/* input global styles here */
+.defaultContainer {
+  min-height: 100vh;
+}
+
+.mt-16 {
+  margin-top: 2rem;
+}
+
+.mt-8 {
+  margin-top: 1rem;
+}
+
+.mb-8 {
+  margin-bottom: 1rem;
+}
+
+.m-0 {
+  margin: 0;
+}
+
+.pb-16 {
+  padding-bottom: 1rem;
+}
+
+/* Navigation Header */
+.offsetNavigationHeader {
+  padding-top: 56px;
+  min-height: calc(100vh - 56px);
+}
+
+.navigationFooter {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.navigationFooterLink {
+  margin-right: .5rem;
+}
+
+.navigationFooter nav {
+  justify-content: flex-end;
+}
+
+/* Index (Landing) Page */
+.landingPageHr {
+  width: 80%;
+  margin-top: 2rem;
+}
+
+.landingPageListTitle {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.backgroundImage {
+  background: url("https://via.placeholder.com/150") no-repeat center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+/* Login Form */
+.loginContainer {
+  min-height: calc(100vh - 56px);
+  margin-top: -56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loginForm {
+  width: 420px;
+  padding: 3rem;
+}
+
+.loginFormTitle {
+  text-align: center;
+}
+
+.loginButtons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.loginButton {
+  margin-left: .5rem;
+}
+
+/* Services Form */
+.searchResultList {
+  max-height: calc(100vh - (254px + 1rem) );
+  min-height: 380px;
+  overflow-y: scroll;
+}
+
+.searchContentContainer {
+  min-height: 400px;
+  overflow-y: scroll;
+  border-right: .5px solid #eee;
+}
+
+.searchResultContainer {
+  padding-bottom: 1rem;
+}
+
+.serviceNav.nav {
+  padding: 0 15px 0 15px;
+}
+
+.serviceImage {
+  height: 300px;
+  max-width: 680px;
+  width: 100%;
+}
+
+.serviceDescription {
+  max-width: 480px;
+  width: 100%;
+}
+
+.dropArea {
+  border: 2px dashed #eee;
+  background-color: #eeeeee8c;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.dropAreaImage {
+  width: 100%;
+}
