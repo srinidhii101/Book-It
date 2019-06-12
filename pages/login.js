@@ -1,9 +1,9 @@
 /* Login Page */
 import DefaultLayout from '../layouts/default';
-import { isValidPassword } from '../functions/validate';
+import { isValidPassword, isEmptyString } from '../functions/validate';
 
 import Link from 'next/link';
-import { Form, Button, Col } from 'react-bootstrap';
+import { Form, Button, Col, FormGroup, Input, FormFeedback, Label } from 'reactstrap';
 import Router from 'next/router';
 
 class Login extends React.Component {
@@ -45,51 +45,54 @@ class Login extends React.Component {
           <Form
           className="loginForm"
           noValidate
+          validated={(isEmptyString(this.state.username) && isValidPassword(this.state.password)).toString()}
           onSubmit={e => this.handleSubmit(e)} >
 
             {/* Title */}
-            <Form.Group controlId="formTitle" className="loginFormTitle">
+            <FormGroup className="loginFormTitle">
               <h1>Welcome Back!</h1>
-            </Form.Group>
+            </FormGroup>
 
             {/* Username */}
-            <Form.Group controlId="formEmail">
-              <Form.Label>Username</Form.Label>
-              <Form.Control
+            <FormGroup>
+              <Label>Username</Label>
+              <Input
                 type="text"
                 placeholder="Enter username"
                 required
                 autoFocus
-                isInvalid={this.state.username.length < 1}
+                valid={!isEmptyString(this.state.username)}
+                invalid={isEmptyString(this.state.username)}
                 onChange={this.handleUsernameChange} />
-              <Form.Control.Feedback type="invalid">
-                  Please enter a username.
-              </Form.Control.Feedback>
-            </Form.Group>
+              <FormFeedback type="invalid">
+                Please enter a username.
+              </FormFeedback>
+            </FormGroup>
 
             {/* Password */}
-            <Form.Group controlId="formPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
+            <FormGroup>
+              <Label>Password</Label>
+              <Input
                 type="password"
                 placeholder="Password"
                 required
-                isInvalid={!isValidPassword(this.state.password)}
+                valid={isValidPassword(this.state.password)}
+                invalid={!isValidPassword(this.state.password)}
                 onChange={this.handlePasswordChange} />
-              <Form.Control.Feedback type="invalid">
-                  Please enter a password.
-              </Form.Control.Feedback>
-            </Form.Group>
+              <FormFeedback type="invalid">
+                Please enter a password.
+              </FormFeedback>
+            </FormGroup>
 
             {/* Register and Login Buttons */}
             <div className="loginButtons">
               <Link href="/register">
-                <Button variant="link" type="button">
+                <Button color="link" type="button">
                   Register
                 </Button>
               </Link>
               <Button
-                variant="primary"
+                color="primary"
                 type="submit"
                 className="loginButton">
                 Login

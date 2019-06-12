@@ -4,8 +4,7 @@
 import DefaultLayout from "../layouts/default";
 
 //importing modules
-import Link from 'next/link';
-import { Container, Row, Col, ListGroup, Card, Button } from 'react-bootstrap';
+import { Container, Row, Col, ListGroup, Card, Button, CardBody, CardText, CardTitle, ListGroupItem } from 'reactstrap';
 
 //The file structure for the landing page
 function Index() {
@@ -17,100 +16,100 @@ function Index() {
           <Row>
             <Col className="mt-16">
               <Card>
-                <Card.Body className="backgroundImage">
-                  <Card.Title>Car Repair</Card.Title>
-                  <Card.Text>
+                <CardBody className="backgroundImage">
+                  <CardTitle>Car Repair</CardTitle>
+                  <CardText>
                     Some quick example text to build on the card title and make up the bulk of
                     the card's content.
-                  </Card.Text>
-                  <Button variant="primary">View Service</Button>
-                </Card.Body>
+                  </CardText>
+                  <Button color="primary">View Service</Button>
+                </CardBody>
               </Card>
             </Col>
             <Col className="mt-16">
               <Card>
-                <Card.Body className="backgroundImage">
-                  <Card.Title>Carpentry</Card.Title>
-                  <Card.Text>
+                <CardBody className="backgroundImage">
+                  <CardTitle>Carpentry</CardTitle>
+                  <CardText>
                     Some quick example text to build on the card title and make up the bulk of
                     the card's content.
-                  </Card.Text>
-                  <Button variant="primary">View Service</Button>
-                </Card.Body>
+                  </CardText>
+                  <Button color="primary">View Service</Button>
+                </CardBody>
               </Card>
             </Col>
             <Col className="mt-16">
               <Card>
-                <Card.Body className="backgroundImage">
-                  <Card.Title>Landscaping</Card.Title>
-                  <Card.Text>
+                <CardBody className="backgroundImage">
+                  <CardTitle>Landscaping</CardTitle>
+                  <CardText>
                     Some quick example text to build on the card title and make up the bulk of
                     the card's content.
-                  </Card.Text>
-                  <Button variant="primary">View Service</Button>
-                </Card.Body>
+                  </CardText>
+                  <Button color="primary">View Service</Button>
+                </CardBody>
               </Card>
             </Col>
             <Col className="mt-16">
               <Card>
-                <Card.Body className="backgroundImage">
-                  <Card.Title>Cleaning</Card.Title>
-                  <Card.Text>
+                <CardBody className="backgroundImage">
+                  <CardTitle>Cleaning</CardTitle>
+                  <CardText>
                     Some quick example text to build on the card title and make up the bulk of
                     the card's content.
-                  </Card.Text>
-                  <Button variant="primary">View Service</Button>
-                </Card.Body>
+                  </CardText>
+                  <Button color="primary">View Service</Button>
+                </CardBody>
               </Card>
             </Col>
           </Row>
           <Row>
             <Col className="mt-16">
               <Card>
-                <Card.Body className="backgroundImage">
-                  <Card.Title>Techical Support</Card.Title>
-                  <Card.Text>
+                <CardBody className="backgroundImage">
+                  <CardTitle>Techical Support</CardTitle>
+                  <CardText>
                     Some quick example text to build on the card title and make up the bulk of
                     the card's content.
-                  </Card.Text>
-                  <Button variant="primary">View Service</Button>
-                </Card.Body>
+                  </CardText>
+                  <Button color="primary">View Service</Button>
+                </CardBody>
               </Card>
             </Col>
             <Col>
               <Card className="mt-16">
-                <Card.Body className="backgroundImage">
-                  <Card.Title>Consulting</Card.Title>
-                  <Card.Text>
+                <CardBody className="backgroundImage">
+                  <CardTitle>Consulting</CardTitle>
+                  <CardText>
                     Some quick example text to build on the card title and make up the bulk of
                     the card's content.
-                  </Card.Text>
-                  <Button variant="primary">View Service</Button>
-                </Card.Body>
+                  </CardText>
+                  <Button color="primary">View Service</Button>
+                </CardBody>
               </Card>
             </Col>
             <Col>
               <Card className="mt-16">
-                <Card.Body className="backgroundImage">
-                  <Card.Title>Haircuts</Card.Title>
-                  <Card.Text>
+                <CardBody className="backgroundImage">
+                  <CardTitle>Haircuts</CardTitle>
+                  <CardText>
                     Some quick example text to build on the card title and make up the bulk of
                     the card's content.
-                  </Card.Text>
-                  <Button variant="primary">View Service</Button>
-                </Card.Body>
+                  </CardText>
+                  <Button color="primary">View Service</Button>
+                </CardBody>
               </Card>
             </Col>
             <Col>
               <Card className="mt-16">
-                <Card.Body className="backgroundImage">
-                  <Card.Title>Spa</Card.Title>
-                  <Card.Text>
+                <CardBody className="backgroundImage">
+                  <CardTitle>Spa</CardTitle>
+                  <CardText>
                     Some quick example text to build on the card title and make up the bulk of
                     the card's content.
-                  </Card.Text>
-                  <Button variant="primary">View Service</Button>
-                </Card.Body>
+                  </CardText>
+                  <Button color="primary">View Service</Button>
+                </CardBody>
               </Card>
             </Col>
           </Row>
@@ -124,25 +123,25 @@ function Index() {
           <Col className="mt-16">
             <ListGroup>
               <label className="landingPageListTitle text-muted">Popular Services</label>
-              <ListGroup.Item action>Landscaping</ListGroup.Item>
-              <ListGroup.Item action>Haircuts</ListGroup.Item>
-              <ListGroup.Item action>Techical Support</ListGroup.Item>
+              <ListGroupItem action>Landscaping</ListGroupItem>
+              <ListGroupItem action>Haircuts</ListGroupItem>
+              <ListGroupItem action>Techical Support</ListGroupItem>
             </ListGroup>
           </Col>
             <Col className="mt-16">
               <ListGroup>
                 <label className="landingPageListTitle text-muted">Recently Requested</label>
-                <ListGroup.Item action>Henry's Haircuts</ListGroup.Item>
-                <ListGroup.Item action>Tashi's Tech</ListGroup.Item>
-                <ListGroup.Item action>Carter's Carpentry</ListGroup.Item>
+                <ListGroupItem action>Henry's Haircuts</ListGroupItem>
+                <ListGroupItem action>Tashi's Tech</ListGroupItem>
+                <ListGroupItem action>Carter's Carpentry</ListGroupItem>
               </ListGroup>
             </Col>
             <Col className="mt-16">
               <ListGroup>
                 <label className="landingPageListTitle text-muted">Newly Posted</label>
-                <ListGroup.Item action>Larry's Landscaping</ListGroup.Item>
-                <ListGroup.Item action>Carol's Consulting</ListGroup.Item>
-                <ListGroup.Item action>Clare's Cleaning</ListGroup.Item>
+                <ListGroupItem action>Larry's Landscaping</ListGroupItem>
+                <ListGroupItem action>Carol's Consulting</ListGroupItem>
+                <ListGroupItem action>Clare's Cleaning</ListGroupItem>
               </ListGroup>
             </Col>
           </Row>

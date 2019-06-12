@@ -1,5 +1,5 @@
 {
-  "name": "csci4177",
+  "name": "Book-it",
   "version": "1.0.0",
   "description": "Group project for CSCI4177 Advanced Web Services @ Dalhousie University",
   "main": "index.js",
@@ -9,6 +9,10 @@
     "start": "next start"
   },
   "author": "kirby",
+  "repository": {
+    "type": "git",
+    "url": "https://git.cs.dal.ca/khackett/book-it.git"
+  },
   "license": "ISC",
   "dependencies": {
     "@zeit/next-css": "^1.0.1",
@@ -20,6 +24,7 @@
     "react-dom": "^16.8.6",
     "react-dropzone": "^10.1.5",
     "react-toastify": "^5.2.1",
+    "reactstrap": "^8.0.0",
     "superagent": "^5.0.5"
   }
 }

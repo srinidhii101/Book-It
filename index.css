@@ -24,6 +24,10 @@
 }
 
 /* Navigation Header */
+.nav-link, .navbar-brand {
+  cursor: pointer;
+}
+
 .offsetNavigationHeader {
   padding-top: 56px;
   min-height: calc(100vh - 56px);

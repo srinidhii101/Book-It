@@ -1,9 +1,10 @@
 /* Register Page */
 import DefaultLayout from '../layouts/default';
-import { isValidEmail, isValidPassword } from '../functions/validate';
+import { isValidEmail, isValidPassword, isEmptyString } from '../functions/validate';
 
 import Link from 'next/link';
-import { Form, Button, Col } from 'react-bootstrap';
+// import { Form, Button, Col } from 'react-bootstrap';
+import { Form, Button, Col, FormGroup, Label, Input, FormFeedback } from 'reactstrap';
 import Router from 'next/router';
 
 class Register extends React.Component {
@@ -52,66 +53,69 @@ class Register extends React.Component {
           <Form
           className="loginForm"
           noValidate
-          validated={this.state.username.length < 1 && isValidEmail(this.state.email) && isValidPassword(this.state.oassword)}
+          validated={(isEmptyString(this.state.username) && isValidEmail(this.state.email) && isValidPassword(this.state.password)).toString()}
           onSubmit={e => this.handleSubmit(e)} >
 
             {/* Title */}
-            <Form.Group controlId="formTitle" className="loginFormTitle">
+            <FormGroup className="loginFormTitle">
               <h1>Register with Book it!</h1>
-            </Form.Group>
+            </FormGroup>
 
             {/* Username */}
-            <Form.Group controlId="formUsername">
-              <Form.Label>Username</Form.Label>
-              <Form.Control
+            <FormGroup>
+              <Label>Username</Label>
+              <Input
                 type="text"
                 placeholder="Username"
                 required
                 autoFocus
-                isInvalid={this.state.username.length < 1}
+                valid={!isEmptyString(this.state.username)}
+                invalid={isEmptyString(this.state.username)}
                 onChange={this.handleUsernameChange} />
-              <Form.Control.Feedback type="invalid">
+              <FormFeedback type="invalid">
                   Please enter a username.
-              </Form.Control.Feedback>
-            </Form.Group>
+              </FormFeedback>
+            </FormGroup>
 
             {/* Username */}
-            <Form.Group controlId="formEmail">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
+            <FormGroup>
+              <Label>Email</Label>
+              <Input
                 type="email"
                 placeholder="example@bookit.com"
-                isInvalid={!isValidEmail(this.state.email)}
+                valid={isValidEmail(this.state.email)}
+                invalid={!isValidEmail(this.state.email)}
                 required
                 onChange={this.handleEmailChange} />
-              <Form.Control.Feedback type="invalid">
+              <FormFeedback type="invalid">
                   Please enter a valid email.
-              </Form.Control.Feedback>
-            </Form.Group>
+              </FormFeedback>
+            </FormGroup>
 
             {/* Password */}
-            <Form.Group controlId="formPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
+            <FormGroup>
+              <Label>Password</Label>
+              <Input
                 type="password"
                 placeholder="Password"
                 required
-                isInvalid={!isValidPassword(this.state.password)}
+                valid={isValidPassword(this.state.password)}
+                invalid={!isValidPassword(this.state.password)}
                 onChange={this.handlePasswordChange} />
-              <Form.Control.Feedback type="invalid">
+              <FormFeedback type="invalid">
                   Passwords must be 8 characters while containing one number and one letter.
-              </Form.Control.Feedback>
-            </Form.Group>
+              </FormFeedback>
+            </FormGroup>
 
             {/* Register and Login Buttons */}
             <div className="loginButtons">
               <Link href="/login">
-                <Button variant="link" type="button">
+                <Button color="link" type="button">
                   Login
                 </Button>
               </Link>
               <Button
-                variant="primary"
+                color="primary"
                 type="submit"
                 className="loginButton">
                 Sign up

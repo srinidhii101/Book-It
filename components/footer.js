@@ -1,15 +1,11 @@
-import { Navbar, Nav } from 'react-bootstrap';
+import { Navbar, NavItem, NavLink } from 'reactstrap';
 
 //Footer structure
 function Footer() {
   return (
     <div className="navigationFooter">
-      <Navbar collapseOnSelect expand="lg" sticky="bottom">
-        <Nav className="flex justify-content-end">
-          <Nav.Item>
-            <Nav.Link eventKey="link-1" className="navigationFooterLink">&copy; 2019 Book it</Nav.Link>
-          </Nav.Item>
-        </Nav>
+      <Navbar sticky={"bottom"}>
+        <NavLink disabled>&copy; 2019 Book it</NavLink>
       </Navbar>
     </div>
   );
