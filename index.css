@@ -11,12 +11,20 @@
   margin-top: 1rem;
 }
 
+.mb-16 {
+  margin-bottom: 2rem;
+}
+
 .mb-8 {
   margin-bottom: 1rem;
 }
 
 .m-0 {
   margin: 0;
+}
+
+.m-auto {
+  margin: auto;
 }
 
 .pb-16 {

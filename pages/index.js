@@ -4,111 +4,75 @@
 import DefaultLayout from "../layouts/default";
 
 //importing modules
-import { Container, Row, Col, ListGroup, Card, Button, CardBody, CardText, CardTitle, ListGroupItem } from 'reactstrap';
-
+import { Container, Jumbotron, Row, Col, ListGroup, Card, Button, CardBody, CardText, CardHeader, CardTitle, ListGroupItem } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTools, faPeopleCarry, faHeartbeat, faCalendarDay, faRecycle, faChalkboardTeacher } from '@fortawesome/free-solid-svg-icons'
 //The file structure for the landing page
 function Index() {
   return (
     <div>
       <DefaultLayout>
+        <Jumbotron>
+          <Container>
+            <h1 className="display-4">Find a service</h1>
+            <hr className="my-2" />
+            <p>Browse the latest Haligonian services offered in areas from Auto Repair to tutoring.
+            Our add-free e-commerce platform will get you access to your favourite services in no time.</p>
+            <p className="lead">
+              <Button color="primary">Browse Services</Button>
+            </p>
+          </Container>
+        </Jumbotron>
         {/* Top display items */}
         <Container className="container-fluid">
           <Row>
-            <Col className="mt-16">
+            <Col className="mt-8">
               <Card>
-                <CardBody className="backgroundImage">
-                  <CardTitle>Car Repair</CardTitle>
-                  <CardText>
-                    Some quick example text to build on the card title and make up the bulk of
-                    the card's content.
-                  </CardText>
-                  <Button color="primary">View Service</Button>
+                <CardHeader>Repair</CardHeader>
+                <CardBody className="m-auto">
+                  <FontAwesomeIcon icon={faTools} size="6x"/>
                 </CardBody>
               </Card>
             </Col>
-            <Col className="mt-16">
+            <Col className="mt-8">
               <Card>
-                <CardBody className="backgroundImage">
-                  <CardTitle>Carpentry</CardTitle>
-                  <CardText>
-                    Some quick example text to build on the card title and make up the bulk of
-                    the card's content.
-                  </CardText>
-                  <Button color="primary">View Service</Button>
+                <CardHeader>Transport</CardHeader>
+                <CardBody className="m-auto">
+                  <FontAwesomeIcon icon={faPeopleCarry} size="6x"/>
                 </CardBody>
               </Card>
             </Col>
-            <Col className="mt-16">
+            <Col className="mt-8">
               <Card>
-                <CardBody className="backgroundImage">
-                  <CardTitle>Landscaping</CardTitle>
-                  <CardText>
-                    Some quick example text to build on the card title and make up the bulk of
-                    the card's content.
-                  </CardText>
-                  <Button color="primary">View Service</Button>
-                </CardBody>
-              </Card>
-            </Col>
-            <Col className="mt-16">
-              <Card>
-                <CardBody className="backgroundImage">
-                  <CardTitle>Cleaning</CardTitle>
-                  <CardText>
-                    Some quick example text to build on the card title and make up the bulk of
-                    the card's content.
-                  </CardText>
-                  <Button color="primary">View Service</Button>
+                <CardHeader>Health</CardHeader>
+                <CardBody className="m-auto">
+                  <FontAwesomeIcon icon={faHeartbeat} size="6x"/>
                 </CardBody>
               </Card>
             </Col>
           </Row>
           <Row>
-            <Col className="mt-16">
+            <Col className="mt-8">
               <Card>
-                <CardBody className="backgroundImage">
-                  <CardTitle>Techical Support</CardTitle>
-                  <CardText>
-                    Some quick example text to build on the card title and make up the bulk of
-                    the card's content.
-                  </CardText>
-                  <Button color="primary">View Service</Button>
+                <CardHeader>Event Planning</CardHeader>
+                <CardBody className="m-auto">
+                  <FontAwesomeIcon icon={faCalendarDay} size="6x"/>
                 </CardBody>
               </Card>
             </Col>
-            <Col>
-              <Card className="mt-16">
-                <CardBody className="backgroundImage">
-                  <CardTitle>Consulting</CardTitle>
-                  <CardText>
-                    Some quick example text to build on the card title and make up the bulk of
-                    the card's content.
-                  </CardText>
-                  <Button color="primary">View Service</Button>
+            <Col className="mt-8">
+              <Card>
+                <CardHeader>Cleaning</CardHeader>
+                <CardBody className="m-auto">
+                  <FontAwesomeIcon icon={faRecycle} size="6x"/>
                 </CardBody>
               </Card>
             </Col>
-            <Col>
-              <Card className="mt-16">
-                <CardBody className="backgroundImage">
-                  <CardTitle>Haircuts</CardTitle>
-                  <CardText>
-                    Some quick example text to build on the card title and make up the bulk of
-                    the card's content.
-                  </CardText>
-                  <Button color="primary">View Service</Button>
-                </CardBody>
-              </Card>
-            </Col>
-            <Col>
-              <Card className="mt-16">
-                <CardBody className="backgroundImage">
-                  <CardTitle>Spa</CardTitle>
-                  <CardText>
-                    Some quick example text to build on the card title and make up the bulk of
-                    the card's content.
-                  </CardText>
-                  <Button color="primary">View Service</Button>
+            <Col className="mt-8">
+              <Card>
+                <CardHeader>Tutoring</CardHeader>
+                <CardBody className="m-auto">
+                  <FontAwesomeIcon icon={faChalkboardTeacher} size="6x"/>
                 </CardBody>
               </Card>
             </Col>
@@ -118,7 +82,7 @@ function Index() {
         <hr className="landingPageHr"></hr>
 
         {/* Bottom display lists */}
-        <Container className="container-fluid">
+        <Container className="container-fluid mb-16">
           <Row>
           <Col className="mt-16">
             <ListGroup>

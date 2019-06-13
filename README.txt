@@ -68,3 +68,7 @@ https://react-bootstrap.github.io/
 
 https://www.kijiji.ca/
 - Used as a point of reference since the website offers similar services
+
+https://github.com/FortAwesome/react-fontawesome
+- Icons for the application
+- in the index page, for the promoted services
