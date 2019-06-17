@@ -1,5 +1,21 @@
-Kirby Hackett
-B00733131
+Team Book-it
+
+Members:
+Kirby Hackett - B00733131
+
+1. Starting up the application
+  a. For development
+    - "npm run dev"
+  b. Check production version
+    = "npm run build"
+    - "npm run start"
+  c. Host on remote server (for our production build)
+    - after signing up for github and linking your account to zeit "now login"
+    - "npm run now-build"
+    - "now"
+    - if you want it to run at another address "now alias **OLD_URL** **NEW_NAME"
+      + ex: "now alias https://book-it.kirbyhackett.now.sh book-it"
+
 
 This project can be accessed at the following URL
 - http://bluenose.cs.dal.ca:15057/
@@ -72,3 +88,6 @@ https://www.kijiji.ca/
 https://github.com/FortAwesome/react-fontawesome
 - Icons for the application
 - in the index page, for the promoted services
+
+https://github.com/zeit/now-builders/issues/155#issuecomment-470932812
+Learning how to deploy using next.js and now command.
