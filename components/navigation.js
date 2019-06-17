@@ -38,23 +38,30 @@ export default class Navigation extends React.Component {
          <Navbar color="primary" dark expand="md" fixed={'top'}>
            <Link href="/">
              <NavbarBrand className="text-light">
-                <FontAwesomeIcon icon={faAddressBook} className="mr-2"/>Book it!
+                <FontAwesomeIcon icon={faAddressBook} className="mr-2 logo-icon"/>Book it!
              </NavbarBrand>
            </Link>
            <NavbarToggler onClick={this.toggle} />
            <Collapse isOpen={this.state.isOpen} navbar>
              <Nav className="ml-auto" navbar>
                <NavItem>
-                  <Link href="/services">
+                  <Link href="/admin">
                       <NavLink>
-                        Services
+                        Admin
                       </NavLink>
                   </Link>
                </NavItem>
                <NavItem>
                   <Link href="/browse">
-                      <NavLink disabled>
+                      <NavLink>
                         Browse
+                      </NavLink>
+                  </Link>
+               </NavItem>
+               <NavItem>
+                  <Link href="/services">
+                      <NavLink>
+                        Services
                       </NavLink>
                   </Link>
                </NavItem>
@@ -63,14 +70,14 @@ export default class Navigation extends React.Component {
                    Account
                  </DropdownToggle>
                  <DropdownMenu right>
-                   <Link href="/login">
+                   <Link href="/cart">
                      <DropdownItem>
-                      <a>Login</a>
+                      <a>Cart</a>
                      </DropdownItem>
                    </Link>
-                   <Link href="/register">
+                   <Link href="/checkout">
                      <DropdownItem>
-                      <a>Register</a>
+                      <a>Checkout</a>
                      </DropdownItem>
                    </Link>
                    <Link href="/orders">
@@ -79,16 +86,15 @@ export default class Navigation extends React.Component {
                      </DropdownItem>
                    </Link>
 
-                   <DropdownItem divider />
-
-                   <Link href="/admin">
-                     <DropdownItem disabled>
-                      <a>Admin</a>
-                     </DropdownItem>
-                   </Link>
-
                  </DropdownMenu>
                </UncontrolledDropdown>
+               <NavItem>
+                  <Link href="/register">
+                      <NavLink>
+                        Register
+                      </NavLink>
+                  </Link>
+               </NavItem>
              </Nav>
            </Collapse>
          </Navbar>

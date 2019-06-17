@@ -1,0 +1,7 @@
+After installing the application...
+now login (you may have to create a github account and hook it up to zeit)
+1. npm run now-build
+2. npm now
+
+If you want to run it at an alias, run:
+a. npm alias ****OLD_URL**** book-it

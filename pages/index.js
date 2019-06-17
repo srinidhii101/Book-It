@@ -16,8 +16,8 @@ function Index() {
           <Container>
             <h1 className="display-4">Find a service</h1>
             <hr className="my-2" />
-            <p>Browse the latest Haligonian services offered in areas from Auto Repair to tutoring.
-            Our add-free e-commerce platform will get you access to your favourite services in no time.</p>
+            <p>Browse the latest Haligonian services offered in areas from auto Repair to tutoring.
+            Our ad free e-commerce platform will get you access to your favourite services in no time.</p>
             <p className="lead">
               <Button color="primary">Browse Services</Button>
             </p>
