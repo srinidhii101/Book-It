@@ -1,22 +1,53 @@
 /* This gives the header, navigation, and footer */
 import DefaultLayout from '../layouts/default';
+import { ToastContainer, toast } from 'react-toastify';
 
 /* Put the reactstrap components in here that are needed */
-import { Modal, ModalHeader, ModalBody, ModalTitle, ModalFooter, Button, Form, FormGroup, Label, Input, Card, CardText, FormFeedback, FormText, InputGroup, InputGroupAddon, Container, Row, Col, ListGroup, ListGroupItem, Nav, NavItem } from 'reactstrap';
+import Link from 'next/link';
+import {  Progress, Modal, ModalHeader, ModalBody, ModalTitle, ModalFooter, Button, Form, FormGroup, Label, Input, Card, CardText, FormFeedback, FormText, InputGroup, InputGroupAddon, Container, Row, Col, ListGroup, ListGroupItem, Nav, NavItem } from 'reactstrap';
 
 class Cart extends React.Component {
   /* If you need to track variables, put them here in state */
-  // constructor(...args) {
-  //   super(...args);
-  //   this.state = {
-  //     username: '',
-  //     password: ''
-  //   };
-  // }
+   constructor(...args) {
+    super(...args);
+     this.state = {
+       
+       removeFromCartModal: false
+       
+    };
+    this.removeFromCartToggle = this.removeFromCartToggle.bind(this);
+   }
+
+   removeFromCartToggle() {
+
+    this.setState(prevState => ({
+      removeFromCartModal: !prevState.removeFromCartModal
+    }))
+   }
+
+   handleRemoveFromCartCancel = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+
+    this.setState({...this.state, removeFromCartModal:false})
+   }
+
+    handleRemoveFromCartConfirm = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+
+    this.setState({...this.state, removeFromCartModal:false});
+
+    toast.success("The request has been removed from your Cart");
+   }
+
 
   render() {
     /* Define variables here */
     //const { username, password } = this.state;
+    const closeRemoveFromCart = <button className="close" onClick={this.removeFromCartToggle}>&times;</button>;
 
     return (
       <DefaultLayout>
@@ -72,14 +103,21 @@ class Cart extends React.Component {
               name="editServiceForm">
                 <Nav className="serviceNav">
                   <NavItem>
-                    <h3>Order Information</h3>
+                    <h3>Cart</h3>
                   </NavItem>
                   <NavItem className="ml-auto">
-                    <Button
+
+                  <Button type="button" onClick={()=>this.setState({removeFromCartModal:true})} className="float-left btn-danger delete">Remove</Button>&nbsp;
+                  <Link href="/checkout">
+
+                  <Button
                       color="success"
                       onClick={() => this.setState({ addServiceModal: true })}>
                      Checkout
-                    </Button>
+                    </Button> 
+
+                    </Link>
+                     
                   </NavItem>
                 </Nav>
 
@@ -93,7 +131,10 @@ class Cart extends React.Component {
                        
                       </FormGroup>
                       <div className="serviceImage backgroundImage mb-8">
+                      
                       </div>
+                      <Progress value={75} />
+                      <p> Rating: 4 out of 5 </p>
                     </Col>
 
                     <Col s={12} lg={6}>
@@ -101,15 +142,24 @@ class Cart extends React.Component {
                       <Label className="text-muted">Service Price: </Label>
                       
                          <Label className="text-muted">&nbsp; $100.00</Label>
+                         <p>  <Label className="text-muted">Ordered Date: </Label>
+                      
+                         <Label className="text-muted">&nbsp; 2019-06-20 </Label> </p>
                         
                         
 
                       {/* Description of Service */}
                       <p> </p>
                       
-                        <Label className="text-muted">Service Description</Label>
-                         <CardText>Keeping landscape healthy, clean, safe and attractive for homes, schools, hotels, offices, etc</CardText>
-                      <Button className="float-right">Remove</Button>
+                        <Label className="text-muted mt-16">Service Description</Label>
+
+                         <CardText className="mb-16">Keeping landscape healthy, clean, safe and attractive for homes, schools, hotels, offices, etc</CardText>
+
+
+
+                         <h6 className="mt-16"> Reviews: </h6>
+                         <Container> <Row> Great Service! </Row> <Row>Would use this service again... </Row> </Container>
+                      
 
                     </Col>
 
@@ -119,6 +169,35 @@ class Cart extends React.Component {
             </Col>
           </Row>
         </Container>
+
+<Modal
+  isOpen={this.state.removeFromCartModal}
+    toggle={this.removeFromCartToggle}>
+    <ModalHeader
+      toggle={this.removeFromCartToggle}
+      close={closeRemoveFromCart}>
+      Remove from Cart
+      </ModalHeader>
+      <ModalBody>
+        <p>Are you sure you want to remove from cart? </p>
+
+      </ModalBody>
+      <ModalFooter>
+        <Button
+        color="secondary" 
+        type="button"
+        onClick={this.handleRemoveFromCartCancel.bind(this)}>Cancel</Button>
+        <Button
+        color="danger"
+        type="button"
+        onClick={this.handleRemoveFromCartConfirm.bind(this)}>
+        Remove
+        </Button>
+
+      </ModalFooter>
+      </Modal>
+      <ToastContainer autoClose={5000} />
+
       </DefaultLayout>
     );
   }
