@@ -3,7 +3,7 @@ import DefaultLayout from '../layouts/default';
 import { isValidPassword, isEmptyString } from '../functions/validate';
 
 import Link from 'next/link';
-import { Form, Button, Col, FormGroup, Input, FormFeedback, Label } from 'reactstrap';
+import { Form, Button, Col, FormGroup, Input, FormFeedback, Label,NavLink } from 'reactstrap';
 import Router from 'next/router';
 
 class Login extends React.Component {
@@ -99,6 +99,8 @@ class Login extends React.Component {
               </Button>
             </div>
 
+            {/*Forgot password link*/}
+            <NavLink href="/newpassword"sm={2}>Forgot Password ?</NavLink>
           </Form>
         </div>
       </DefaultLayout>
