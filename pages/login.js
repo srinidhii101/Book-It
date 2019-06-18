@@ -98,6 +98,8 @@ class Login extends React.Component {
                 Login
               </Button>
             </div>
+
+            {/*Forgot password link*/}
             <NavLink href="/newpassword"sm={2}>Forgot Password ?</NavLink>
           </Form>
         </div>
