@@ -17,7 +17,7 @@ class Browse extends React.Component {
   {
   	e.preventDefault();
   	e.stopPropagation();
-  
+
   		toast.success("The Service has been booked");
   }
   render() {
@@ -98,7 +98,7 @@ class Browse extends React.Component {
                       {/* Service name and service picture */}
                       <FormGroup className="mb-8">
                         <Label className="text-muted">Service Name : Larry's Towing</Label>
-                        
+
                         <FormFeedback type="invalid">
                             Please enter a name for your service.
                         </FormFeedback>
@@ -119,14 +119,15 @@ class Browse extends React.Component {
                     <Col s={12} lg={6}>
                       {/* Price of Service */}
                       <Label className="text-muted">Service Price: $150 </Label>
-                      
-                      
+
+
                       {/* Description of Service */}
                       <FormGroup>
                         <Label className="text-muted">Service Description</Label>
                         <Input
                           type="textarea"
-                          value="Lorem Ipsum is simple a dummy text of printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500's, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem ipsum passages and more recently with the desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." 
+                          readOnly
+                          defaultValue="Lorem Ipsum is simple a dummy text of printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500's, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem ipsum passages and more recently with the desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." 
                           rows='10'/>
                       </FormGroup>
                       <p> Rate The Service :</p>
@@ -134,9 +135,9 @@ class Browse extends React.Component {
                        <FormGroup>
 
                        <ListGroupItem action>Rating : 4/5</ListGroupItem>
-                       
+
                       <ListGroupItem action> Would You Use the Service Again: Yes </ListGroupItem>
-                       
+
                       </FormGroup>
 
                     </Col>
