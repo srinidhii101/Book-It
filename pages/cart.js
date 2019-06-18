@@ -2,7 +2,7 @@
 import DefaultLayout from '../layouts/default';
 
 /* Put the reactstrap components in here that are needed */
-import { Modal, ModalHeader, ModalBody, ModalTitle, ModalFooter, Button, Form, FormGroup, Label, Input, FormFeedback, FormText, InputGroup, InputGroupAddon, Container, Row, Col, ListGroup, ListGroupItem, Nav, NavItem } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalTitle, ModalFooter, Button, Form, FormGroup, Label, Input, Card, CardText, FormFeedback, FormText, InputGroup, InputGroupAddon, Container, Row, Col, ListGroup, ListGroupItem, Nav, NavItem } from 'reactstrap';
 
 class Cart extends React.Component {
   /* If you need to track variables, put them here in state */
@@ -78,7 +78,7 @@ class Cart extends React.Component {
                     <Button
                       color="success"
                       onClick={() => this.setState({ addServiceModal: true })}>
-                      Rate Service
+                     Checkout
                     </Button>
                   </NavItem>
                 </Nav>
@@ -88,11 +88,9 @@ class Cart extends React.Component {
                     <Col s={12} lg={6}>
                       {/* Service name and service picture */}
                       <FormGroup className="mb-8">
-                        <Label className="text-muted">Service Name</Label>
-                        <Input type="text" />
-                        <FormFeedback type="invalid">
-                            Please enter a name for your service.
-                        </FormFeedback>
+                        <Label className="text-muted">Service Name: Larry&apos;s Landscaping </Label>
+                        
+                       
                       </FormGroup>
                       <div className="serviceImage backgroundImage mb-8">
                       </div>
@@ -100,24 +98,18 @@ class Cart extends React.Component {
 
                     <Col s={12} lg={6}>
                       {/* Price of Service */}
-                      <Label className="text-muted">Service Price</Label>
-                      <InputGroup className="mb-3">
-                        <InputGroupAddon addonType="prepend">$
-                        </InputGroupAddon>
-                        <Input />
-                        <InputGroupAddon addonType="append">.00
-                        </InputGroupAddon>
-                        <FormFeedback type="invalid">
-                            Please enter positive number.
-                        </FormFeedback>
-                      </InputGroup>
+                      <Label className="text-muted">Service Price: </Label>
+                      
+                         <Label className="text-muted">&nbsp; $100.00</Label>
+                        
+                        
 
                       {/* Description of Service */}
-                      <FormGroup>
+                      <p> </p>
+                      
                         <Label className="text-muted">Service Description</Label>
-                        <Input
-                          type="textarea" />
-                      </FormGroup>
+                         <CardText>Keeping landscape healthy, clean, safe and attractive for homes, schools, hotels, offices, etc</CardText>
+                      <Button className="float-right">Remove</Button>
 
                     </Col>
 
