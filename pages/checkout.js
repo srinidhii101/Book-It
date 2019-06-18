@@ -1,6 +1,6 @@
 /* This gives the header, navigation, and footer */
 import DefaultLayout from '../layouts/default';
-import { Col,ButtonDropdown,DropdownMenu,DropdownItem,DropdownToggle, Row, Button, Form, FormGroup, Label, Input, FormText,FormFeedback,Container } from 'reactstrap';
+import { Col,ButtonDropdown,ListGroup,ListGroupItem,DropdownMenu,DropdownItem,DropdownToggle, Row, Button, Form, FormGroup, Label, Input, FormText,FormFeedback,Container } from 'reactstrap';
 import StripeCheckout from 'react-stripe-checkout';
 /* Put the reactstrap components in here that are needed */
 //import {  } from 'reactstrap';
@@ -37,6 +37,17 @@ class Checkout extends React.Component {
         <Container fluid={true} className="mt-8">
         <Row>
         <Col sm={2} className="paymentContentContainer">
+        <Row>
+                  <Col className="pb-16">
+                    <label className="text-muted">Cart Details:</label>
+                    <ListGroup className="searchResultList mb-8">
+                      <ListGroupItem action active>20$ - Haircut</ListGroupItem>
+                      <ListGroupItem action>100$ - Gym</ListGroupItem>
+                      <ListGroupItem action>100$ - Tutor</ListGroupItem>
+                    </ListGroup>
+                  </Col>
+
+                </Row>
         </Col>
         <Col sm={6}>
         <Form>
@@ -137,11 +148,11 @@ class Checkout extends React.Component {
         <Col md={10}>
             <FormGroup>
               <Label>Additional Information:</Label>
-              <Input type="textarea" required/>
+              <Input type="textarea"/>
             </FormGroup>
             
             <FormGroup className="font-bold">
-              <Label>Your Total: 240$</Label>
+              <Label>Your Total: 220$</Label>
             </FormGroup>
         
             <FormGroup>
