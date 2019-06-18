@@ -119,6 +119,12 @@
   border-right: .5px solid #eee;
 }
 
+.paymentContentContainer {
+  min-height: 400px;
+  overflow-y: scroll;
+  border-right: .5px solid #eee;
+}
+
 .searchResultContainer {
   padding-bottom: 1rem;
 }
@@ -150,4 +156,9 @@
 
 .dropAreaImage {
   width: 100%;
+}
+
+.font-bold {
+  font-weight: bold;
+  font-size: 20px;
 }
