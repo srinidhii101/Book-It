@@ -28,6 +28,7 @@
     "react-bootstrap": "^1.0.0-beta.8",
     "react-dom": "^16.8.6",
     "react-dropzone": "^10.1.5",
+    "react-stripe-checkout": "^2.6.3",
     "react-toastify": "^5.2.1",
     "reactstrap": "^8.0.0",
     "superagent": "^5.0.5"

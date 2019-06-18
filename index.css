@@ -2,6 +2,18 @@
 .defaultContainer {
   min-height: 100vh;
 }
+.labelCss{
+  margin-bottom: 6.5rem;
+  font-size: 2rem;
+  font-weight: bold;
+}
+.nextLabel{
+  margin-left: -13rem;
+}
+.nextClick{
+  margin-bottom: -4rem;
+  margin-left: -14rem;
+}
 
 .mt-16 {
   margin-top: 2rem;
@@ -150,4 +162,16 @@
 
 .dropAreaImage {
   width: 100%;
+}
+
+.font-bold {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+
+.paymentContentContainer {
+  min-height: 400px;
+  overflow-y: scroll;
+  border-right: .5px solid #eee;
 }

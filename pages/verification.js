@@ -1,5 +1,8 @@
 /* This gives the header, navigation, and footer */
 import DefaultLayout from '../layouts/default';
+import Link from 'next/link';
+
+import {Button} from 'reactstrap';
 
 /* Put the reactstrap components in here that are needed */
 //import {  } from 'reactstrap';
@@ -21,9 +24,14 @@ class Verification extends React.Component {
     return (
       <DefaultLayout>
         <div className="loginContainer">
+          
+          <label className="labelCss">Congrats!</label>
+          <label className="nextLabel">Your Email has been successfully verified</label>
+          <Link href="/browse">
+          <Button className="nextClick" color="primary" size="sm">Browse Our Services</Button>
+          </Link>
 
-        {/* Your HTML/JSX goes here */}
-        Your email has been verified / not message
+        
 
         </div>
       </DefaultLayout>
