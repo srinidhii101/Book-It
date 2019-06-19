@@ -72,6 +72,10 @@
   justify-content: flex-end;
 }
 
+.icon-height {
+  max-height: 16px;
+}
+
 /* Index (Landing) Page */
 .landingPageHr {
   width: 80%;
@@ -128,7 +132,7 @@
 @media all and (max-width: 768px) {
   .searchResultList {
     max-height: calc(100vh - (254px + 1rem) );
-    min-height: 0px;
+    min-height: 100px;
     overflow-y: scroll;
   }
 }
