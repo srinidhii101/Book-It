@@ -194,3 +194,12 @@
   margin-bottom: 3rem;
   text-align: center;
 }
+
+/* ORDER */
+.orderModalBody {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  padding: 1rem;
+  padding-bottom: 2rem;
+}
