@@ -125,6 +125,14 @@
   overflow-y: scroll;
 }
 
+@media all and (max-width: 768px) {
+  .searchResultList {
+    max-height: calc(100vh - (254px + 1rem) );
+    min-height: 0px;
+    overflow-y: scroll;
+  }
+}
+
 .searchContentContainer {
   min-height: 400px;
   overflow-y: scroll;
@@ -169,9 +177,16 @@
   font-size: 20px;
 }
 
-
 .paymentContentContainer {
-  min-height: 400px;
+  /* min-height: 400px; */
   overflow-y: scroll;
   border-right: .5px solid #eee;
+}
+
+.checkoutTotalGroup {
+  display: table;
+  margin: auto;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+  text-align: center;
 }

@@ -2,7 +2,7 @@
 import DefaultLayout from '../layouts/default';
 import { Col,ButtonDropdown,Dropdown,ListGroup,ListGroupItem,DropdownMenu,DropdownItem,DropdownToggle, Row, Button, Form, FormGroup, Label, Input, FormText,FormFeedback,Container } from 'reactstrap';
 import StripeCheckout from 'react-stripe-checkout';
-import { isValidPhone,isValidEmail, isEmptyString ,isPostalCodeValid} from '../functions/validate';
+import { isValidPhone, isValidEmail, isEmptyString, isPostalCodeValid } from '../functions/validate';
 
 class Checkout extends React.Component {
   /* If you need to track variables, put them here in state */
@@ -31,31 +31,24 @@ class Checkout extends React.Component {
   handleFirstNameChange = (e) => {
     this.setState({ ...this.state, firstName: e.currentTarget.value})
   }
-
   handleLastNameChange = (e) => {
     this.setState({ ...this.state, lastName: e.currentTarget.value})
   }
-
   handleProvinceChange = (e) => {
     this.setState({ ...this.state, province: e.currentTarget.value})
   }
-
   handleTownChange = (e) => {
     this.setState({ ...this.state, town: e.currentTarget.value})
   }
-
   handleStreetChange = (e) => {
     this.setState({ ...this.state, street: e.currentTarget.value})
   }
-
   handlePostalCodeChange = (e) => {
     this.setState({ ...this.state, postalCode: e.currentTarget.value})
   }
-
   handlePhoneChange = (e) => {
     this.setState({ ...this.state, phone: e.currentTarget.value})
   }
-
   handleEmailChange = (e) => {
     this.setState({ ...this.state, email: e.currentTarget.value})
   }
@@ -65,6 +58,16 @@ class Checkout extends React.Component {
       isOpen: !this.state.isOpen,
       dropdownOpen: !this.state.dropdownOpen
     });
+  }
+
+  isValidForm() {
+    return !isEmptyString(this.state.firstName) && !isEmptyString(this.state.lastName) && !isEmptyString(this.state.province) && !isEmptyString(this.state.town) &&
+      !isEmptyString(this.state.street) && isPostalCodeValid(this.state.postalCode) && isValidPhone(this.state.phone) && isValidEmail(this.state.email);
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    e.stopPropagation();
   }
 
   render() {
@@ -92,7 +95,8 @@ class Checkout extends React.Component {
             <Col md={5}>
               <Form
               noValidate
-              validated={(isValidEmail(this.state.email)).toString && (isPostalCodeValid(this.state.postalCode)).toString() && (isValidPhone(this.state.phone)).toString()}>
+              validated={this.isValidForm().toString()}
+              onSubmit={this.handleSubmit.bind(this)}>
                 <Row>
                   <Col md={6}>
                     <FormGroup>
@@ -241,17 +245,17 @@ class Checkout extends React.Component {
             </Col>
 
             <Col md={4}>
-              <Form>
+              <Form onSubmit={this.handleSubmit.bind(this)}>
                 <Row>
                   <Col md={12}>
                     <FormGroup>
                       <Label>Email Address:</Label>
                       <Input
                         type="email"
+                        required
                         placeholder="example@bookit.com"
                         valid={isValidEmail(this.state.email)}
                         invalid={!isValidEmail(this.state.email)}
-                        required
                         onChange={this.handleEmailChange} />
                       <FormFeedback type="invalid">
                         Please enter a valid email.
@@ -267,16 +271,16 @@ class Checkout extends React.Component {
                       <Input type="textarea"/>
                     </FormGroup>
 
-                    <FormGroup className="font-bold">
-                      <Label>Your Total: 220$</Label>
-                    </FormGroup>
-
-                    <FormGroup>
+                    <FormGroup className="checkoutTotalGroup">
+                      <Label>Your Total:</Label><br/>
+                      <h1>220$</h1>
                       <StripeCheckout
                         name="Book it"
+                        description="Thanks for supporting Local!"
+                        label="Pay with 💳"
+                        email={this.state.email}
                         amount={22000}
-                        //disabled={!(this.state.firstName && this.state.lastName && this.state.province && this.state.town && this.state.street && this.state.postalCode && this.state.phone && isValidEmail(this.state.email))}
-
+                        disabled={!this.isValidForm()}
                         stripeKey="pk_test_wXtDaiHSEDQ55g1paPXsydVJ00xeVKA6LM"
                         token={this.onToken}
                         zipcode />
