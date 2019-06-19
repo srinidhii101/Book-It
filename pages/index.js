@@ -7,6 +7,7 @@ import DefaultLayout from "../layouts/default";
 import { Container, Jumbotron, Row, Col, ListGroup, Card, Button, CardBody, CardText, CardHeader, CardTitle, ListGroupItem } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTools, faPeopleCarry, faHeartbeat, faCalendarDay, faRecycle, faChalkboardTeacher } from '@fortawesome/free-solid-svg-icons'
+import Link from 'next/link'
 //The file structure for the landing page
 function Index() {
   return (
@@ -19,7 +20,9 @@ function Index() {
             <p>Browse the latest Haligonian services offered in areas from auto Repair to tutoring.
             Our ad free e-commerce platform will get you access to your favourite services in no time.</p>
             <p className="lead">
+            <Link href="/browse">
               <Button color="primary">Browse Services</Button>
+              </Link>
             </p>
           </Container>
         </Jumbotron>
