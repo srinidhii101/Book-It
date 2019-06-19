@@ -16,3 +16,13 @@ export function isEmptyString(string) {
 export function isValidEmail(email) {
   return /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/.test(email);
 }
+
+//This method returns true if phone is valid
+export function isValidPhone(phone){
+ return /^\D?(\d{3})\D?\D?(\d{3})\D?(\d{4})$/.test(phone);
+}
+
+//This method returns true if postal code is valid
+export function isPostalCodeValid(postalCode){
+	return /^([A-Za-z]\d[A-Za-z][-]?\d[A-Za-z]\d)$/.test(postalCode);
+}

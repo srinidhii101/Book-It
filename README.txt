@@ -90,4 +90,9 @@ https://github.com/FortAwesome/react-fontawesome
 - in the index page, for the promoted services
 
 https://github.com/zeit/now-builders/issues/155#issuecomment-470932812
-Learning how to deploy using next.js and now command.
+- Learning how to deploy using next.js and now command.
+
+https://stripe.com/docs/recipes/elements-react
+https://alligator.io/react/payments-stripe-checkout-react/
+https://hackernoon.com/stripe-api-reactjs-and-express-bc446bf08301
+- Checkout guides with stripe
