@@ -1,26 +1,68 @@
 /* This gives the header, navigation, and footer */
 import DefaultLayout from '../layouts/default';
-import { Col,ButtonDropdown,ListGroup,ListGroupItem,DropdownMenu,DropdownItem,DropdownToggle, Row, Button, Form, FormGroup, Label, Input, FormText,FormFeedback,Container } from 'reactstrap';
+import { Col,ButtonDropdown,Dropdown,ListGroup,ListGroupItem,DropdownMenu,DropdownItem,DropdownToggle, Row, Button, Form, FormGroup, Label, Input, FormText,FormFeedback,Container } from 'reactstrap';
 import StripeCheckout from 'react-stripe-checkout';
-/* Put the reactstrap components in here that are needed */
-//import {  } from 'reactstrap';
+import { isValidPhone,isValidEmail, isEmptyString ,isPostalCodeValid} from '../functions/validate';
 
 class Checkout extends React.Component {
   /* If you need to track variables, put them here in state */
    constructor(props) {
      super(props);
      this.toggle = this.toggle.bind(this);
-
+     this.handleFirstNameChange=this.handleFirstNameChange.bind(this);
      this.state = {
       isOpen: false,
-      dropdownOpen: false
+      dropdownOpen: false,
+      firstName: '',
+      lastName:'',
+      province:'',
+      town:'',
+      street:'',
+      postalCode:'',
+      phone:'',
+      email:''
     };
    }
 
   onToken = (token,addresses) =>{
     //TODO
   };
+
+  handleFirstNameChange = (e) => {
+    this.setState({ ...this.state, firstName: e.currentTarget.value})
+  }
+
+  handleLastNameChange = (e) => {
+    this.setState({ ...this.state, lastName: e.currentTarget.value})
+  }
   
+
+  handleProvinceChange = (e) => {
+    this.setState({ ...this.state, province: e.currentTarget.value})
+  }
+
+
+  handleTownChange = (e) => {
+    this.setState({ ...this.state, town: e.currentTarget.value})
+  }
+
+
+  handleStreetChange = (e) => {
+    this.setState({ ...this.state, street: e.currentTarget.value})
+  }
+
+  handlePostalCodeChange = (e) => {
+    this.setState({ ...this.state, postalCode: e.currentTarget.value})
+  }
+
+
+  handlePhoneChange = (e) => {
+    this.setState({ ...this.state, phone: e.currentTarget.value})
+  }
+
+  handleEmailChange = (e) => {
+    this.setState({ ...this.state, email: e.currentTarget.value})
+  }
   toggle() {
     this.setState({
       isOpen: !this.state.isOpen,
@@ -29,9 +71,7 @@ class Checkout extends React.Component {
   }
 
   render() {
-    /* Define variables here */
-    //const { username, password } = this.state;
-
+    const { firstName,lastName,province,validForm,town,street,postalCode,phone} = this.state;
     return (
       <DefaultLayout>
         <Container fluid={true} className="mt-8">
@@ -50,21 +90,35 @@ class Checkout extends React.Component {
                 </Row>
         </Col>
         <Col sm={6}>
-        <Form>
-        {/* Username */}
+        <Form  
+        noValidate 
+        validated={(isValidEmail(this.state.email)).toString && (isPostalCodeValid(this.state.postalCode)).toString() && (isValidPhone(this.state.phone)).toString()}>
         <Row>
         <Col md={5}>
             <FormGroup>
               <Label>First Name:</Label>
-              <Input type="text" placeholder="Enter your first name" required/>
-
+              <Input type="text" placeholder="Enter your first name" 
+              required
+              valid={!isEmptyString(this.state.firstName)}
+                invalid={isEmptyString(this.state.firstName)}
+                onChange={this.handleFirstNameChange}/>
+                <FormFeedback>
+                  Please enter first name.
+              </FormFeedback>
             </FormGroup>
             </Col>
           
           <Col md={5}>
             <FormGroup>
               <Label>Last Name:</Label>
-              <Input type="text" placeholder="Enter your last name" required/>
+              <Input type="text" placeholder="Enter your last name"
+              required
+              valid={!isEmptyString(this.state.lastName)}
+                invalid={isEmptyString(this.state.lastName)}
+                onChange={this.handleLastNameChange}/>
+                <FormFeedback type="invalid">
+                  Please enter last name.
+              </FormFeedback>
             </FormGroup>
             </Col>
         </Row>
@@ -72,22 +126,18 @@ class Checkout extends React.Component {
         <Col md={10}>
             <FormGroup>
               <Label>Company Name:</Label>
-              <Input type="text" placeholder="Enter your company name" required/>
+              <Input type="text" placeholder="Enter your company name"/>
             </FormGroup>
             </Col>
         </Row>
         <Row>
         <Col md={5}>       
         <FormGroup>
-          <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-          <DropdownToggle caret>Select Country</DropdownToggle>
-          <DropdownMenu>
-            <DropdownItem header>Select Country</DropdownItem>
-            <DropdownItem>Canada</DropdownItem>
-            </DropdownMenu>
-            </ButtonDropdown>
+        <Dropdown isOpen={this.state.isOpen} toggle={this.toggle}>
+        <DropdownToggle caret>Canada</DropdownToggle>
+        </Dropdown>
         </FormGroup>
-            </Col>
+        </Col>
         <Row>
         </Row>
         </Row>
@@ -95,15 +145,28 @@ class Checkout extends React.Component {
         <Col md={5}>
             <FormGroup>
               <Label>Province:</Label>
-              <Input type="text" placeholder="Enter Province" required/>
-
+              <Input type="text" placeholder="Enter Province"
+              required
+              valid={!isEmptyString(this.state.province)}
+                invalid={isEmptyString(this.state.province)}
+                onChange={this.handleProvinceChange}/>
+                <FormFeedback type="invalid">
+                  Please enter province.
+              </FormFeedback>
             </FormGroup>
             </Col>
           
           <Col md={5}>
             <FormGroup>
               <Label>Town/City:</Label>
-              <Input type="text" placeholder="Enter town name" required/>
+              <Input type="text" placeholder="Enter town name"
+              required
+              valid={!isEmptyString(this.state.town)}
+                invalid={isEmptyString(this.state.town)}
+                onChange={this.handleTownChange}/>
+                <FormFeedback>
+                  Please enter town name.
+              </FormFeedback>
             </FormGroup>
             </Col>
         </Row>
@@ -111,7 +174,14 @@ class Checkout extends React.Component {
         <Col md={10}>
             <FormGroup>
               <Label>Street Address:</Label>
-              <Input type="text" placeholder="Enter street name" required/>
+              <Input type="text" placeholder="Enter street name" 
+              required
+              valid={!isEmptyString(this.state.street)}
+                invalid={isEmptyString(this.state.street)}
+                onChange={this.handleStreetChange}/>
+                <FormFeedback type="none">
+                  Please enter street.
+              </FormFeedback>
             </FormGroup>
             </Col>
         </Row>
@@ -119,15 +189,28 @@ class Checkout extends React.Component {
         <Col md={5}>
             <FormGroup>
               <Label>Postal Code:</Label>
-              <Input type="text" placeholder="Enter your postal code" required/>
-
+              <Input type="text" placeholder="Enter your postal code"
+              required
+              valid={isPostalCodeValid(this.state.postalCode)}
+                invalid={!isPostalCodeValid(this.state.postalCode)}
+                onChange={this.handlePostalCodeChange}/>
+                <FormFeedback>
+                  Please enter postal code.
+              </FormFeedback>
             </FormGroup>
             </Col>
           
           <Col md={5}>
             <FormGroup>
               <Label>Phone Number:</Label>
-              <Input type="text" placeholder="Enter your phone number" required/>
+              <Input type="text" placeholder="Enter your phone number" 
+              required
+                valid={isValidPhone(this.state.phone)}
+                invalid={!isValidPhone(this.state.phone)}
+                onChange={this.handlePhoneChange}/>
+                <FormFeedback>
+                  Please enter phone number.
+              </FormFeedback>
             </FormGroup>
             </Col>
         </Row>
@@ -139,8 +222,17 @@ class Checkout extends React.Component {
         <Col md={10}>
             <FormGroup>
               <Label>Email Address:</Label>
-              <Input type="email" placeholder="abc@xyz.com" required/>
-            </FormGroup>
+              <Input
+                type="email"
+                placeholder="example@bookit.com"
+                valid={isValidEmail(this.state.email)}
+                invalid={!isValidEmail(this.state.email)}
+                required
+                onChange={this.handleEmailChange} />
+              <FormFeedback type="invalid">
+                  Please enter a valid email.
+              </FormFeedback>
+               </FormGroup>
             </Col>
         </Row>
         
