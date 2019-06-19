@@ -86,7 +86,7 @@ class Browse extends React.Component {
                     <Button
                       color="success"
                       onClick={this.HandleBookService.bind(this)}>
-                      Book a Service
+                      Add to Cart
                     </Button>
                   </NavItem>
                 </Nav>
