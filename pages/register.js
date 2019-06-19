@@ -116,7 +116,7 @@ class Register extends React.Component {
               </Link>
               <Button
                 color="primary"
-                type="submit"
+                type="button"
                 className="loginButton">
                 Sign up
               </Button>
