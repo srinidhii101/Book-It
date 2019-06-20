@@ -22,7 +22,7 @@ function Index() {
             <p className="lead">
             <Link href="/browse">
               <Button color="primary">Browse Services</Button>
-              </Link>
+            </Link>
             </p>
           </Container>
         </Jumbotron>
