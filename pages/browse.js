@@ -2,6 +2,7 @@
 import DefaultLayout from '../layouts/default';
 
 /* Put the reactstrap components in here that are needed */
+<<<<<<< HEAD
 import { Modal, Progress, ModalHeader, ModalBody, ModalTitle, ModalFooter, Button, Form, FormGroup, Label, Input, FormFeedback, FormText, InputGroup, InputGroupAddon, Container, Row, Col, ListGroup, ListGroupItem, Nav, NavItem } from 'reactstrap';
 import {ToastContainer, toast} from 'react-toastify';
 class Browse extends React.Component {
@@ -11,6 +12,30 @@ class Browse extends React.Component {
   	e.stopPropagation();
   	toast.success("The service has been added to your cart.");
   }
+=======
+import { Modal,Progress, ModalHeader, ModalBody, ModalTitle, ModalFooter, Button, Form, FormGroup, Label, Input, FormFeedback, FormText, InputGroup, InputGroupAddon, Container, Row, Col, ListGroup, ListGroupItem, Nav, NavItem } from 'reactstrap';
+import {ToastContainer, toast} from 'react-toastify';
+class Browse extends React.Component {
+  /* If you need to track variables, put them here in state */
+  // constructor(...args) {
+  //   super(...args);
+  //   this.state = {
+  //     username: '',
+  //     password: ''
+  //   };
+  // }
+  HandleBookService(e)
+  {
+  	e.preventDefault();
+  	e.stopPropagation();
+
+  		toast.success("The Service has been booked");
+  }
+  render() {
+
+    /* Define variables here */
+    //const { username, password } = this.state;
+>>>>>>> master
 
   render() {
     return (
@@ -67,33 +92,65 @@ class Browse extends React.Component {
                 <Nav className="serviceNav">
                   <NavItem>
                     <h3>Service Information</h3>
+
                   </NavItem>
                   <NavItem className="ml-auto">
                     <Button
                       color="success"
                       onClick={this.HandleBookService.bind(this)}>
+<<<<<<< HEAD
                       Add to Cart
                     </Button>
                   </NavItem>
                 </Nav>
+=======
+                      Book a Service
+                    </Button>
+                  </NavItem>
+                </Nav>
+
+
+>>>>>>> master
                 <Container className="mt-8">
                   <Row>
                     <Col s={12} lg={6}>
                       {/* Service name and service picture */}
                       <FormGroup className="mb-8">
                         <Label className="text-muted">Service Name : Larry's Towing</Label>
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
                         <FormFeedback type="invalid">
                           Please enter a name for your service.
                         </FormFeedback>
                       </FormGroup>
+<<<<<<< HEAD
                       <div className="serviceImage backgroundImage mb-8"></div>
                       <Progress value={70} />
                       <p> Rating is 3.5 out of 5 stars</p>
+=======
+
+                      <div className="serviceImage backgroundImage mb-8">
+                      </div>
+                      <Progress value={70} />
+                      <p> Rating is 3.5 out of 5 stars</p>
+
+
+
+
+>>>>>>> master
                     </Col>
+
+
 
                     <Col s={12} lg={6}>
                       {/* Price of Service */}
                       <Label className="text-muted">Service Price: $150 </Label>
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
 
                       {/* Description of Service */}
                       <FormGroup>
@@ -101,6 +158,7 @@ class Browse extends React.Component {
                         <Input
                           type="textarea"
                           readOnly
+<<<<<<< HEAD
                           defaultValue="Lorem Ipsum is simple a dummy text of printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500's, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem ipsum passages and more recently with the desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
                           rows='10'/>
                       </FormGroup>
@@ -108,6 +166,19 @@ class Browse extends React.Component {
                       <FormGroup>
                         <ListGroupItem action>Rating : 4/5</ListGroupItem>
                         <ListGroupItem action> Would You Use the Service Again: Yes </ListGroupItem>
+=======
+                          defaultValue="Lorem Ipsum is simple a dummy text of printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500's, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem ipsum passages and more recently with the desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." 
+                          rows='10'/>
+                      </FormGroup>
+                      <p> Rate The Service :</p>
+
+                       <FormGroup>
+
+                       <ListGroupItem action>Rating : 4/5</ListGroupItem>
+
+                      <ListGroupItem action> Would You Use the Service Again: Yes </ListGroupItem>
+
+>>>>>>> master
                       </FormGroup>
                     </Col>
                   </Row>
@@ -116,6 +187,10 @@ class Browse extends React.Component {
             </Col>
           </Row>
         </Container>
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
         <ToastContainer autoClose={5000}/>
       </DefaultLayout>
     );

@@ -96,6 +96,7 @@ https://stripe.com/docs/recipes/elements-react
 https://alligator.io/react/payments-stripe-checkout-react/
 https://hackernoon.com/stripe-api-reactjs-and-express-bc446bf08301
 - Checkout guides with stripe
+<<<<<<< HEAD
 
 
 http://regexlib.com/Search.aspx?k=postal+code&AspxAutoDetectCookieSupport=1
@@ -107,3 +108,5 @@ http://regexlib.com/Search.aspx?k=phone
 - Used this regex to validate phone number on the front end.It is used in the functions/validate.js file
 in the isValidPhone function.
 - Same regex has been used in the code.
+=======
+>>>>>>> master
