@@ -91,13 +91,9 @@ class Browse extends React.Component {
                       <Progress value={70} />
                       <p> Rating is 3.5 out of 5 stars</p>
                     </Col>
-
-
-
                     <Col s={12} lg={6}>
                       {/* Price of Service */}
                       <Label className="text-muted">Service Price: $150 </Label>
-
                       {/* Description of Service */}
                       <FormGroup>
                         <Label className="text-muted">Service Description</Label>
