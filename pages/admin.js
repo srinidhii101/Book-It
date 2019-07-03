@@ -1,5 +1,6 @@
 /* This gives the header, navigation, and footer */
 import DefaultLayout from '../layouts/default';
+import { checkRole } from '../functions/auth';
 
 /* Put the reactstrap components in here that are needed */
 import { Table, Button, Form, FormGroup, Label, Container, Row, Col, ListGroup, ListGroupItem, Input, Nav, NavItem, ButtonGroup, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
@@ -7,16 +8,16 @@ import { Table, Button, Form, FormGroup, Label, Container, Row, Col, ListGroup, 
 import { ToastContainer, toast } from 'react-toastify';
 import '../node_modules/react-toastify/dist/ReactToastify.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faUserTie, faUserCog } from '@fortawesome/free-solid-svg-icons'
+import { faUser, faUserTie, faUserCog } from '@fortawesome/free-solid-svg-icons';
+import Router from 'next/router';
 
 class Admin extends React.Component {
-  /* If you need to track variables, put them here in state */
-  // constructor(...args) {
-  //   super(...args);
-  //   this.state = {
-  //     : ''
-  //   };
-  // }
+  //when the component mounts, redirecting if the user does not possess the correct permissions.
+  componentDidMount() {
+    if(checkRole(['admin'])) {
+      Router.push('/login');
+    }
+  }
 
   handleSaveChanges() {
     toast.success("Changes have been successfully saved!");
@@ -111,7 +112,7 @@ class Admin extends React.Component {
                         </thead>
                         <tbody>
                           <tr>
-                            <th scope="row">Kirby's Electrical</th>
+                            <td>Kirby's Electrical</td>
                             <td>2019-06-13</td>
                             <td>
                               <UncontrolledDropdown onClick={this.onChangeOption.bind(this)}>
@@ -127,7 +128,7 @@ class Admin extends React.Component {
                             </td>
                           </tr>
                           <tr>
-                            <th scope="row">Linda's Landscaping</th>
+                            <td>Linda's Landscaping</td>
                             <td>2019-06-13</td>
                             <td>
                               <UncontrolledDropdown onClick={this.onChangeOption.bind(this)}>
@@ -143,7 +144,7 @@ class Admin extends React.Component {
                             </td>
                           </tr>
                           <tr>
-                            <th scope="row">Kyle's Tutoring</th>
+                            <td>Kyle's Tutoring</td>
                             <td>2019-06-13</td>
                             <td>
                               <UncontrolledDropdown onClick={this.onChangeOption.bind(this)}>

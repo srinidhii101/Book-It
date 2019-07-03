@@ -1,21 +1,27 @@
 /* Login Page */
 import DefaultLayout from '../layouts/default';
 import { isPositiveNumber, isEmptyString } from '../functions/validate';
+import { checkRole } from '../functions/auth';
 
 import { ToastContainer, toast } from 'react-toastify';
 import '../node_modules/react-toastify/dist/ReactToastify.css';
 import { Modal, ModalHeader, ModalBody, ModalTitle, ModalFooter, Button, Form, FormGroup, Label, Input, FormFeedback, FormText, InputGroup, InputGroupAddon, Container, Row, Col, ListGroup, ListGroupItem, Nav, NavItem } from 'reactstrap';
 import Dropzone from 'react-dropzone';
 import request from 'superagent';
+import Router from 'next/router';
+
+//Get environment variables
+// const dotenv = require('dotenv');
+// dotenv.config();
 
 //Cloudinary constants
-const CLOUDINARY_UPLOAD_PRESET = 'ml_default';
-const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/kirby-cloud/image/upload';
-
+const CLOUDINARY_UPLOAD_PRESET = process.env.CLOUDINARY_UPLOAD_PRESET;
+const CLOUDINARY_UPLOAD_URL = process.env.CLOUDINARY_UPLOAD_URL;
 
 class Login extends React.Component {
   constructor(...args) {
     super(...args);
+
     this.state = {
       uploadedFile: null,
       uploadedFileCloudinaryUrl: '',
@@ -32,6 +38,13 @@ class Login extends React.Component {
 
      this.addServiceToggle = this.addServiceToggle.bind(this);
      this.deleteServiceToggle = this.deleteServiceToggle.bind(this);
+  }
+
+  //when the component mounts, redirecting if the user does not possess the correct permissions.
+  componentDidMount() {
+    if(checkRole(['admin', 'vendor'])) {
+      Router.push('/login');
+    }
   }
 
   addServiceToggle() {

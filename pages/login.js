@@ -5,15 +5,28 @@ import { isValidPassword, isEmptyString } from '../functions/validate';
 import Link from 'next/link';
 import { Form, Button, Col, FormGroup, Input, FormFeedback, Label,NavLink } from 'reactstrap';
 import Router from 'next/router';
+import ls, { set } from "local-storage";
 
 class Login extends React.Component {
   constructor(...args) {
     super(...args);
     this.state = {
       username: '',
-      password: ''
+      password: '',
+      data: ''
     };
   }
+
+  componentDidMount() {
+    this.getDataFromDb();
+  }
+
+  getDataFromDb = () => {
+    fetch('http://localhost:3001/api/users')
+      .then((data) => data.json())
+      .then((res) => this.setState({ data: res.data }))
+      .then(() => console.log(this.state));
+  };
 
   //handling the submit event and routing to the landing page if valid
   handleSubmit(e) {
@@ -21,6 +34,11 @@ class Login extends React.Component {
       e.stopPropagation();
       if(this.state.username.length > 0 && this.state.password.length > 0) {
         //TODO: Give authentication
+        //get authentication from database
+        if(true) {
+          const bookit = { "user": this.state.username, "session": 'a1a1a1a1', 'role': 'vendor' };
+          ls.set('bookit', bookit);
+        }
         Router.push('/');
       }
   }
@@ -43,7 +61,7 @@ class Login extends React.Component {
 
           {/* Login Form */}
           <Form
-          className="loginForm"
+          className="loginForm mt-32"
           noValidate
           validated={(isEmptyString(this.state.username) && isValidPassword(this.state.password)).toString()}
           onSubmit={e => this.handleSubmit(e)} >
