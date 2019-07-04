@@ -1,7 +1,7 @@
 /* Login Page */
 import DefaultLayout from '../layouts/default';
 import { isPositiveNumber, isEmptyString } from '../functions/validate';
-import { checkRole } from '../functions/auth';
+import { checkRole, checkUserId } from '../functions/auth';
 
 import { ToastContainer, toast } from 'react-toastify';
 import '../node_modules/react-toastify/dist/ReactToastify.css';
@@ -28,12 +28,16 @@ class Login extends React.Component {
       addServiceName: '',
       addServiceDescription: '',
       addServicePrice: 0,
-      serviceName: "Larry's Landscaping",
-      serviceDescription: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`,
+      serviceName: '',
+      serviceDescription: '',
       servicePrice: 0,
+      serviceImagePath: '',
+      serviceImageName: '',
       addServiceModal: false,
       deleteServiceModal: false,
-      confirmDeleteModalShow: false
+      confirmDeleteModalShow: false,
+      services: [],
+      serviceIndex: 0
      };
 
      this.addServiceToggle = this.addServiceToggle.bind(this);
@@ -42,9 +46,14 @@ class Login extends React.Component {
 
   //when the component mounts, redirecting if the user does not possess the correct permissions.
   componentDidMount() {
+
     if(checkRole(['admin', 'vendor'])) {
       Router.push('/login');
     }
+    fetch('http://localhost:3001/api/users/'+ checkUserId() +'/services')
+      .then((data) => data.json())
+      .then((res) => this.setState({ services: res.data }))
+      .then(() => this.loadFirstService());
   }
 
   addServiceToggle() {
@@ -154,10 +163,35 @@ class Login extends React.Component {
 
     // TODO: actually delete it
     toast.success("The service has been deleted!");
+  }
 
+  loadFirstService() {
+    this.setState({
+      ...this.state,
+      serviceName: this.state.services[0].name,
+      serviceDescription: this.state.services[0].description,
+      servicePrice: this.state.services[0].price,
+      serviceImagePath: this.state.services[0].cloud_url,
+      serviceImageName: this.state.services[0].cloud_name,
+      serviceIndex: 0
+    });
+  }
+
+  handleServiceIndexChange(index, e) {
+    this.setState({
+      ...this.state,
+      serviceName: this.state.services[e.currentTarget.id].name,
+      serviceDescription: this.state.services[e.currentTarget.id].description,
+      servicePrice: this.state.services[e.currentTarget.id].price,
+      serviceImagePath: this.state.services[e.currentTarget.id].cloud_url,
+      serviceImageName: this.state.services[e.currentTarget.id].cloud_name,
+      serviceIndex: index
+    });
   }
 
   render() {
+    //initialize values
+
     const { serviceName, servicePrice, serviceDescription, addServiceName, addServicePrice, addServiceDescription } = this.state;
     const closeAddServiceButton = <button className="close" onClick={this.addServiceToggle}>&times;</button>;
     const closeDeleteServiceButton = <button className="close" onClick={this.deleteServiceToggle}>&times;</button>;
@@ -179,28 +213,21 @@ class Login extends React.Component {
                 <Row>
                   <Col className="pb-16">
                     <label className="text-muted">Results:</label>
-                    {/* Emulating an overflowing list of services */}
                     <ListGroup className="searchResultList mb-8">
-                      <ListGroupItem action active>Larry's Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
-                      <ListGroupItem action>Techical Support</ListGroupItem>
-                      <ListGroupItem action>Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
-                      <ListGroupItem action>Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
-                      <ListGroupItem action>Techical Support</ListGroupItem>
-                      <ListGroupItem action>Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
-                      <ListGroupItem action>Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
-                      <ListGroupItem action>Techical Support</ListGroupItem>
-                      <ListGroupItem action>Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
-                      <ListGroupItem action>Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
-                      <ListGroupItem action>Techical Support</ListGroupItem>
-                      <ListGroupItem action>Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
+                      {this.state.services &&
+                        this.state.services.map((service, index) => {
+                          return (
+                            <ListGroupItem
+                              action
+                              key={service.id}
+                              id={index}
+                              active={index == this.state.serviceIndex}
+                              className="listItem"
+                              onClick={this.handleServiceIndexChange.bind(this, index)}>
+                                {service.name}
+                            </ListGroupItem>)
+                        })
+                      }
                     </ListGroup>
                   </Col>
 
@@ -237,7 +264,7 @@ class Login extends React.Component {
                         <Label className="text-muted">Service Name</Label>
                         <Input type="text"
                         placeholder="Service Name"
-                        defaultValue={serviceName}
+                        value={this.state.serviceName}
                         onChange={this.handleServiceNameChange}
                         valid={!isEmptyString(this.state.serviceName)}
                         invalid={isEmptyString(this.state.serviceName)} />
@@ -245,8 +272,14 @@ class Login extends React.Component {
                             Please enter a name for your service.
                         </FormFeedback>
                       </FormGroup>
-                      <div className="serviceImage backgroundImage mb-8">
-                      </div>
+
+                      {this.state.serviceImagePath &&
+                        <img className="serviceImage mb-8" src={this.state.serviceImagePath} alt={this.state.serviceImageName} />
+                      }
+                      {!this.state.serviceImagePath &&
+                        <div className="serviceImage backgroundImage mb-8"></div>
+                      }
+
                     </Col>
 
                     <Col s={12} lg={6}>
@@ -257,7 +290,7 @@ class Login extends React.Component {
                         </InputGroupAddon>
                         <Input
                           type="number"
-                          defaultValue={servicePrice}
+                          value={servicePrice}
                           min="0"
                           onChange={this.handleServicePriceChange}
                           valid={isPositiveNumber(this.state.servicePrice)}
@@ -277,7 +310,7 @@ class Login extends React.Component {
                           valid={true}
                           rows={8}
                           onChange={this.handleServiceDescriptionChange}
-                          defaultValue={serviceDescription} />
+                          value={serviceDescription} />
                       </FormGroup>
 
                       {/* Register and Login Buttons */}

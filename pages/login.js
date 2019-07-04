@@ -17,16 +17,16 @@ class Login extends React.Component {
     };
   }
 
-  componentDidMount() {
-    this.getDataFromDb();
-  }
+  // componentDidMount() {
+  //   this.getDataFromDb();
+  // }
 
-  getDataFromDb = () => {
-    fetch('http://localhost:3001/api/users')
-      .then((data) => data.json())
-      .then((res) => this.setState({ data: res.data }))
-      .then(() => console.log(this.state));
-  };
+  // getDataFromDb = () => {
+  //   fetch('http://localhost:3001/api/users')
+  //     .then((data) => data.json())
+  //     .then((res) => this.setState({ data: res.data }))
+  //     .then(() => console.log(this.state));
+  // };
 
   //handling the submit event and routing to the landing page if valid
   handleSubmit(e) {
@@ -36,7 +36,7 @@ class Login extends React.Component {
         //TODO: Give authentication
         //get authentication from database
         if(true) {
-          const bookit = { "user": this.state.username, "session": 'a1a1a1a1', 'role': 'vendor' };
+          const bookit = { "user": this.state.username, "session": 'a1a1a1a1', 'role': 'vendor', 'id': 2 };
           ls.set('bookit', bookit);
         }
         Router.push('/');

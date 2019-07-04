@@ -14,3 +14,8 @@ export function checkRole(allowedRoles) {
 
   return redirectFlag;
 }
+
+export function checkUserId() {
+  const bookit = ls.get('bookit');
+  return bookit.id;
+}

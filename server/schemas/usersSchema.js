@@ -14,6 +14,7 @@ const UsersSchema = new Schema({
         enum : ['customer','vendor','admin'],
         default: 'customer'
     },
+    services: Array,
     info: Object
   }, { collection : 'users' }, { timestamps: true });
 

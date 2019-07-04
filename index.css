@@ -54,7 +54,7 @@
   height: 1.2rem;
 }
 
-.nav-link, .navbar-brand {
+.nav-link, .navbar-brand, .listItem {
   cursor: pointer;
 }
 

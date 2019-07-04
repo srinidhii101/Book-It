@@ -35,6 +35,16 @@ router.get('/users', (req, res) => {
   return UsersModel.getUsers(req, res);
 });
 
+//fetch user
+router.get('/users/:id', (req, res) => {
+  return UsersModel.getUser(req, res);
+})
+
+//fetch user services
+router.get('/users/:id/services', (req, res) => {
+  return UsersModel.getUserServices(req, res);
+});
+
 //fetch all users
 router.get('/services', (req, res) => {
   return ServicesModel.getServices(req, res);
