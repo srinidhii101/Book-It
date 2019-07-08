@@ -118,3 +118,6 @@ https://stackoverflow.com/questions/36234137/typeerror-class-function-is-not-a-f
 
 https://medium.com/the-node-js-collection/making-your-node-js-work-everywhere-with-environment-variables-2da8cdf6e786
 - Environment variables
+
+https://sailsjs.com/documentation/anatomy
+- Better project structure as suggested by Alfred
