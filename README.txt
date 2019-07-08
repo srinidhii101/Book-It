@@ -121,3 +121,7 @@ https://medium.com/the-node-js-collection/making-your-node-js-work-everywhere-wi
 
 https://sailsjs.com/documentation/anatomy
 - Better project structure as suggested by Alfred
+
+https://mongoosejs.com/docs/deprecations.html#-findandmodify-
+- Fix console errors on line 21 of server.js
+- Took the code to hide errors "mongoose.set('useFindAndModify', false)"

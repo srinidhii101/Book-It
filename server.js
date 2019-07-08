@@ -18,6 +18,7 @@ const dbRoute = process.env.DB_ROUTE;
 
 // connects our back end code with the database
 mongoose.connect(dbRoute, { useNewUrlParser: true });
+mongoose.set('useFindAndModify', false);
 
 let db = mongoose.connection;
 
@@ -64,6 +65,11 @@ router.post('/services', (req, res) => {
   return ServiceController.createService(req, res);
 });
 
+// this is our delete method
+router.delete('/services/:user/:id', (req, res) => {
+  return ServiceController.deleteService(req, res);
+});
+
 
 /* Examples of adding, updating and deleting data */
 
@@ -74,16 +80,6 @@ router.post('/updateData', (req, res) => {
   // const { id, update } = req.body;
   // Data.findByIdAndUpdate(id, update, (err) => {
   //   if (err) return res.json({ success: false, error: err });
-  //   return res.json({ success: true });
-  // });
-});
-
-// this is our delete method
-// this method removes existing data in our database
-router.delete('/deleteData', (req, res) => {
-  // const { id } = req.body;
-  // Data.findByIdAndRemove(id, (err) => {
-  //   if (err) return res.send(err);
   //   return res.json({ success: true });
   // });
 });

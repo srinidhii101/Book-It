@@ -25,13 +25,24 @@ class ServicesModel {
     service.save((err, service) => {
       if (err) return res.json({ success: false, error: err });
       //updating related user to hold the service id for later reference
-      Users.findById({ "_id": req.body.user},(err, user)=> {
-        if (err) return res.json({ success: false, error: err });
+      Users.findById({ "_id": req.body.user},(error, user)=> {
+        if (error) return res.json({ success: false, error: error });
         user.services.push({"id": service._id});
         user.save();
         return res.json({ success: true });
       });
     });
+  }
+
+  deleteService(req, res) {
+    Services.findByIdAndRemove(req.params.id, (err, response) => {
+      if (err) return response.send(err);
+      Users.findById({ "_id": req.params.user},(error, user)=> {
+        if (error) return response.send(error);
+        user.services.filter(service => service !== req.params.id);
+      });
+    });
+    return res.json({ success: true });
   }
 }
 module.exports = new ServicesModel();

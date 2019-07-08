@@ -5,7 +5,7 @@ import { checkRole, checkUserId } from '../functions/auth';
 
 import { ToastContainer, toast } from 'react-toastify';
 import '../node_modules/react-toastify/dist/ReactToastify.css';
-import { Modal, ModalHeader, ModalBody, ModalTitle, ModalFooter, Button, Form, FormGroup, Label, Input, FormFeedback, FormText, InputGroup, InputGroupAddon, Container, Row, Col, ListGroup, ListGroupItem, Nav, NavItem } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalTitle, ModalFooter, Button, Form, FormGroup, Label, Input, FormFeedback, FormText, InputGroup, InputGroupAddon, Container, Row, Col, ListGroup, ListGroupItem, Nav, NavItem, Fade } from 'reactstrap';
 import Dropzone from 'react-dropzone';
 import request from 'superagent';
 import Router from 'next/router';
@@ -140,13 +140,11 @@ class Login extends React.Component {
            "lastBooked": null,
            "numberOfBookings": 0,
            "name": this.state.addServiceName,
-           "description": this.state.addServiceDescription,
-           "price": this.state.addServicePrice,
-           "cloud_name": this.state.uploadedFile.path,
-           "cloud_url": this.state.uploadedFileCloudinaryUrl
+           "description": this.state.addServiceDescription || '',
+           "price": this.state.addServicePrice || 0,
+           "cloud_name": this.state.uploadedFile ? this.state.uploadedFile.path : '',
+           "cloud_url": this.state.uploadedFileCloudinaryUrl ? this.state.uploadedFileCloudinaryUrl : ''
       });
-
-      console.log(res);
 
       if(res.data.success) {
         toast.success("The service has been added!");
@@ -175,9 +173,12 @@ class Login extends React.Component {
     });
   }
 
-  handleDeleteServiceFormConfirm(e) {
+  async handleDeleteServiceFormConfirm(e) {
     e.preventDefault();
     e.stopPropagation();
+
+    const res = await axios.delete('http://localhost:3001/api/services/' + checkUserId() + '/' + this.state.services[this.state.serviceIndex]._id);
+    console.log(res);
     this.setState({
       ...this.state,
       deleteServiceModal: false,
@@ -191,10 +192,10 @@ class Login extends React.Component {
     this.setState({
       ...this.state,
       serviceName: this.state.services[0].name,
-      serviceDescription: this.state.services[0].description,
-      servicePrice: this.state.services[0].price,
-      serviceImagePath: this.state.services[0].cloud_url,
-      serviceImageName: this.state.services[0].cloud_name,
+      serviceDescription: this.state.services[0].description || '',
+      servicePrice: this.state.services[0].price || 0,
+      serviceImagePath: this.state.services[0].cloud_url || '',
+      serviceImageName: this.state.services[0].cloud_name || '',
       serviceIndex: 0
     });
   }
@@ -203,10 +204,10 @@ class Login extends React.Component {
     this.setState({
       ...this.state,
       serviceName: this.state.services[e.currentTarget.id].name,
-      serviceDescription: this.state.services[e.currentTarget.id].description,
-      servicePrice: this.state.services[e.currentTarget.id].price,
-      serviceImagePath: this.state.services[e.currentTarget.id].cloud_url,
-      serviceImageName: this.state.services[e.currentTarget.id].cloud_name,
+      serviceDescription: this.state.services[e.currentTarget.id].description || '',
+      servicePrice: this.state.services[e.currentTarget.id].price || 0,
+      serviceImagePath: this.state.services[e.currentTarget.id].cloud_url || '',
+      serviceImageName: this.state.services[e.currentTarget.id].cloud_name || '',
       serviceIndex: index
     });
   }
@@ -293,12 +294,14 @@ class Login extends React.Component {
                         </FormFeedback>
                       </FormGroup>
 
+                      <Fade in>
                       {this.state.serviceImagePath &&
                         <img className="serviceImage mb-8" src={this.state.serviceImagePath} alt={this.state.serviceImageName} />
                       }
                       {!this.state.serviceImagePath &&
                         <div className="serviceImage backgroundImage mb-8"></div>
                       }
+                      </Fade>
 
                     </Col>
 
