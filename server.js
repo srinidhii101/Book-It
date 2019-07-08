@@ -4,8 +4,8 @@ var cors = require('cors');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 dotenv.config();
-const UsersController = require('./server/controllers/usersController');
-const ServiceController = require('./server/controllers/servicesController');
+const UsersController = require('./api/controllers/usersController');
+const ServiceController = require('./api/controllers/servicesController');
 
 // const API_PORT = 3001;
 const app = express();
