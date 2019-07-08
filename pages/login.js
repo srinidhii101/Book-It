@@ -36,7 +36,7 @@ class Login extends React.Component {
         //TODO: Give authentication
         //get authentication from database
         if(true) {
-          const bookit = { "user": this.state.username, "session": 'a1a1a1a1', 'role': 'vendor', 'id': 2 };
+          const bookit = { "user": this.state.username, "session": 'a1a1a1a1', 'role': 'vendor', 'id': '5d1f7fbf8fce462763a1aecd' };
           ls.set('bookit', bookit);
         }
         Router.push('/');

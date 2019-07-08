@@ -9,10 +9,8 @@ import { Modal, ModalHeader, ModalBody, ModalTitle, ModalFooter, Button, Form, F
 import Dropzone from 'react-dropzone';
 import request from 'superagent';
 import Router from 'next/router';
+import axios from 'axios';
 
-//Get environment variables
-// const dotenv = require('dotenv');
-// dotenv.config();
 
 //Cloudinary constants
 const CLOUDINARY_UPLOAD_PRESET = process.env.CLOUDINARY_UPLOAD_PRESET;
@@ -50,10 +48,13 @@ class Login extends React.Component {
     if(checkRole(['admin', 'vendor'])) {
       Router.push('/login');
     }
+
     fetch('http://localhost:3001/api/users/'+ checkUserId() +'/services')
       .then((data) => data.json())
       .then((res) => this.setState({ services: res.data }))
-      .then(() => this.loadFirstService());
+      .then(() => this.loadFirstService())
+      .catch((err)=>{/* Do nothing */})
+
   }
 
   addServiceToggle() {
@@ -80,8 +81,8 @@ class Login extends React.Component {
   //handling sending the image to cloudinary
   handleImageUpload(file) {
     let upload = request.post(CLOUDINARY_UPLOAD_URL)
-                        .field('upload_preset', CLOUDINARY_UPLOAD_PRESET)
-                        .field('file', file);
+                          .field('upload_preset', CLOUDINARY_UPLOAD_PRESET)
+                          .field('file', file);
 
     upload.end((err, response) => {
       if (err) {
@@ -104,7 +105,7 @@ class Login extends React.Component {
     this.setState({ ...this.state, serviceDescription: e.currentTarget.value});
   }
   handleServicePriceChange = (e) => {
-    this.setState({ ...this.state, servicePrice: e.currentTarget.value});
+    this.setState({ ...this.state, servicePrice: e.target.value});
   }
   handleAddServiceNameChange = (e) => {
     this.setState({ ...this.state, addServiceName: e.currentTarget.value});
@@ -126,21 +127,42 @@ class Login extends React.Component {
     }
   }
 
-  handleAddServiceFormSubmit(e) {
+  async handleAddServiceFormSubmit(e) {
     e.preventDefault();
     e.stopPropagation();
     if(!isEmptyString(this.state.addServiceName) && isPositiveNumber(this.state.addServicePrice)) {
       // TODO: actually apply changes to the JSON object
-      toast.success("The service has been added!");
-      this.setState({
-        ...this.state,
-        addServiceModal: false,
-        addServiceName: '',
-        addServicePrice: 0,
-        addServiceDescription: '',
-        uploadedFile: null,
-        uploadedFileCloudinaryUrl: ''
+      axios.defaults.headers.common = {};
+      axios.defaults.headers.common.accept = "application/json";
+
+      const res = await axios.post('http://localhost:3001/api/services', {
+           "user": checkUserId(),
+           "lastBooked": null,
+           "numberOfBookings": 0,
+           "name": this.state.addServiceName,
+           "description": this.state.addServiceDescription,
+           "price": this.state.addServicePrice,
+           "cloud_name": this.state.uploadedFile.path,
+           "cloud_url": this.state.uploadedFileCloudinaryUrl
       });
+
+      console.log(res);
+
+      if(res.data.success) {
+        toast.success("The service has been added!");
+        this.setState({
+          ...this.state,
+          addServiceModal: false,
+          addServiceName: '',
+          addServicePrice: 0,
+          addServiceDescription: '',
+          uploadedFile: null,
+          uploadedFileCloudinaryUrl: ''
+        });
+      }
+      else {
+        toast.success("There was an issue adding your service :(");
+      }
     }
   }
 
@@ -191,8 +213,6 @@ class Login extends React.Component {
 
   render() {
     //initialize values
-
-    const { serviceName, servicePrice, serviceDescription, addServiceName, addServicePrice, addServiceDescription } = this.state;
     const closeAddServiceButton = <button className="close" onClick={this.addServiceToggle}>&times;</button>;
     const closeDeleteServiceButton = <button className="close" onClick={this.deleteServiceToggle}>&times;</button>;
     /* Wrapping the form with a navigation and footer */
@@ -206,7 +226,7 @@ class Login extends React.Component {
               <Container>
                 <Row>
                   <Col>
-                     <Input type="search" placeholder="Search service here..." />
+                     <Input type="search" placeholder="Search..." autoFocus className="mt-1"/>
                   </Col>
                 </Row>
                 <hr/>
@@ -219,7 +239,7 @@ class Login extends React.Component {
                           return (
                             <ListGroupItem
                               action
-                              key={service.id}
+                              key={service._id}
                               id={index}
                               active={index == this.state.serviceIndex}
                               className="listItem"
@@ -290,7 +310,7 @@ class Login extends React.Component {
                         </InputGroupAddon>
                         <Input
                           type="number"
-                          value={servicePrice}
+                          value={this.state.servicePrice}
                           min="0"
                           onChange={this.handleServicePriceChange}
                           valid={isPositiveNumber(this.state.servicePrice)}
@@ -310,7 +330,7 @@ class Login extends React.Component {
                           valid={true}
                           rows={8}
                           onChange={this.handleServiceDescriptionChange}
-                          value={serviceDescription} />
+                          value={this.state.serviceDescription} />
                       </FormGroup>
 
                       {/* Register and Login Buttons */}
@@ -348,7 +368,7 @@ class Login extends React.Component {
             <Form
             name="addServiceForm"
             noValidate
-            validated={(!isEmptyString(this.state.addServiceName) && isPositiveNumber(servicePrice)).toString()}
+            validated={(!isEmptyString(this.state.addServiceName) && isPositiveNumber(this.state.addServicePrice)).toString()}
             onSubmit={e => this.handleSubmit(e)} >
 
               {/* Service Name */}

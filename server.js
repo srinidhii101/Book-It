@@ -4,8 +4,8 @@ var cors = require('cors');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 dotenv.config();
-const UsersModel = require('./server/models/usersModel');
-const ServicesModel = require('./server/models/servicesModel');
+const UsersController = require('./server/controllers/usersController');
+const ServiceController = require('./server/controllers/servicesController');
 
 // const API_PORT = 3001;
 const app = express();
@@ -32,23 +32,38 @@ app.use(bodyParser.json());
 
 //fetch all users
 router.get('/users', (req, res) => {
-  return UsersModel.getUsers(req, res);
+  return UsersController.getUsers(req, res);
 });
 
 //fetch user
-router.get('/users/:id', (req, res) => {
-  return UsersModel.getUser(req, res);
+router.get('/users/:_id', (req, res) => {
+  if(typeof req.params.id === String) {
+    req.params.id = mongoose.Types.ObjectId(req.params.id);
+  }
+  return UsersController.getUser(req, res);
 })
 
 //fetch user services
-router.get('/users/:id/services', (req, res) => {
-  return UsersModel.getUserServices(req, res);
+router.get('/users/:_id/services', (req, res) => {
+  return UsersController.getUserServices(req, res);
 });
 
 //fetch all users
 router.get('/services', (req, res) => {
-  return ServicesModel.getServices(req, res);
+  return ServiceController.getServices(req, res);
 });
+
+// this is our create methid
+// this method adds new data in our database
+router.post('/users', (req, res) => {
+  return UsersController.createUser(req, res);
+});
+
+// this method adds new service in our database
+router.post('/services', (req, res) => {
+  return ServiceController.createService(req, res);
+});
+
 
 /* Examples of adding, updating and deleting data */
 
