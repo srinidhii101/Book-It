@@ -54,58 +54,24 @@ router.get('/services', (req, res) => {
   return ServiceController.getServices(req, res);
 });
 
-// this is our create methid
-// this method adds new data in our database
+//add user
 router.post('/users', (req, res) => {
   return UsersController.createUser(req, res);
 });
 
-// this method adds new service in our database
+//add service
 router.post('/services', (req, res) => {
   return ServiceController.createService(req, res);
 });
 
-// this is our delete method
+router.put('/services/:id', (req, res) => {
+  return ServiceController.updateService(req, res);
+});
+
+//delete a user's service
 router.delete('/services/:user/:id', (req, res) => {
   return ServiceController.deleteService(req, res);
 });
-
-
-/* Examples of adding, updating and deleting data */
-
-// this is our update method
-// this method overwrites existing data in our database
-router.post('/updateData', (req, res) => {
-  console.log('here');
-  // const { id, update } = req.body;
-  // Data.findByIdAndUpdate(id, update, (err) => {
-  //   if (err) return res.json({ success: false, error: err });
-  //   return res.json({ success: true });
-  // });
-});
-
-// this is our create methid
-// this method adds new data in our database
-router.post('/putData', (req, res) => {
-  // let data = new Data();
-  //
-  // const { id, message } = req.body;
-  //
-  // if ((!id && id !== 0) || !message) {
-  //   return res.json({
-  //     success: false,
-  //     error: 'INVALID INPUTS',
-  //   });
-  // }
-  // data.message = message;
-  // data.id = id;
-  // data.save((err) => {
-  //   if (err) return res.json({ success: false, error: err });
-  //   return res.json({ success: true });
-  // });
-});
-
-/* End of examples */
 
 // append /api for our http requests
 app.use('/api', router);

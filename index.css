@@ -129,7 +129,7 @@
 /* Services Form */
 .searchResultList {
   max-height: calc(100vh - (254px + 1rem) );
-  min-height: 380px;
+  min-height: 100px;
   overflow-y: scroll;
 }
 

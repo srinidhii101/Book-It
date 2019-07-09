@@ -3,6 +3,7 @@ import DefaultLayout from '../layouts/default';
 import { isPositiveNumber, isEmptyString } from '../functions/validate';
 import { checkRole, checkUserId } from '../functions/auth';
 
+//node modules imports
 import { ToastContainer, toast } from 'react-toastify';
 import '../node_modules/react-toastify/dist/ReactToastify.css';
 import { Modal, ModalHeader, ModalBody, ModalTitle, ModalFooter, Button, Form, FormGroup, Label, Input, FormFeedback, FormText, InputGroup, InputGroupAddon, Container, Row, Col, ListGroup, ListGroupItem, Nav, NavItem, Fade } from 'reactstrap';
@@ -11,8 +12,7 @@ import request from 'superagent';
 import Router from 'next/router';
 import axios from 'axios';
 
-
-//Cloudinary constants
+//env constants
 const CLOUDINARY_UPLOAD_PRESET = process.env.CLOUDINARY_UPLOAD_PRESET;
 const CLOUDINARY_UPLOAD_URL = process.env.CLOUDINARY_UPLOAD_URL;
 
@@ -44,25 +44,24 @@ class Login extends React.Component {
 
   //when the component mounts, redirecting if the user does not possess the correct permissions.
   componentDidMount() {
-
     if(checkRole(['admin', 'vendor'])) {
       Router.push('/login');
     }
-
     fetch('http://localhost:3001/api/users/'+ checkUserId() +'/services')
       .then((data) => data.json())
       .then((res) => this.setState({ services: res.data }))
       .then(() => this.loadFirstService())
-      .catch((err)=>{/* Do nothing */})
-
+      .catch((err)=>{toast.warn("There were issues connecting to the server. Please check your connection.")});
   }
 
+  //toggling add service modal
   addServiceToggle() {
     this.setState(prevState => ({
       addServiceModal: !prevState.addServiceModal
     }));
   }
 
+  //toggling the deletion confirmation modal
   deleteServiceToggle() {
     this.setState(prevState => ({
       deleteServiceModal: !prevState.deleteServiceModal
@@ -74,7 +73,6 @@ class Login extends React.Component {
     this.setState({
       uploadedFile: files[0]
     });
-
     this.handleImageUpload(files[0]);
   }
 
@@ -122,8 +120,23 @@ class Login extends React.Component {
     e.preventDefault();
     e.stopPropagation();
     if(!isEmptyString(this.state.serviceName) && isPositiveNumber(this.state.servicePrice)) {
-      // TODO: Make this a toast
-      toast.success("The service has been updated!");
+      try {
+        let serviceUpdate = this.state.services[this.state.serviceIndex];
+        serviceUpdate.name = this.state.serviceName;
+        serviceUpdate.price = this.state.servicePrice;
+        serviceUpdate.description = this.state.serviceDescription;
+        const config = { headers: {'Content-Type': 'application/json'} };
+
+        axios.put('http://localhost:3001/api/services/' + this.state.services[this.state.serviceIndex]._id, serviceUpdate, config).then(res=>{
+          res.data.success ? toast.success("The service has been successfully updated!")
+                            : toast.warn("There were issues updating your service.");
+        });
+      }
+      catch(err) {
+        toast.warn("There were issues updating your service.");
+        console.log(err);
+      }
+
     }
   }
 
@@ -135,7 +148,8 @@ class Login extends React.Component {
       axios.defaults.headers.common = {};
       axios.defaults.headers.common.accept = "application/json";
 
-      const res = await axios.post('http://localhost:3001/api/services', {
+      try {
+        const res = await axios.post('http://localhost:3001/api/services', {
            "user": checkUserId(),
            "lastBooked": null,
            "numberOfBookings": 0,
@@ -144,22 +158,26 @@ class Login extends React.Component {
            "price": this.state.addServicePrice || 0,
            "cloud_name": this.state.uploadedFile ? this.state.uploadedFile.path : '',
            "cloud_url": this.state.uploadedFileCloudinaryUrl ? this.state.uploadedFileCloudinaryUrl : ''
-      });
-
-      if(res.data.success) {
-        toast.success("The service has been added!");
-        this.setState({
-          ...this.state,
-          addServiceModal: false,
-          addServiceName: '',
-          addServicePrice: 0,
-          addServiceDescription: '',
-          uploadedFile: null,
-          uploadedFileCloudinaryUrl: ''
         });
+
+        if(res.data.success) {
+          toast.success("The service has been added!");
+          this.setState({
+            ...this.state,
+            addServiceModal: false,
+            addServiceName: '',
+            addServicePrice: 0,
+            addServiceDescription: '',
+            uploadedFile: null,
+            uploadedFileCloudinaryUrl: ''
+          });
+        }
+        else {
+          toast.warn("There were issues adding your service.");
+        }
       }
-      else {
-        toast.success("There was an issue adding your service :(");
+      catch(err) {
+        toast.warn("There were issues adding your service.");
       }
     }
   }
@@ -173,19 +191,20 @@ class Login extends React.Component {
     });
   }
 
-  async handleDeleteServiceFormConfirm(e) {
+  handleDeleteServiceFormConfirm(e) {
     e.preventDefault();
     e.stopPropagation();
 
-    const res = await axios.delete('http://localhost:3001/api/services/' + checkUserId() + '/' + this.state.services[this.state.serviceIndex]._id);
-    console.log(res);
-    this.setState({
-      ...this.state,
-      deleteServiceModal: false,
-    });
-
-    // TODO: actually delete it
-    toast.success("The service has been deleted!");
+    if(this.state.services[this.state.serviceIndex]._id){
+      axios.delete('http://localhost:3001/api/services/' + checkUserId() + '/' + this.state.services[this.state.serviceIndex]._id).then(response => {
+        this.setState({
+          ...this.state,
+          deleteServiceModal: false,
+        });
+        // TODO: actually delete it
+        toast.success("The service has been successfully deleted!");
+      }).catch(err=> { toast.warn('There were issues connecting to the server.')});
+    }
   }
 
   loadFirstService() {

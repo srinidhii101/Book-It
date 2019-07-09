@@ -39,10 +39,18 @@ class ServicesModel {
       if (err) return response.send(err);
       Users.findById({ "_id": req.params.user},(error, user)=> {
         if (error) return response.send(error);
-        user.services.filter(service => service !== req.params.id);
+        user.services = user.services.filter(service => JSON.stringify(service.id) !== JSON.stringify(req.params.id));
+        user.save();
       });
     });
     return res.json({ success: true });
+  }
+
+  updateService(req, res) {
+    Services.findByIdAndUpdate(req.params._id, req.body, (err) => {
+      if (err) return res.json({ success: false, error: err });
+      return res.json({ success: true });
+    });
   }
 }
 module.exports = new ServicesModel();
