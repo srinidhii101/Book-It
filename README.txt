@@ -16,7 +16,6 @@ Kirby Hackett - B00733131
     - if you want it to run at another address "now alias **OLD_URL** **NEW_NAME"
       + ex: "now alias https://book-it.kirbyhackett.now.sh book-it"
 
-
 This project can be accessed at the following URL
 - http://bluenose.cs.dal.ca:15057/
 
@@ -106,3 +105,26 @@ http://regexlib.com/Search.aspx?k=phone
 - Used this regex to validate phone number on the front end.It is used in the functions/validate.js file
 in the isValidPhone function.
 - Same regex has been used in the code.
+<<<<<<< HEAD
+=======
+
+https://medium.com/javascript-in-plain-english/full-stack-mongodb-react-node-js-express-js-in-one-simple-app-6cc8ed6de274
+- getting server side running
+
+https://stackoverflow.com/questions/43694799/how-can-i-connect-to-mongodb-atlas-using-robomongo
+https://stackoverflow.com/questions/19961387/trying-to-get-a-list-of-collections-from-mongoose
+- Mongodb atlas and robomongo issues
+
+https://stackoverflow.com/questions/36234137/typeerror-class-function-is-not-a-function-at-object-anonymous
+- Models exporting issues
+
+https://medium.com/the-node-js-collection/making-your-node-js-work-everywhere-with-environment-variables-2da8cdf6e786
+- Environment variables
+
+https://sailsjs.com/documentation/anatomy
+- Better project structure as suggested by Alfred
+
+https://mongoosejs.com/docs/deprecations.html#-findandmodify-
+- Fix console errors on line 21 of server.js
+- Took the code to hide errors "mongoose.set('useFindAndModify', false)"
+>>>>>>> dev

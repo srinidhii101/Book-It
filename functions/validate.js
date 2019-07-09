@@ -5,7 +5,7 @@ export function isPositiveNumber(number) {
 
 //returns true if the password is 8 characters (or more), has one letter and has one number
 export function isValidPassword(password) {
-  return /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password);
+  return /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!$%@#£€*?&]{8,}$/.test(password);
 }
 
 export function isEmptyString(string) {

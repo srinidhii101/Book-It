@@ -15,6 +15,10 @@
   margin-left: -14rem;
 }
 
+.mt-32 {
+  margin-top: 4rem;
+}
+
 .mt-16 {
   margin-top: 2rem;
 }
@@ -50,7 +54,7 @@
   height: 1.2rem;
 }
 
-.nav-link, .navbar-brand {
+.nav-link, .navbar-brand, .listItem {
   cursor: pointer;
 }
 
@@ -125,7 +129,7 @@
 /* Services Form */
 .searchResultList {
   max-height: calc(100vh - (254px + 1rem) );
-  min-height: 380px;
+  min-height: 100px;
   overflow-y: scroll;
 }
 
@@ -138,7 +142,7 @@
 }
 
 .searchContentContainer {
-  min-height: 400px;
+  min-height: 100px;
   overflow-y: scroll;
   border-right: .5px solid #eee;
 }

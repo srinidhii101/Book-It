@@ -1,45 +1,67 @@
 /* Login Page */
 import DefaultLayout from '../layouts/default';
 import { isPositiveNumber, isEmptyString } from '../functions/validate';
+import { checkRole, checkUserId } from '../functions/auth';
 
+//node modules imports
 import { ToastContainer, toast } from 'react-toastify';
 import '../node_modules/react-toastify/dist/ReactToastify.css';
-import { Modal, ModalHeader, ModalBody, ModalTitle, ModalFooter, Button, Form, FormGroup, Label, Input, FormFeedback, FormText, InputGroup, InputGroupAddon, Container, Row, Col, ListGroup, ListGroupItem, Nav, NavItem } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalTitle, ModalFooter, Button, Form, FormGroup, Label, Input, FormFeedback, FormText, InputGroup, InputGroupAddon, Container, Row, Col, ListGroup, ListGroupItem, Nav, NavItem, Fade } from 'reactstrap';
 import Dropzone from 'react-dropzone';
 import request from 'superagent';
+import Router from 'next/router';
+import axios from 'axios';
 
-//Cloudinary constants
-const CLOUDINARY_UPLOAD_PRESET = 'ml_default';
-const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/kirby-cloud/image/upload';
-
+//env constants
+const CLOUDINARY_UPLOAD_PRESET = process.env.CLOUDINARY_UPLOAD_PRESET;
+const CLOUDINARY_UPLOAD_URL = process.env.CLOUDINARY_UPLOAD_URL;
 
 class Login extends React.Component {
   constructor(...args) {
     super(...args);
+
     this.state = {
       uploadedFile: null,
       uploadedFileCloudinaryUrl: '',
       addServiceName: '',
       addServiceDescription: '',
       addServicePrice: 0,
-      serviceName: "Larry's Landscaping",
-      serviceDescription: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`,
+      serviceName: '',
+      serviceDescription: '',
       servicePrice: 0,
+      serviceImagePath: '',
+      serviceImageName: '',
       addServiceModal: false,
       deleteServiceModal: false,
-      confirmDeleteModalShow: false
+      confirmDeleteModalShow: false,
+      services: [],
+      serviceIndex: 0
      };
 
      this.addServiceToggle = this.addServiceToggle.bind(this);
      this.deleteServiceToggle = this.deleteServiceToggle.bind(this);
   }
 
+  //when the component mounts, redirecting if the user does not possess the correct permissions.
+  componentDidMount() {
+    if(checkRole(['admin', 'vendor'])) {
+      Router.push('/login');
+    }
+    fetch('http://localhost:3001/api/users/'+ checkUserId() +'/services')
+      .then((data) => data.json())
+      .then((res) => this.setState({ services: res.data }))
+      .then(() => this.loadFirstService())
+      .catch((err)=>{toast.warn("There were issues connecting to the server. Please check your connection.")});
+  }
+
+  //toggling add service modal
   addServiceToggle() {
     this.setState(prevState => ({
       addServiceModal: !prevState.addServiceModal
     }));
   }
 
+  //toggling the deletion confirmation modal
   deleteServiceToggle() {
     this.setState(prevState => ({
       deleteServiceModal: !prevState.deleteServiceModal
@@ -51,15 +73,14 @@ class Login extends React.Component {
     this.setState({
       uploadedFile: files[0]
     });
-
     this.handleImageUpload(files[0]);
   }
 
   //handling sending the image to cloudinary
   handleImageUpload(file) {
     let upload = request.post(CLOUDINARY_UPLOAD_URL)
-                        .field('upload_preset', CLOUDINARY_UPLOAD_PRESET)
-                        .field('file', file);
+                          .field('upload_preset', CLOUDINARY_UPLOAD_PRESET)
+                          .field('file', file);
 
     upload.end((err, response) => {
       if (err) {
@@ -82,7 +103,7 @@ class Login extends React.Component {
     this.setState({ ...this.state, serviceDescription: e.currentTarget.value});
   }
   handleServicePriceChange = (e) => {
-    this.setState({ ...this.state, servicePrice: e.currentTarget.value});
+    this.setState({ ...this.state, servicePrice: e.target.value});
   }
   handleAddServiceNameChange = (e) => {
     this.setState({ ...this.state, addServiceName: e.currentTarget.value});
@@ -99,26 +120,63 @@ class Login extends React.Component {
     e.preventDefault();
     e.stopPropagation();
     if(!isEmptyString(this.state.serviceName) && isPositiveNumber(this.state.servicePrice)) {
-      // TODO: Make this a toast
-      toast.success("The service has been updated!");
+      try {
+        let serviceUpdate = this.state.services[this.state.serviceIndex];
+        serviceUpdate.name = this.state.serviceName;
+        serviceUpdate.price = this.state.servicePrice;
+        serviceUpdate.description = this.state.serviceDescription;
+        const config = { headers: {'Content-Type': 'application/json'} };
+
+        axios.put('http://localhost:3001/api/services/' + this.state.services[this.state.serviceIndex]._id, serviceUpdate, config).then(res=>{
+          res.data.success ? toast.success("The service has been successfully updated!")
+                            : toast.warn("There were issues updating your service.");
+        });
+      }
+      catch(err) {
+        toast.warn("There were issues updating your service.");
+      }
     }
   }
 
-  handleAddServiceFormSubmit(e) {
+  async handleAddServiceFormSubmit(e) {
     e.preventDefault();
     e.stopPropagation();
     if(!isEmptyString(this.state.addServiceName) && isPositiveNumber(this.state.addServicePrice)) {
       // TODO: actually apply changes to the JSON object
-      toast.success("The service has been added!");
-      this.setState({
-        ...this.state,
-        addServiceModal: false,
-        addServiceName: '',
-        addServicePrice: 0,
-        addServiceDescription: '',
-        uploadedFile: null,
-        uploadedFileCloudinaryUrl: ''
-      });
+      axios.defaults.headers.common = {};
+      axios.defaults.headers.common.accept = "application/json";
+
+      try {
+        const res = await axios.post('http://localhost:3001/api/services', {
+           "user": checkUserId(),
+           "lastBooked": null,
+           "numberOfBookings": 0,
+           "name": this.state.addServiceName,
+           "description": this.state.addServiceDescription || '',
+           "price": this.state.addServicePrice || 0,
+           "cloud_name": this.state.uploadedFile ? this.state.uploadedFile.path : '',
+           "cloud_url": this.state.uploadedFileCloudinaryUrl ? this.state.uploadedFileCloudinaryUrl : ''
+        });
+
+        if(res.data.success) {
+          toast.success("The service has been added!");
+          this.setState({
+            ...this.state,
+            addServiceModal: false,
+            addServiceName: '',
+            addServicePrice: 0,
+            addServiceDescription: '',
+            uploadedFile: null,
+            uploadedFileCloudinaryUrl: ''
+          });
+        }
+        else {
+          toast.warn("There were issues adding your service.");
+        }
+      }
+      catch(err) {
+        toast.warn("There were issues adding your service.");
+      }
     }
   }
 
@@ -134,18 +192,45 @@ class Login extends React.Component {
   handleDeleteServiceFormConfirm(e) {
     e.preventDefault();
     e.stopPropagation();
+
+    if(this.state.services[this.state.serviceIndex]._id){
+      axios.delete('http://localhost:3001/api/services/' + checkUserId() + '/' + this.state.services[this.state.serviceIndex]._id).then(response => {
+        this.setState({
+          ...this.state,
+          deleteServiceModal: false,
+        });
+        // TODO: actually delete it
+        toast.success("The service has been successfully deleted!");
+      }).catch(err=> { toast.warn('There were issues connecting to the server.')});
+    }
+  }
+
+  loadFirstService() {
     this.setState({
       ...this.state,
-      deleteServiceModal: false,
+      serviceName: this.state.services[0].name,
+      serviceDescription: this.state.services[0].description || '',
+      servicePrice: this.state.services[0].price || 0,
+      serviceImagePath: this.state.services[0].cloud_url || '',
+      serviceImageName: this.state.services[0].cloud_name || '',
+      serviceIndex: 0
     });
+  }
 
-    // TODO: actually delete it
-    toast.success("The service has been deleted!");
-
+  handleServiceIndexChange(index, e) {
+    this.setState({
+      ...this.state,
+      serviceName: this.state.services[e.currentTarget.id].name,
+      serviceDescription: this.state.services[e.currentTarget.id].description || '',
+      servicePrice: this.state.services[e.currentTarget.id].price || 0,
+      serviceImagePath: this.state.services[e.currentTarget.id].cloud_url || '',
+      serviceImageName: this.state.services[e.currentTarget.id].cloud_name || '',
+      serviceIndex: index
+    });
   }
 
   render() {
-    const { serviceName, servicePrice, serviceDescription, addServiceName, addServicePrice, addServiceDescription } = this.state;
+    //initialize values
     const closeAddServiceButton = <button className="close" onClick={this.addServiceToggle}>&times;</button>;
     const closeDeleteServiceButton = <button className="close" onClick={this.deleteServiceToggle}>&times;</button>;
     /* Wrapping the form with a navigation and footer */
@@ -159,35 +244,28 @@ class Login extends React.Component {
               <Container>
                 <Row>
                   <Col>
-                     <Input type="search" placeholder="Search service here..." />
+                     <Input type="search" placeholder="Search..." autoFocus className="mt-1"/>
                   </Col>
                 </Row>
                 <hr/>
                 <Row>
                   <Col className="pb-16">
                     <label className="text-muted">Results:</label>
-                    {/* Emulating an overflowing list of services */}
                     <ListGroup className="searchResultList mb-8">
-                      <ListGroupItem action active>Larry's Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
-                      <ListGroupItem action>Techical Support</ListGroupItem>
-                      <ListGroupItem action>Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
-                      <ListGroupItem action>Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
-                      <ListGroupItem action>Techical Support</ListGroupItem>
-                      <ListGroupItem action>Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
-                      <ListGroupItem action>Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
-                      <ListGroupItem action>Techical Support</ListGroupItem>
-                      <ListGroupItem action>Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
-                      <ListGroupItem action>Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
-                      <ListGroupItem action>Techical Support</ListGroupItem>
-                      <ListGroupItem action>Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
+                      {this.state.services &&
+                        this.state.services.map((service, index) => {
+                          return (
+                            <ListGroupItem
+                              action
+                              key={service._id}
+                              id={index}
+                              active={index == this.state.serviceIndex}
+                              className="listItem"
+                              onClick={this.handleServiceIndexChange.bind(this, index)}>
+                                {service.name}
+                            </ListGroupItem>)
+                        })
+                      }
                     </ListGroup>
                   </Col>
 
@@ -224,7 +302,7 @@ class Login extends React.Component {
                         <Label className="text-muted">Service Name</Label>
                         <Input type="text"
                         placeholder="Service Name"
-                        defaultValue={serviceName}
+                        value={this.state.serviceName}
                         onChange={this.handleServiceNameChange}
                         valid={!isEmptyString(this.state.serviceName)}
                         invalid={isEmptyString(this.state.serviceName)} />
@@ -232,8 +310,16 @@ class Login extends React.Component {
                             Please enter a name for your service.
                         </FormFeedback>
                       </FormGroup>
-                      <div className="serviceImage backgroundImage mb-8">
-                      </div>
+
+                      <Fade in>
+                      {this.state.serviceImagePath &&
+                        <img className="serviceImage mb-8" src={this.state.serviceImagePath} alt={this.state.serviceImageName} />
+                      }
+                      {!this.state.serviceImagePath &&
+                        <div className="serviceImage backgroundImage mb-8"></div>
+                      }
+                      </Fade>
+
                     </Col>
 
                     <Col s={12} lg={6}>
@@ -244,7 +330,7 @@ class Login extends React.Component {
                         </InputGroupAddon>
                         <Input
                           type="number"
-                          defaultValue={servicePrice}
+                          value={this.state.servicePrice}
                           min="0"
                           onChange={this.handleServicePriceChange}
                           valid={isPositiveNumber(this.state.servicePrice)}
@@ -264,7 +350,7 @@ class Login extends React.Component {
                           valid={true}
                           rows={8}
                           onChange={this.handleServiceDescriptionChange}
-                          defaultValue={serviceDescription} />
+                          value={this.state.serviceDescription} />
                       </FormGroup>
 
                       {/* Register and Login Buttons */}
@@ -302,7 +388,7 @@ class Login extends React.Component {
             <Form
             name="addServiceForm"
             noValidate
-            validated={(!isEmptyString(this.state.addServiceName) && isPositiveNumber(servicePrice)).toString()}
+            validated={(!isEmptyString(this.state.addServiceName) && isPositiveNumber(this.state.addServicePrice)).toString()}
             onSubmit={e => this.handleSubmit(e)} >
 
               {/* Service Name */}

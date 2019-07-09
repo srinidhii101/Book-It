@@ -51,7 +51,7 @@ class Register extends React.Component {
 
           {/* Login Form */}
           <Form
-          className="loginForm"
+          className="loginForm mt-32"
           noValidate
           validated={(isEmptyString(this.state.username) && isValidEmail(this.state.email) && isValidPassword(this.state.password)).toString()}
           onSubmit={e => this.handleSubmit(e)} >
