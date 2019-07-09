@@ -47,7 +47,7 @@ class ServicesModel {
   }
 
   updateService(req, res) {
-    Services.findByIdAndUpdate(req.params._id, req.body, (err) => {
+    Services.findByIdAndUpdate(req.params.id, req.body, (err) => {
       if (err) return res.json({ success: false, error: err });
       return res.json({ success: true });
     });

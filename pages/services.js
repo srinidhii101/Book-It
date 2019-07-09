@@ -134,9 +134,7 @@ class Login extends React.Component {
       }
       catch(err) {
         toast.warn("There were issues updating your service.");
-        console.log(err);
       }
-
     }
   }
 
