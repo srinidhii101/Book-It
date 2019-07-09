@@ -14,7 +14,6 @@ const router = express.Router();
 
 // this is our MongoDB database
 const dbRoute = process.env.DB_ROUTE;
-//'mongodb+srv://kirby:Bookit@123@bookit-cluster-jltje.mongodb.net/bookit?retryWrites=true&w=majority';
 
 // connects our back end code with the database
 mongoose.connect(dbRoute, { useNewUrlParser: true });
@@ -36,7 +35,7 @@ router.get('/users', (req, res) => {
   return UsersController.getUsers(req, res);
 });
 
-//fetch user
+//fetch user by id
 router.get('/users/:_id', (req, res) => {
   if(typeof req.params.id === String) {
     req.params.id = mongoose.Types.ObjectId(req.params.id);
@@ -44,7 +43,7 @@ router.get('/users/:_id', (req, res) => {
   return UsersController.getUser(req, res);
 })
 
-//fetch user services
+//fetch user services by user id
 router.get('/users/:_id/services', (req, res) => {
   return UsersController.getUserServices(req, res);
 });
@@ -64,18 +63,18 @@ router.post('/services', (req, res) => {
   return ServiceController.createService(req, res);
 });
 
+//update service by id
 router.put('/services/:id', (req, res) => {
   return ServiceController.updateService(req, res);
 });
 
-//delete a user's service
+//delete a user's service by id
 router.delete('/services/:user/:id', (req, res) => {
   return ServiceController.deleteService(req, res);
 });
 
-// append /api for our http requests
+// append /api for requests
 app.use('/api', router);
 
-// launch our backend into a port
-//app.listen(API_PORT, () => console.log(`LISTENING ON PORT ${API_PORT}`));
+//stating which port api will run on
 app.listen(process.env.SERVER_PORT, () => console.log(`LISTENING ON PORT ${process.env.SERVER_PORT}`));
