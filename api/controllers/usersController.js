@@ -33,6 +33,7 @@ class UsersModel {
   createUser(req, res) {
     let user = new Users();
     user.email = req.body.email;
+    user.username=req.body.username;
     user.password = req.body.password;
     user.role = req.body.role;
     user.services = req.body.services;
@@ -43,4 +44,42 @@ class UsersModel {
     });
   }
 }
+
+
+//user login
+/*
+userLogin(req, res) {
+  let user = new Users();
+  email = req.body.email;
+  password = req.body.password;
+  Users.find({email:email}, (err, users) => 
+  { if(err)
+      return res.send ({success: false, message: "could not connect to server"});
+
+  
+  //non-existing account
+  if (users.length != 1) {
+    return res.send ({ success: false, message: "Email ID does not exists"});
+
+  }
+//incorrect password check
+  const user = users[0]; 
+  if (!user.validPassword (password)) {
+    return res.send ({ success: false, message: "Password is incorrect"});
+  }
+
+});
+
+  //successful authentication
+  new userSession = new UserSession();
+  userSession.userID = user._id;
+  userSession.save((err, doc) => {
+    if (err) {
+      return res.send ({ success: false, message: "Could connect database"});
+    }
+
+    return res.send ({ success: "signed in successfully", token: doc._id});
+  });
+
+};  */
 module.exports = new UsersModel();
