@@ -1,5 +1,6 @@
 const Users = require('../models/usersSchema');
 const Services = require('../models/servicesSchema');
+const CryptoJS = require("crypto-js")
 
 class UsersModel {
   //get all users
@@ -36,50 +37,86 @@ class UsersModel {
     user.username=req.body.username;
     user.password = req.body.password;
     user.role = req.body.role;
-    user.services = req.body.services;
+    user.services =  [];
     user.info = req.body.info;
-    user.save((err) => {
-      if (err) return res.json({ success: false, error: err });
-      return res.json({ success: true });
+    
+    //retrieving and checking if email already exist in DB
+    Users.find({'email':user.email}, (err, existingUsers) =>
+    
+      {
+        if (err){
+        return res.json({success: false, error: err});
+      }    
+
+      if (existingUsers.length > 0) {
+       return res.json ({exist : "Email already registered"}); 
+       
+      } 
+      //saving a new user after validation has been successfully performed
+     user.save((err) => {
+        if (err)
+         { 
+           return res.json({ success: false, error: err });
+         }
+        return res.json({ success: true, message: "Account created" }); 
+       
+      }
+
+    ); 
     });
-  }
-}
-
-
-//user login
-/*
-userLogin(req, res) {
-  let user = new Users();
-  email = req.body.email;
-  password = req.body.password;
-  Users.find({email:email}, (err, users) => 
-  { if(err)
-      return res.send ({success: false, message: "could not connect to server"});
-
   
-  //non-existing account
-  if (users.length != 1) {
-    return res.send ({ success: false, message: "Email ID does not exists"});
 
   }
-//incorrect password check
-  const user = users[0]; 
-  if (!user.validPassword (password)) {
-    return res.send ({ success: false, message: "Password is incorrect"});
+
+
+
+    //user login
+
+  userLogin(req, res) {
+    let user = new Users();
+    user.username = req.body.username;
+    user.password = req.body.password;
+
+    //decrypting incoming password from the user
+    var passdecryptIncoming  = (CryptoJS.AES.decrypt(user.password.toString(), 'quick Oats')).toString(CryptoJS.enc.Utf8); //decrypt incoming password
+    
+    //checking if a user exist for the username provided by the user
+    Users.find({'username':user.username}, (err, users) => {
+      if(err) {
+        return res.send ({success: false, message: "could not connect to server"});
+      }
+    
+      //non-existing account
+      if (users.length !== 1) {
+        return res.send ({ success: false, message: "Email ID does not exists"});
+      }
+
+      //decrypting the stored password for the user and checking against the one supplied for login
+    const userdb = users[0]; 
+    var passdecrypt  = (CryptoJS.AES.decrypt(userdb.password.toString(), 'quick Oats')).toString(CryptoJS.enc.Utf8); //decrypt stored password  
+      if (passdecrypt !== passdecryptIncoming) {
+        return res.send ({ success: false, message: "Password is incorrect"});
+      }
+
+      return res.send ({ success: true, message: "Login successful"});
+
+
+    });
+
+
+
+    //successful authentication
+   /* const userSession = new UserSession();
+    userSession.userID = user._id;
+    userSession.save((err, doc) => {
+      if (err) {
+        return res.send ({ success: false, message: "Could connect database"});
+      }
+
+      return res.send ({ success: "signed in successfully", token: doc._id});
+    }); */
+
   }
 
-});
-
-  //successful authentication
-  new userSession = new UserSession();
-  userSession.userID = user._id;
-  userSession.save((err, doc) => {
-    if (err) {
-      return res.send ({ success: false, message: "Could connect database"});
-    }
-
-    return res.send ({ success: "signed in successfully", token: doc._id});
-  });
-
-};  */
+} 
 module.exports = new UsersModel();

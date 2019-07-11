@@ -3,6 +3,7 @@ import DefaultLayout from '../layouts/default';
 import { isValidEmail, isValidPassword, isEmptyString } from '../functions/validate';
 import { ToastContainer, toast } from 'react-toastify';
 import '../node_modules/react-toastify/dist/ReactToastify.css'; 
+import Router from 'next/router';
 import axios from 'axios';
 const CryptoJS = require("crypto-js")
 
@@ -27,16 +28,16 @@ class Register extends React.Component {
  async handleSubmit(e) {
       e.preventDefault();
       e.stopPropagation();
-      if(this.state.username.length > 0 && this.state.password.length > 0) {
-        //TODO: Give authentication
-        
-       // Router.push('/');
+      //validating to esnure form is populated with username and password and valid email is supplied
+      if(this.state.username.length > 0 && this.state.password.length > 0 && isValidEmail(this.state.email)) {
+       
       
       this.setState({ validForm: true });
-
-      var encryptedPass = CryptoJS.AES.encrypt(this.state.password, 'quick Oats');
       
-    
+      //encrypting user password before sending via the network
+      const encryptedPass = CryptoJS.AES.encrypt(this.state.password, 'quick Oats');
+      
+  
 
 
       try {
@@ -45,17 +46,26 @@ class Register extends React.Component {
            "role": "customer",
            "username": this.state.username,
            "email": this.state.email,
-           "password": this.state.password
+           "password": encryptedPass.toString()
            
         });
 
+
+        //successful account creation, redirects to the home page
         if(res.data.success) 
         {
           toast.success("Account created!");
+          Router.push('/');
+        }
+
+        //if email provided by user already exists in repository
+       else if(!res.data.success) 
+        {
+          toast.warn("Account already Exist!");
         }
 
         else {
-          toast.warn("There were issues adding your service.");
+          toast.warn("There were issues connecting to Database.");
           console.log(res.data)
              }
       }
@@ -63,7 +73,7 @@ class Register extends React.Component {
   
 
   catch(err) {
-    toast.warn("There were issues adding your service.");
+    toast.warn("Problem connecting to DB.");
     console.log(err);
   }
 

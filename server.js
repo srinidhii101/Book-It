@@ -53,6 +53,12 @@ router.get('/services', (req, res) => {
   return ServiceController.getServices(req, res);
 });
 
+
+//user login
+router.post('/login', (req, res) => {
+  return UsersController.userLogin(req, res);
+});
+
 //add user
 router.post('/users', (req, res) => {
   return UsersController.createUser(req, res);
@@ -67,6 +73,7 @@ router.post('/services', (req, res) => {
 router.put('/services/:id', (req, res) => {
   return ServiceController.updateService(req, res);
 });
+
 
 //delete a user's service by id
 router.delete('/services/:user/:id', (req, res) => {
