@@ -219,7 +219,7 @@ class Admin extends React.Component {
                       <Button
                         color="success"
                         onClick={this.handleSaveChanges}>
-                        Add New Service
+                        Update User Role
                       </Button>
 
                     </Col>
