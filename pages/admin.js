@@ -1,6 +1,8 @@
 /* This gives the header, navigation, and footer */
 import DefaultLayout from '../layouts/default';
 import { checkRole } from '../functions/auth';
+import axios from 'axios';
+
 
 /* Put the reactstrap components in here that are needed */
 import { Table, Button, Form, FormGroup, Label, Container, Row, Col, ListGroup, ListGroupItem, Input, Nav, NavItem, ButtonGroup, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
@@ -12,15 +14,41 @@ import { faUser, faUserTie, faUserCog } from '@fortawesome/free-solid-svg-icons'
 import Router from 'next/router';
 
 class Admin extends React.Component {
+  constructor(...args) {
+    super(...args);
+
+    this.state = {
+      users:[],
+      userIndex:0,
+      role:"customer",
+      email:""
+
+    };
+  }
   //when the component mounts, redirecting if the user does not possess the correct permissions.
   componentDidMount() {
     if(checkRole(['admin'])) {
       Router.push('/login');
     }
+    fetch('http://localhost:3001/api/users/')
+      .then((data) => data.json())
+      .then((res) => this.setState({ users: res.data }))
+      .then(() => this.loadFirstUser())
+      .then(()=> console.log(this.state))
+      .catch((err)=>{toast.warn("There were issues connecting to the server. Please check your connection.")});
   }
 
   handleSaveChanges() {
     toast.success("Changes have been successfully saved!");
+  }
+
+  loadFirstUser() {
+    this.setState({
+      ...this.state,
+      role: this.state.users[0].role,
+      email:this.state.users[0].email,
+      userIndex: 0
+    });
   }
 
   onChangeOption(e) {
@@ -33,6 +61,24 @@ class Admin extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     e.stopPropagation();
+  }
+  handleUserIndexChange(index, e) {
+    this.setState({
+      ...this.state,
+      role:this.state.users[e.currentTarget.id].role,
+      email:this.state.users[e.currentTarget.id].email,
+      userIndex: index
+    });
+  }
+
+  handleRoleChange = async (e) => {
+   await axios.post('http://localhost:3001/api/users/update', {
+        "email": this.state.email,
+        "newRole": e.currentTarget.id
+     });  
+
+    this.setState({ ...this.state, role: e.currentTarget.id});
+
   }
 
   render() {
@@ -57,28 +103,23 @@ class Admin extends React.Component {
                 <Row>
                   <Col className="pb-16">
                     <label className="text-muted">Results:</label>
-                    {/* Emulating an overflowing list of services */}
+                    {/* Emulating an overflowing list of users */}
                     <ListGroup className="searchResultList mb-8">
-                      <ListGroupItem action active>Larry's Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
-                      <ListGroupItem action>Techical Support</ListGroupItem>
-                      <ListGroupItem action>Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
-                      <ListGroupItem action>Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
-                      <ListGroupItem action>Techical Support</ListGroupItem>
-                      <ListGroupItem action>Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
-                      <ListGroupItem action>Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
-                      <ListGroupItem action>Techical Support</ListGroupItem>
-                      <ListGroupItem action>Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
-                      <ListGroupItem action>Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
-                      <ListGroupItem action>Techical Support</ListGroupItem>
-                      <ListGroupItem action>Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
+                    {this.state.users &&
+                        this.state.users.map((user, index) => {
+                          return (
+                            <ListGroupItem
+                              action
+                              key={user._id}
+                              id={index}
+                              active={index == this.state.userIndex}
+                              className="listItem"
+                              onClick={this.handleUserIndexChange.bind(this, index)}>
+                                {user.email}
+                            </ListGroupItem>)
+                        })
+                      }
+
                     </ListGroup>
                   </Col>
 
@@ -166,13 +207,13 @@ class Admin extends React.Component {
                     <Col s={12} lg={4}>
                       {/* Price of Service */}
                       <Label className="text-muted">User Email:</Label>
-                      <p>kr732968@dal.ca</p>
+                      <p>{this.state.email}</p>
 
                       <Label className="text-muted">Role:</Label><br/>
                       <ButtonGroup className="mb-8">
-                        <Button color="primary"><FontAwesomeIcon className="icon-height" icon={faUserCog}/> Admin</Button>
-                        <Button color="light"><FontAwesomeIcon className="icon-height" icon={faUserTie}/> Vendor</Button>
-                        <Button color="light"><FontAwesomeIcon className="icon-height"icon={faUser}/> Customer</Button>
+                        <Button active={this.state.role==="admin"} id="admin" onClick={this.handleRoleChange.bind(this)}><FontAwesomeIcon className="icon-height" icon={faUserCog}/> Admin</Button>
+                        <Button active={this.state.role==="vendor"} id="vendor" onClick={this.handleRoleChange.bind(this)}><FontAwesomeIcon className="icon-height" icon={faUserTie}/> Vendor</Button>
+                        <Button active={this.state.role==="customer"} id="customer" onClick={this.handleRoleChange.bind(this)}><FontAwesomeIcon className="icon-height"icon={faUser}/> Customer</Button>
                       </ButtonGroup>
 
                       <Button

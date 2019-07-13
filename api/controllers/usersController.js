@@ -42,5 +42,14 @@ class UsersModel {
       return res.json({ success: true });
     });
   }
+
+  
+  //update a user's role
+  updateUserRole(req, res) {
+    Users.findOneAndUpdate({'email': req.body.email}, {'role': req.body.newRole}, {upsert:true}, function(err, doc){
+      if (err) return res.send(500, { error: err });
+      return res.send("succesfully saved");
+  });
+  }
 }
 module.exports = new UsersModel();
