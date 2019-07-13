@@ -3,6 +3,9 @@ import DefaultLayout from '../layouts/default';
 import { Col,ButtonDropdown,Dropdown,ListGroup,ListGroupItem,DropdownMenu,DropdownItem,DropdownToggle, Row, Button, Form, FormGroup, Label, Input, FormText,FormFeedback,Container } from 'reactstrap';
 import StripeCheckout from 'react-stripe-checkout';
 import { isValidPhone, isValidEmail, isEmptyString, isPostalCodeValid } from '../functions/validate';
+import axios from 'axios';
+import { checkUserId } from '../functions/auth';
+import { toast } from 'react-toastify';
 
 class Checkout extends React.Component {
   /* If you need to track variables, put them here in state */
@@ -24,9 +27,22 @@ class Checkout extends React.Component {
     };
    }
 
-  onToken = (token,addresses) =>{
-    //TODO
-  };
+    onToken = (token, addresses) => {
+      try {
+        axios.put('http://localhost:3001/api/payment/' + checkUserId(), {
+          "firstName": this.state.firstName,
+          "lastName": this.state.lastName,
+          "companyName": this.state.companyName,
+          "province":this.state.province,
+          "city":this.state.city,
+          "street":this.state.street,
+          "postalCode":this.state.postalCode,
+          "phoneNumber":this.state.phone
+        });
+      } catch (err) {
+        toast.warn("There were issues updating your service.");
+      }
+    };
 
   handleFirstNameChange = (e) => {
     this.setState({ ...this.state, firstName: e.currentTarget.value})

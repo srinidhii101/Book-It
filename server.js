@@ -73,6 +73,11 @@ router.delete('/services/:user/:id', (req, res) => {
   return ServiceController.deleteService(req, res);
 });
 
+// update the payment details for a service
+router.put('/payment/:id', (req, res) => {
+  return UsersController.updateUserPaymentDetails(req, res, db);
+});
+
 // append /api for requests
 app.use('/api', router);
 

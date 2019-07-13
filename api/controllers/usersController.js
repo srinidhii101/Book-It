@@ -1,5 +1,6 @@
 const Users = require('../models/usersSchema');
 const Services = require('../models/servicesSchema');
+const ObjectID = require('mongodb').ObjectID;
 
 class UsersModel {
   //get all users
@@ -36,11 +37,35 @@ class UsersModel {
     user.password = req.body.password;
     user.role = req.body.role;
     user.services = req.body.services;
-    user.info = req.body.info;
     user.save((err) => {
       if (err) return res.json({ success: false, error: err });
       return res.json({ success: true });
     });
   }
+
+  // Method to update the payment details of a user
+  updateUserPaymentDetails(request, response, db) {
+    var usersCollection = db.collection('users');
+    usersCollection.updateOne({
+      _id: new ObjectID(request.params.id)
+    }, {
+      $set: {
+        info: {
+          firstName: request.body.firstName,
+          lastName: request.body.lastName,
+          companyName: request.body.companyName,
+          country: "Canada",
+          province:request.body.province,
+          city:request.body.city,
+          street:request.body.street,
+          postalCode:request.body.postalCode,
+          phoneNumber:request.body.phone
+        }
+      }
+    }, {
+      upsert: true
+    });
+  }
 }
+
 module.exports = new UsersModel();

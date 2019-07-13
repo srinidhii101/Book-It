@@ -13,7 +13,19 @@ const UsersSchema = new Schema({
     },
     services: Array,
     bookings: Array,
-    info: Object
+    info: {
+      firstName:{type:String},
+      lastName:{type:String},
+      companyName:{type:String},
+      country:{type:String},
+      province:{type:String},
+      city:{type:String},
+      street:{type:String},
+      postalCode:{type:String},
+      phoneNumber:{type:Number},
+      additionalInfo: {type: String},
+      totalAmount: { type: Number}
+    }
   }, { 'timestamps': true });
 
 // export the new Schema so we could modify it using Node.js
