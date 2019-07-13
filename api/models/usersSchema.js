@@ -22,7 +22,8 @@ const UsersSchema = new Schema({
       city:{type:String},
       street:{type:String},
       postalCode:{type:String},
-      phoneNumber:{type:Number},
+      phone:{type:Number},
+      email:{type:String},
       additionalInfo: {type: String},
       totalAmount: { type: Number}
     }

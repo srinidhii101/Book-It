@@ -45,26 +45,28 @@ class UsersModel {
 
   // Method to update the payment details of a user
   updateUserPaymentDetails(request, response, db) {
-    var usersCollection = db.collection('users');
-    usersCollection.updateOne({
-      _id: new ObjectID(request.params.id)
-    }, {
-      $set: {
-        info: {
-          firstName: request.body.firstName,
-          lastName: request.body.lastName,
-          companyName: request.body.companyName,
-          country: "Canada",
-          province:request.body.province,
-          city:request.body.city,
-          street:request.body.street,
-          postalCode:request.body.postalCode,
-          phoneNumber:request.body.phone
+      var usersCollection = db.collection('users');
+      usersCollection.updateOne({
+        _id: new ObjectID(request.params.id)
+      }, {
+        $set: {
+          info: {
+            firstName: request.body.firstName,
+            lastName: request.body.lastName,
+            companyName: request.body.companyName,
+            country: "Canada",
+            province: request.body.province,
+            city: request.body.city,
+            street: request.body.street,
+            postalCode: request.body.postalCode,
+            phone: request.body.phone,
+            email: request.body.email,
+            additionalInfo: request.body.additionalInfo
+          }
         }
-      }
-    }, {
-      upsert: true
-    });
+      }, {
+        upsert: true
+      });
   }
 }
 
