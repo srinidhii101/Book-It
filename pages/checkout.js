@@ -317,7 +317,7 @@ class Checkout extends React.Component {
 
                     <FormGroup className="checkoutTotalGroup">
                       <Label>Your Total:</Label><br/>
-                      <h1>220$</h1>
+                      <h1 id="totalAmount">220$</h1>
                       <StripeCheckout
                         name="Book it"
                         description="Thanks for supporting Local!"
