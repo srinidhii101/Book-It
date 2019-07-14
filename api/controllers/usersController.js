@@ -165,7 +165,7 @@ class UsersModel {
         to: request.body.email,
         subject: "Your Order Receipt",
         text: receiptOutput,
-        html: " Hi,<br><br> PFA the order receipt<br><br>Regards,<br>Team Book it",
+        html: " Hi,<br><br> PFA the order receipt.<br><br>Regards,<br>Team Book it",
         attachments: [{
           filename: 'receipt.txt',
           path: 'receipt.txt',
