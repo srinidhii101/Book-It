@@ -1,4 +1,6 @@
-/* This gives the header, navigation, and footer */
+/* This file will be used to implement the 
+ **payments feature of the application
+ **Author - Manpreet Singh (B00821998) */
 import DefaultLayout from '../layouts/default';
 import { Col,ButtonDropdown,Dropdown,ListGroup,ListGroupItem,DropdownMenu,DropdownItem,DropdownToggle, Row, Button, Form, FormGroup, Label, Input, FormText,FormFeedback,Container } from 'reactstrap';
 import StripeCheckout from 'react-stripe-checkout';
@@ -55,10 +57,12 @@ class Checkout extends React.Component {
       } else {
         toast.error("Payment Service is down, please try again !!!");
       }
-      // reload the page when payment is successful
+
+      // Start for reloading the page when payment is successful
       setTimeout(function () {
         window.location.reload();
       }, 3000);
+      // End for reloading the page when payment is successful
 
     };
 

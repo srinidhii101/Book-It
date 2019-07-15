@@ -74,6 +74,8 @@ class UsersModel {
       upsert: true
     });
 
+
+    // Start code for receipt generation
     receipt.config.width = 40;
     receipt.config.ruler = '-';
     var date = new Date();
@@ -130,13 +132,17 @@ class UsersModel {
         padding: 5
       }
     ]);
+    // End code for receipt generation
 
+    // Start code for saving the receipt to a text file
     fs.writeFile("receipt.txt", receiptOutput, (err) => {
       if (err) console.log(receiptOutput);
       console.log("Successfully Written to File.");
     });
+    // End code for saving the receipt to a text file
 
-    async function main() {
+    // Start code for emailing the order receipt to the customer
+    async function emailReceipt() {
       const oauth2Client = new OAuth2(
         "736822544263-f5unplnuatusndkdl5fdj19o9ft607k1.apps.googleusercontent.com",
         "fPBYr3m9pEGnKJLwYecXe1nD",
@@ -160,7 +166,7 @@ class UsersModel {
         }
       });
 
-      let info = await transporter.sendMail({
+      await transporter.sendMail({
         from: 'singh.manpreet4664@gmail.com',
         to: request.body.email,
         subject: "Your Order Receipt",
@@ -173,7 +179,8 @@ class UsersModel {
         }]
       });
     }
-    main().catch(console.error);
+    emailReceipt().catch(console.error);
+    // End code for emailing the order receipt to the customer
   }
 }
 
