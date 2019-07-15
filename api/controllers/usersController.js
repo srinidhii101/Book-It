@@ -3,12 +3,12 @@ const Services = require('../models/servicesSchema');
 
 //Reference: https://mongodb.github.io/node-mongodb-native/api-bson-generated/objectid.html
 const ObjectID = require('mongodb').ObjectID;
-
 const receipt = require('receipt');
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
 const OAuth2 = google.auth.OAuth2;
-const fs = require("fs");
+const fileStream = require("fs");
+const dateFormatter = require('dateformat');
 
 class UsersModel {
   //get all users
@@ -78,13 +78,13 @@ class UsersModel {
       upsert: true
     });
 
-
     // Start code for receipt generation
     // Reference: https://www.npmjs.com/package/receipt
     // The below code has been modfied to create the receipt as per the customer orders
     receipt.config.width = 40;
     receipt.config.ruler = '-';
     var date = new Date();
+    var formattedDate = dateFormatter(date, "dddd, mmmm dS, yyyy, h:MM:ss TT");
     var customerName = request.body.firstName + ' ' + request.body.lastName;
 
     var receiptOutput = receipt.create([{
@@ -102,7 +102,7 @@ class UsersModel {
         type: 'properties',
         lines: [{
           name: 'Date',
-          value: date
+          value: formattedDate
         }]
       },
       {
@@ -143,7 +143,7 @@ class UsersModel {
     // Start code for saving the receipt to a text file
     // Reference: https://tutorialedge.net/nodejs/reading-writing-files-with-nodejs/
     // Tutorial used to know how to write to file in Node.js
-    fs.writeFile("receipt.txt", receiptOutput, (err) => {
+    fileStream.writeFile("receipt.txt", receiptOutput, (err) => {
       if (err) console.log(receiptOutput);
       console.log("Successfully Written to File.");
     });
