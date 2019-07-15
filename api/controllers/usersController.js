@@ -1,6 +1,9 @@
 const Users = require('../models/usersSchema');
 const Services = require('../models/servicesSchema');
+
+//Reference: https://mongodb.github.io/node-mongodb-native/api-bson-generated/objectid.html
 const ObjectID = require('mongodb').ObjectID;
+
 const receipt = require('receipt');
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
@@ -49,6 +52,7 @@ class UsersModel {
   }
 
   // Method to update the payment details of a user
+  // Reference: https://mongoosejs.com/docs/api.html
   updateUserPaymentDetails(request, response, db) {
     var usersCollection = db.collection('users');
     usersCollection.updateOne({
@@ -76,6 +80,8 @@ class UsersModel {
 
 
     // Start code for receipt generation
+    // Reference: https://www.npmjs.com/package/receipt
+    // The below code has been modfied to create the receipt as per the customer orders
     receipt.config.width = 40;
     receipt.config.ruler = '-';
     var date = new Date();
@@ -135,13 +141,18 @@ class UsersModel {
     // End code for receipt generation
 
     // Start code for saving the receipt to a text file
+    // Reference: https://tutorialedge.net/nodejs/reading-writing-files-with-nodejs/
+    // Tutorial used to know how to write to file in Node.js
     fs.writeFile("receipt.txt", receiptOutput, (err) => {
       if (err) console.log(receiptOutput);
       console.log("Successfully Written to File.");
     });
     // End code for saving the receipt to a text file
 
+
     // Start code for emailing the order receipt to the customer
+    // Reference: https://medium.com/@nickroach_50526/sending-emails-with-node-js-using-smtp-gmail-and-oauth2-316fe9c790a1
+    // Modified the code to send attachment as an email
     async function emailReceipt() {
       const oauth2Client = new OAuth2(
         "736822544263-f5unplnuatusndkdl5fdj19o9ft607k1.apps.googleusercontent.com",

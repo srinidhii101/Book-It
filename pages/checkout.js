@@ -59,6 +59,7 @@ class Checkout extends React.Component {
       }
 
       // Start for reloading the page when payment is successful
+      // Reference: https://guide.freecodecamp.org/javascript/location-reload-method/
       setTimeout(function () {
         window.location.reload();
       }, 3000);
