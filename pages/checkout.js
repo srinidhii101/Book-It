@@ -51,9 +51,9 @@ class Checkout extends React.Component {
         paymentSuccess = false;
       }
       if (paymentSuccess) {
-        toast.success("The payment has been successful");
+        toast.success("Payment Successful and receipt has been emailed to you.");
       } else {
-        toast.error("The payment has not been successful");
+        toast.error("Payment Service is down, please try again !!!");
       }
       // reload the page when payment is successful
       setTimeout(function () {
@@ -335,7 +335,7 @@ class Checkout extends React.Component {
             </Col>
           </Row>
         </Container>
-        <ToastContainer autoClose={2000}/>
+        <ToastContainer autoClose={5000}/>
       </DefaultLayout>
     );
   }

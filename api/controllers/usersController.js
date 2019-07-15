@@ -67,7 +67,7 @@ class UsersModel {
           phone: request.body.phone,
           email: request.body.email,
           additionalInfo: request.body.additionalInfo,
-          totalAmount: request.body.totalAmount
+          totalAmount: 200 // this amount will be changed when add to cart feture is implemented
         }
       }
     }, {
