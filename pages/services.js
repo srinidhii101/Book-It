@@ -21,6 +21,8 @@ class Login extends React.Component {
     super(...args);
 
     this.state = {
+      searchResults:[],
+      searchInput:[],
       uploadedFile: null,
       uploadedFileCloudinaryUrl: '',
       addServiceName: '',
@@ -53,6 +55,25 @@ class Login extends React.Component {
       .then(() => this.loadFirstService())
       .catch((err)=>{toast.warn("There were issues connecting to the server. Please check your connection.")});
   }
+  
+
+  
+   handleSearchInputChange(e)
+   {
+   	
+   	if(e.currentTarget.value.length>0)
+   	{
+   		let results= this.state.services.filter(service=>service.name.toLowerCase().includes(e.currentTarget.value.toLowerCase())|| service.description.toLowerCase().includes(e.currentTarget.value.toLowerCase()));
+
+   	    this.setState({...this.state,"searchInput":e.currentTarget.value, "searchResults":results})
+   	}
+   	else
+   	{
+   		this.setState({...this.state,"searchInput":'',"searchResults":this.state.services});
+   	}
+   }
+  
+
 
   //toggling add service modal
   addServiceToggle() {
@@ -206,6 +227,7 @@ class Login extends React.Component {
   }
 
   loadFirstService() {
+  	console.log("First Service");
     this.setState({
       ...this.state,
       serviceName: this.state.services[0].name,
@@ -213,18 +235,20 @@ class Login extends React.Component {
       servicePrice: this.state.services[0].price || 0,
       serviceImagePath: this.state.services[0].cloud_url || '',
       serviceImageName: this.state.services[0].cloud_name || '',
+      searchResults: this.state.services,
       serviceIndex: 0
     });
   }
 
   handleServiceIndexChange(index, e) {
+  	console.log("Index Change");
     this.setState({
       ...this.state,
-      serviceName: this.state.services[e.currentTarget.id].name,
-      serviceDescription: this.state.services[e.currentTarget.id].description || '',
-      servicePrice: this.state.services[e.currentTarget.id].price || 0,
-      serviceImagePath: this.state.services[e.currentTarget.id].cloud_url || '',
-      serviceImageName: this.state.services[e.currentTarget.id].cloud_name || '',
+      serviceName: this.state.searchResults[e.currentTarget.id].name,
+      serviceDescription: this.state.searchResults[e.currentTarget.id].description || '',
+      servicePrice: this.state.searchResults[e.currentTarget.id].price || 0,
+      serviceImagePath: this.state.searchResults[e.currentTarget.id].cloud_url || '',
+      serviceImageName: this.state.searchResults[e.currentTarget.id].cloud_name || '',
       serviceIndex: index
     });
   }
@@ -244,7 +268,10 @@ class Login extends React.Component {
               <Container>
                 <Row>
                   <Col>
-                     <Input type="search" placeholder="Search..." autoFocus className="mt-1"/>
+                     <Input type="search"
+                      placeholder="Search a Service..." 
+                      autoFocus className="mt-1"
+                      onChange={this.handleSearchInputChange.bind(this)}/>
                   </Col>
                 </Row>
                 <hr/>
@@ -252,8 +279,8 @@ class Login extends React.Component {
                   <Col className="pb-16">
                     <label className="text-muted">Results:</label>
                     <ListGroup className="searchResultList mb-8">
-                      {this.state.services &&
-                        this.state.services.map((service, index) => {
+                      {this.state.searchResults &&
+                        this.state.searchResults.map((service, index) => {
                           return (
                             <ListGroupItem
                               action
@@ -265,6 +292,10 @@ class Login extends React.Component {
                                 {service.name}
                             </ListGroupItem>)
                         })
+                      }
+
+                      {this.state.searchResults!={'key': 'value'} && 
+                      	<p> End of Search Results</p>
                       }
                     </ListGroup>
                   </Col>
