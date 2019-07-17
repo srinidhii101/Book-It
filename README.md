@@ -13,8 +13,8 @@
         http://bluenose.cs.dal.ca:35826/checkout
             
         Since both the services are interlinked.Therefore, these both services cover three features of the application which are: Payment System,
-        Receipt Generation and Email System, which were presented during the Project Proposal.To use the payment system, a user must be logged in
-        to the application.
+        Receipt Generation and Email System, which were presented during the Project Proposal.To use the payment system, a user must be logged 
+        in to the application.
             
             
 **2.**  **Libraries Used**
