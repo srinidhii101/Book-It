@@ -1,130 +1,88 @@
-Team Book-it
+Introduction 
+Book It is one stop potential destination for ordinary services one might need. 
+The web application provides a platform for persons with various technical skills
+and expertise to announce their presence and the services they can provide to people
+living in the Halifax community or region. ("Nketia", 2019)
 
-Members:
-Kirby Hackett - B00733131
+Some of the features of the application include Registration and Login. Registration
+allow users to register/signup to have an account and the Login allows users to login 
+with their account details.
 
-1. Starting up the application
-  a. For development
-    - "npm run dev"
-  b. Check production version
-    = "npm run build"
-    - "npm run start"
-  c. Host on remote server (for our production build)
-    - after signing up for github and linking your account to zeit "now login"
-    - "npm run now-build"
-    - "now"
-    - if you want it to run at another address "now alias **OLD_URL** **NEW_NAME"
-      + ex: "now alias https://book-it.kirbyhackett.now.sh book-it"
+For this assignment, I have taken the responsibility of connecting the front-end
+of the Registration and the Login activities to the backend of the application.
+This has ensured that new users are able to create their account on the platform
+and are able to later login with credentials they created. 
 
-This project can be accessed at the following URL
-- http://bluenose.cs.dal.ca:15057/
+Bluenose and GitLab links
 
-The project folders exist in the following directory on bluenose
-~/public_html/csci4177/a2/
+The link to the Registration on Bluenose is: http://bluenose.cs.dal.ca:23487/register
+and Login is: http://bluenose.cs.dal.ca:23487/login
 
-Gitlab username: khackett
-Project url: https://git.cs.dal.ca/khackett/a2_kirby_hackett/
+Codes related these features which I have worked on are commited to "register_user" branch
+on the Gitlab repository of the group project found here: 
+https://git.cs.dal.ca/khackett/book-it/tree/register_user
+(The application structure has been adopted from Kirby Hacket's work for assignment 2
+which the group agreed to use)
 
-This implementation utilizes React.js as a framework, Next.js for routing, and react-bootstrap
-for styling.
+Files and Codes related to features I worked on in Assignment 4
+Front-end: 
+pages/register.js
+pages/login.js
+
+Back-end
+api/controllers/usersController.js ('createUser' and 'userLogin' functions)
+api/models/userSessions.js
+
+
+How to Register
+
+1. A user needs to provide username, email and password to create an account
+2. Validation rule have been applied to ensure these required information are 
+provided and in the format required. Validation is performed at the front-end before
+the details are submitted to the backend application server and subsequent submission
+to the database
+3. The registration process provides a feedback to the user to inform a successful
+account creation or server error in case any issues happend at the backend.
+If the account creation was successful, the user is redirected to the home of the 
+application
+
+
+How to Login
+1. A user needs to provide a username and password to login into the application
+2.  Validation rule have been applied to ensure these required information are 
+provided and in the format required. Validation is performed at the front-end before
+the details are submitted to the backend application server and subsequent verification
+from the database
+3. If the login is successful, that is an account was found in the database to match the 
+details supplied by the user, the login is successful and user is redirected to the home page.
+The user is held at the login page to provide the correct credntials to login
+
+
+Encryption
+Encryption has been implemented using Crypto JS to secure when transmitting from the 
+front end to server and the encrypted password is saved in database to ensure further
+security at the database level. Encryption is done in both account creation and login
+Decryption is done at the server end during login.
+
+
+Code Reuse
+1. As stated earlier,the basic application structure and front-end development have been
+adopted from Kirby Hackets work for assignment 2. 
+2. To understand how user cration and login are done in Mongo Express React and Node application
+I followed a video tutorial from https://www.youtube.com/watch?time_continue=180&v=s1swJLYxLAA
+
+
 
 References:
+1. Nketia, A (2019). CSCI 5709-Advance Web Development - Assignment 3, Unpublished manuscript, Dalhousie University
 
-https://github.com/zeit/next.js
-- This was used to configure the next.js environment and understand what this variant is
+2.Group 9, Advance Web Summer 2019 (2019). CSCI 5709-Advance Web Development - Assignment 1, Unpublished manuscript, Dalhousie University
 
-https://github.com/zeit/next.js/wiki/Global-styles-and-layouts
-- This was used to get an idea about proper project structure
-- line 5 - 13 in layouts/default.js was where the code was applied.
-- It was modified to allow the wrap the /pages with a consistent layout
+3. Building a Login System for a MERN (MongoDB, Express.js, React.js, Node.js) Web App. (2019). 
+Retrieved 10 July 2019, from https://www.youtube.com/watch?time_continue=180&v=s1swJLYxLAA
+- I followed this tutorial to understand how user creation and login are implemented on MERN
 
-https://github.com/zeit/next.js/wiki/Redirecting-in-%60getInitialProps%60
-- This was used to get idea about routing using next
-- Used in Line 28 in pages/register.js and Line 24 in login
-- I used this to reroute the app properly to the homepage after it will later on become authenticated
+4. crypto-js. (2019). Retrieved 10 July 2019, from https://www.npmjs.com/package/crypto-js
+- I utilised this Librabry to implement AES encryption and decryption of user passwords
 
-https://css-tricks.com/image-upload-manipulation-react/
-https://github.com/damonbauer/react-cloudinary/blob/master/src/App.js
-- These code snippets were used to setup the frontend component of the upload image functionality
-- Line 23 - 47 & 138 - 162 in components/addServiceModal.js
-- This functionality required a 3rd party service to host the image after upload, so I integrated it to
-  work with my codebase.
 
-https://github.com/zeit/next.js#custom-document
-- pages/_document.js file was copied to edit the html tag
-- This was required to become w3c complaint as required, specifically the lang="en" portion
-- Most of the document remains the same with a few unneeded parts cut out
-
-https://stackoverflow.com/questions/29820791/git-ignore-node-modules-folder-everywhere
-- This was used to ignore bulky unneeded files when using git
-- This file remains pretty much unedited, and was used to prevent unneeded files from getting
-  on Gitlab such as the node_modules folder
-
-https://stackoverflow.com/questions/19605150/regex-for-password-must-contain-at-least-eight-characters-at-least-one-number-a
-- Password Regex was taken and left as is. It is imported as a helper function to do some
-  front-end validation
-- Line 6 of functions/validate.js
-
-https://stackoverflow.com/questions/49992423/using-reactstrap-with-next-js
-https://spectrum.chat/next-js/general/ignoring-folders-files-specifically-fonts~4f68cfd5-d576-46b8-adc8-86e9d7ea0b1f
-- Used code from these sources to get react-bootstrap working with next.js
-- Also to allow custom css to work inside the project. The code was kept as is,
-  and is the entirety of the next.config.js file.
-
-http://regexlib.com/REDetails.aspx?regexp_id=26
-- Used this regex to validate emails on the front end. It is used in the functions/validate.js file
-  in the isValidEmail function.
-- I have no modified the regex in anyway besides getting it hook up to my project.
-- Line 10 of functions/validate.js
-
-https://react-bootstrap.github.io/
-- Refactored Login Form code to fit the case for efficiency pages/login.js line 45 - 99
-- Used the documentation to properly utilize grid layouts and used their built-in components.
-
-https://www.kijiji.ca/
-- Used as a point of reference since the website offers similar services
-
-https://github.com/FortAwesome/react-fontawesome
-- Icons for the application
-- in the index page, for the promoted services
-
-https://github.com/zeit/now-builders/issues/155#issuecomment-470932812
-- Learning how to deploy using next.js and now command.
-
-https://stripe.com/docs/recipes/elements-react
-https://alligator.io/react/payments-stripe-checkout-react/
-https://hackernoon.com/stripe-api-reactjs-and-express-bc446bf08301
-- Checkout guides with stripe
-
-http://regexlib.com/Search.aspx?k=postal+code&AspxAutoDetectCookieSupport=1
-- Used this regex to validate postal code on the front end.It is used in the functions/validate.js file
-in the isPostalCodeValid function.
-- Same regex has been used in the code.
-
-http://regexlib.com/Search.aspx?k=phone
-- Used this regex to validate phone number on the front end.It is used in the functions/validate.js file
-in the isValidPhone function.
-- Same regex has been used in the code.
-<<<<<<< HEAD
-=======
-
-https://medium.com/javascript-in-plain-english/full-stack-mongodb-react-node-js-express-js-in-one-simple-app-6cc8ed6de274
-- getting server side running
-
-https://stackoverflow.com/questions/43694799/how-can-i-connect-to-mongodb-atlas-using-robomongo
-https://stackoverflow.com/questions/19961387/trying-to-get-a-list-of-collections-from-mongoose
-- Mongodb atlas and robomongo issues
-
-https://stackoverflow.com/questions/36234137/typeerror-class-function-is-not-a-function-at-object-anonymous
-- Models exporting issues
-
-https://medium.com/the-node-js-collection/making-your-node-js-work-everywhere-with-environment-variables-2da8cdf6e786
-- Environment variables
-
-https://sailsjs.com/documentation/anatomy
-- Better project structure as suggested by Alfred
-
-https://mongoosejs.com/docs/deprecations.html#-findandmodify-
-- Fix console errors on line 21 of server.js
-- Took the code to hide errors "mongoose.set('useFindAndModify', false)"
->>>>>>> dev

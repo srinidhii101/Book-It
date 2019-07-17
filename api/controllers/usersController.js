@@ -71,6 +71,7 @@ class UsersModel {
 
 
     //user login
+    //followed video tutorial from https://www.youtube.com/watch?time_continue=180&v=s1swJLYxLAA
 
   userLogin(req, res) {
     let user = new Users();
@@ -99,6 +100,7 @@ class UsersModel {
         return res.send ({ success: false, message: "Password is incorrect"});
       }
 
+      //create session for user if authentication is successful
       const userSession = new UserSessions();
       userSession.userId = user._id;
       userSession.save((err, secRecord) => { if (err) {
@@ -116,17 +118,6 @@ class UsersModel {
     });
 
 
-
-    //successful authentication
-   /* const userSession = new UserSession();
-    userSession.userID = user._id;
-    userSession.save((err, doc) => {
-      if (err) {
-        return res.send ({ success: false, message: "Could connect database"});
-      }
-
-      return res.send ({ success: "signed in successfully", token: doc._id});
-    }); */
 
   }
 
