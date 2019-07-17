@@ -15,7 +15,11 @@
         Since both the services are interlinked.Therefore, these both services cover three features of the application which are: Payment System,
         Receipt Generation and Email System, which were presented during the Project Proposal.To use the payment system, a user must be logged 
         in to the application.
-            
+        
+        Note: Please use below dummy card details to test the payment system:
+            Card Number: 4242 4242 4242 4242
+            MM/DD: 01/20        
+            CVV: 000    
             
 **2.**  **Libraries Used**
 
