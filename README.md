@@ -13,7 +13,8 @@
         http://bluenose.cs.dal.ca:35826/checkout
             
         Since both the services are interlinked.Therefore, these both services cover the three features of the application which are Payment System,
-        Receipt Generation and Email System which were presented during the Project Proposal.
+        Receipt Generation and Email System which were presented during the Project Proposal.To use the payment system, a user must be logged in
+        to the application.
             
             
 **2.**  **Libraries Used**
@@ -30,10 +31,35 @@
 **3.** **How to use the application**
 
         1. Download the project from the below mentioned repository:
+           https://git.cs.dal.ca/khackett/book-it/tree/Singh_Manpreet_B00821998
+           
+        2. Run 'npm install' in the root folder of the project.
+        
+        3. Use command 'npm run dev' to run the application.This will host the application on 'http://localhost:3000'
+        
+        4. Change port number to '3001; in place of 'process.env.SERVER_PORT' in 'server.js'.Then, use command 'node server.js'
+           to connect to the MongoDB.
+        
+        The project has been hosted at the below mentioned URL with above mentioned features implemented:
+        
+            http://bluenose.cs.dal.ca:35826
+ 
+**4.**  **Project Structure**
+        
+        1. pages - This folder contains all the web pages of the appplication.
+        2. api/controllers - This folder contains all the files to handle the backend of the application.
+        3. api/models - This folder contains the database model and the schema files required for the application.
+        4. functions - This folder contains all the user defined functions.
         
         
+        The following files contain the code for the payment and checkout system:
         
-**3.**  **Coding References**
+        1. pages/checkout.js
+        2. api/controllers/usersController.js
+        3. api/models/usersSchema.js
+        4. server.js
+        
+**5.**  **Coding References**
 
         1. Modified Code:
            
@@ -96,4 +122,11 @@
            Reference:
            FreeCodeCamp. Location Reload Method. Retrieved from https://guide.freecodecamp.org/javascript/location-reload-method/
            
+**5.**  **References**
+
+        1. ObjectID()¶. Retrieved from https://mongodb.github.io/node-mongodb-native/api-bson-generated/objectid.html
+        
+        2. Reading and Writing Files With NodeJS. Retrieved from https://tutorialedge.net/nodejs/reading-writing-files-with-nodejs/
+        
+        3. React-stripe-checkout. Retrieved from https://www.npmjs.com/package/react-stripe-checkout
         
