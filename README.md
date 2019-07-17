@@ -2,18 +2,18 @@
     
     The following features have been developed as part of the fourth assignment:
         
-        1. Checkout Services: This features provides a receipt to the customers about the details of his order and the amount that he has paid
+        1. Checkout Services: This features provide receipt to the customer about the details of his order and the amount that he has paid
         for that order.The receipt is emailed to the user as an attachment.
         
-        2. Payments System: This feature allows the users to pay for the services that they have purchased.The user can fill all the mandatory 
+        2. Payments System: This feature allows the users to pay for the services that they have purchased.A user can fill all the mandatory 
         details and pay for the services.
             
         The url for the payments system and checkout services is mentioned below:
         
         http://bluenose.cs.dal.ca:35826/checkout
             
-        Since both the services are interlinked.Therefore, these both services cover the three features of the application which are Payment System,
-        Receipt Generation and Email System which were presented during the Project Proposal.To use the payment system, a user must be logged in
+        Since both the services are interlinked.Therefore, these both services cover three features of the application which are: Payment System,
+        Receipt Generation and Email System, which were presented during the Project Proposal.To use the payment system, a user must be logged in
         to the application.
             
             
