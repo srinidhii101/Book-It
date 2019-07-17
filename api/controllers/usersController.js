@@ -1,7 +1,7 @@
 const Users = require('../models/usersSchema');
 const Services = require('../models/servicesSchema');
 const CryptoJS = require("crypto-js")
-
+const UserSessions = require('../models/userSessions');
 class UsersModel {
   //get all users
   getUsers(req, res) {
@@ -95,11 +95,23 @@ class UsersModel {
     const userdb = users[0]; 
     var passdecrypt  = (CryptoJS.AES.decrypt(userdb.password.toString(), 'quick Oats')).toString(CryptoJS.enc.Utf8); //decrypt stored password  
       if (passdecrypt !== passdecryptIncoming) {
+
         return res.send ({ success: false, message: "Password is incorrect"});
       }
 
-      return res.send ({ success: true, message: "Login successful"});
+      const userSession = new UserSessions();
+      userSession.userId = user._id;
+      userSession.save((err, secRecord) => { if (err) {
+         return res.send({success: false, message: "Error, could not save session"} ); 
+        }
+        console.log(secRecord._id);
 
+        return res.send ({ success: true, message: "Login successful"});
+       
+
+    })
+
+     
 
     });
 
