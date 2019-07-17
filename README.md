@@ -40,8 +40,7 @@
         4. Change port number to '3001' in place of 'process.env.SERVER_PORT' in 'server.js'.Then, use command 'node server.js'
            to connect to the MongoDB.
         
-        The project has been hosted at the below mentioned URL with above mentioned features implemented:
-        
+        The project has been hosted at the below mentioned URL:
             http://bluenose.cs.dal.ca:35826
  
 **4.**  **Project Structure**
@@ -129,4 +128,6 @@
         2. Reading and Writing Files With NodeJS. Retrieved from https://tutorialedge.net/nodejs/reading-writing-files-with-nodejs/
         
         3. React-stripe-checkout. Retrieved from https://www.npmjs.com/package/react-stripe-checkout
+        
+        4. Dateformat. Retrieved from https://www.npmjs.com/package/dateformat
         
