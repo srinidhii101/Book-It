@@ -37,7 +37,7 @@
         
         3. Use command 'npm run dev' to run the application.This will host the application on 'http://localhost:3000'
         
-        4. Change port number to '3001; in place of 'process.env.SERVER_PORT' in 'server.js'.Then, use command 'node server.js'
+        4. Change port number to '3001' in place of 'process.env.SERVER_PORT' in 'server.js'.Then, use command 'node server.js'
            to connect to the MongoDB.
         
         The project has been hosted at the below mentioned URL with above mentioned features implemented:
