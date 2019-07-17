@@ -1,155 +1,99 @@
-**1.**  **Pages Developed:**
+**1.**  **Assignment 4:**
     
-    The following pages have been developed as part of the second assignment:
+    The following features have been developed as part of the fourth assignment:
         
-        1.  Landing page of the application: This page provides the category of the services which are being offered by the application.
-        There are other options for the users like they can login, register, read the cutomer reviews and book the required services.
-        The url for the landing page is mentioned below:
+        1. Checkout Services: This features provides a receipt to the customers about the details of his order and the amount that he has paid
+        for that order.The receipt is emailed to the user as an attachment.
         
-            https://bookmyservice.herokuapp.com/ 
+        2. Payments System: This feature allows the users to pay for the services that they have purchased.The user can fill all the mandatory 
+        details and pay for the services.
             
-        2. Login Page of the application: This page provides a user the option to login to the application using his email and password.The
-        forgot password link has also been provided to the user which will give the message on the click that password has been emailed to him.
-        The url for the login page is mentioned below:
+        The url for the payments system and checkout services is mentioned below:
         
-            https://bookmyservice.herokuapp.com/Login
+        http://bluenose.cs.dal.ca:35826/checkout
             
-        3. Register Page: This page allows the user to  register for the website using his basic details.The user will get an alert that 
-        registration is successful,if all the validations have been passed.The url for the registration page is mentioned below:
-        
-            https://bookmyservice.herokuapp.com/Register
+        Since both the services are interlinked.Therefore, these both services cover the three features of the application which are Payment System,
+        Receipt Generation and Email System which were presented during the Project Proposal.
             
-        4. Book A Service Page: This page provides a form to the user to book any service like wedding planner,fitness services etc.The user
-        will get an alert on booking a service successfully.The url of the booking a service page is mentioned below:
-        
-            https://bookmyservice.herokuapp.com/BookService
             
-        5. Maintenance Page and Routing of the pages: On click of the pages/links which are under development user will be redirected to
-        a page stating that the site is under maintenance.All the pages have been linked from the home page of the application.The url
-        for the site under maintenance page is mentioned below:
-        
-            https://bookmyservice.herokuapp.com/UnderMaintenance
-
 **2.**  **Libraries Used**
 
-        The following libraries have been used to develop the application:
+        The following libraries have been used to develop the backend of the above mentioned features:
         
-        1.  availity-reactstrap-validation
-        2.  bootstrap
-        3.  react
-        4.  react-bootstrap
-        5.  react-dom
-        6.  react-router-bootstrap
-        7.  react-router-dom
-        8.  react-scripts
-        9.  reactstrap
-        10. reactstrap-validation
+        1.  react-stripe-checkout - This library provides the default payment system.It can be used in test mode and the development mode.
+            For this application, we are using this in test mode as we need to build a dummy payment system.
+            
+        2.  receipt - This library provides the layout to create a receipt.This receipt will be used to notify the user about his order details.
+        
+        3.  nodemailer - This library has been used to create the email server.
+        
+**3.** **How to use the application**
+
+        1. Download the project from the below mentioned repository:
+        
+        
         
 **3.**  **Coding References**
 
         1. Modified Code:
            
-           <NavbarToggler onClick={this.toggle} />
-           <Collapse isOpen={this.state.isOpen} navbar>
-            <Nav className="ml-auto" navbar>
-              <NavItem>
-                <NavLink href="/">Home</NavLink>
-                
+           var receiptOutput = receipt.create([{
+                type: 'text',
+                value: [
+                    'Book It',
+                    'Thanks for supporting Local!',
+                    ]     
+           
            Reference Code:
            
-           <NavItem>
-                <NavLink href="https://github.com/reactstrap/reactstrap">GitHub</NavLink>
-            </NavItem>
+           const output = receipt.create([
+                { type: 'text', value: [
+                    'MY AWESOME STORE',
+                    '123 STORE ST', 
+                    ]
+                }
             
             Reference:
-            https://reactstrap.github.io/components/navbar/
+            Receipt. Retrieved from https://www.npmjs.com/package/receipt
             
-            The reactstrap resource has been used to develop all the UI components of the application.
-            Below is the link of all the components which has been created using that resource:
-            
-            https://reactstrap.github.io/components/alerts/
+            This reference has been used to create the receipt for the customer as per the requirement.
           
         2. Modified Code:
         
-            <BrowserRouter>
-            <Switch>
-                <Route exact path="/" component={Home} />
-                <Route exact path="/Home" component={Home} />
-                <Route exact path="/Login" component={Login} />
+            await transporter.sendMail({
+                from: 'singh.manpreet4664@gmail.com',
+                to: request.body.email,
+                subject: "Your Order Receipt",
+                text: receiptOutput,
       
         
            Reference Code:
-           export default () =>
-           <Switch>
-            <Route path="/" exact component={Home} />
-            </Switch>;
+           
+           const mailOptions = {
+                from: "nicklaus.roach@gmail.com",
+                to: "nicklaus.roach@gmail.com",
+                subject: "Node.js Email with Secure OAuth",
+                generateTextFromHTML: true,
+                html: "<b>test</b>"
+            };
            
            Reference:
-           https://serverless-stack.com/chapters/create-containers.html
+           (2019, June 04). Sending Emails with Node.js Using SMTP, Gmail, and OAuth2. 
+           Retrieved from https://medium.com/@nickroach_50526/sending-emails-with-node-js-using-smtp-gmail-and-oauth2-316fe9c790a1
+           
+           This tutorial has been used to create the email server.
            
         3. Modified Code:
-           
-          <AvForm row>
-          <AvGroup>
-          <FormGroup row>
-          <Label for="email" sm={1}>Email:</Label>
-          <Col sm={4}>
-          <AvInput name="email" type="email" id="example" userName={this.state.userName} onChange={this.handleUserNameChange} placeholder="abc@xyz.com" required />
-          <AvFeedback>Invalid Input!</AvFeedback>
-          
-          Reference Code:
-          
-          <AvGroup>
-          <Label for="example">Rank</Label>
-          <AvInput name="rank" id="example" required />
-          <AvFeedback>This is an error!</AvFeedback>
-          </AvGroup>
-          
-          Reference:
-          https://availity.github.io/availity-reactstrap-validation/components/avform/
-          
-        4. Modified Code:
-           <Col sm={4}>
-            <AvInput name="email" type="email" id="example" userName={this.state.userName} onChange={this.handleUserNameChange} placeholder="abc@xyz.com" required />
-            <AvFeedback>Invalid Input!</AvFeedback>
-            </Col>
         
-          Reference Code:
-            handleChange(event) {
-            this.setState({ value: event.target.value })
-            }
-
-            render() {
-            return (
-            <form>
-            <input
-                type="text"
-                value={this.state.username}
-            onChange={this.handleChange}
-            />
-            </form>
+           setTimeout(function () {
+            window.location.reload();
+            }, 3000);
             
-          Reference:
-          https://flaviocopes.com/react-forms/
-          
-          5. (n.d.). Retrieved from https://www.google.com/search?q=spanner image icon&tbm=isch&source=univ&client=firefox-b-d&sa=X&ved=2ahUKEwiTve_2zMbiAhXsRd8KHWTVCJ8QsAR6BAgGEAE&biw=1280&bih=607#imgrc=OtwX9B5a1sLksM:
-          
-          6. (n.d.). Retrieved from https://www.google.com/search?q=fitness icon png&client=firefox-b-d&tbm=isch&tbs=rimg:Ca-MC6v8GNDXIjhuLMnRAbF2hFwRf0NxZIgk-502s-ljgkxPTU2gvM55k4HIUJ0uTBjiIiU-fvRpHef-cT0Atj5VeioSCW4sydEBsXaEEQLh5tMgIiVmKhIJXBF_1Q3FkiCQRycx3aw_1Acm4qEgn7nTaz6WOCTBG2m29gddzz_1SoSCU9NTaC8znmTEQnsCs0aV5uuKhIJgchQnS5MGOIR2lERfwMEjS8qEgkiJT5-9Gkd5xHXBlgH5DwtdyoSCf5xPQC2PlV6EQ-bh1SNcSPu&tbo=u&sa=X&ved=2ahUKEwidre2Bz8biAhVoj1QKHSw9BcQQ9C96BAgBEBs&biw=1280&bih=607&dpr=1.5#imgrc=XBF_Q3FkiCTbEM:
-          
-          7. (n.d.). Retrieved from https://www.google.com/search?q=cleaning services icon&client=firefox-b-d&tbm=isch&source=iu&ictx=1&fir=kijd_De2n-rmiM:,YZo9u-DifufDJM,_&vet=1&usg=AI4_-kTzJBfaNQvPBsnRbp9Zzgo3VxGvgQ&sa=X&ved=2ahUKEwiw8Mm00MbiAhWGmuAKHWGRDeEQ9QEwCXoECAYQFg#imgrc=kijd_De2n-rmiM:
-          
-          8. (n.d.). Retrieved from https://www.google.com/search?q=wedding services icon&client=firefox-b-d&tbm=isch&source=iu&ictx=1&fir=iMRnzMhgIQcHbM:,i1cyk6_0OeAu0M,_&vet=1&usg=AI4_-kQddqD_Pxi9mI_n5fmTYyOMSJ5p_Q&sa=X&ved=2ahUKEwijsM6X0cbiAhXGdd8KHb7OCRQQ9QEwAHoECAcQBA#imgrc=iMRnzMhgIQcHbM:
-          
-          9. (n.d.). Retrieved from https://www.google.com/search?q=packers and movers icon&client=firefox-b-d&tbm=isch&source=iu&ictx=1&fir=6OasVZqjPizhPM:,fttaH9mTthRKQM,_&vet=1&usg=AI4_-kSPqEi1EliTHXZidWuyEhGhFeefuw&sa=X&ved=2ahUKEwidrpbv0cbiAhXGg-AKHXDNDiMQ9QEwBXoECAcQDg#imgrc=aa3iAZwTy0Pd_M:&vet=1
-          
-          10. (n.d.). Retrieved from https://www.google.com/search?q=tutors icon&tbm=isch&source=univ&client=firefox-b-d&sa=X&ved=2ahUKEwjah5e60sbiAhVjneAKHUU0DHsQsAR6BAgHEAE&biw=1280&bih=607#imgrc=NPwagK9z4BtgFM:
-          
-          11. 41 Neat Cleaning Business Slogans. (2018, July 11). Retrieved from https://www.logoorbit.com/industry/cleaning-services/cleaning-business-slogans
-          
-          12. (n.d.). Retrieved from https://www.google.com/search?q=your child's future begin here slogan&tbm=isch&source=univ&client=firefox-b-d&sa=X&ved=2ahUKEwjljfu918niAhWSmuAKHSmpAjYQsAR6BAgFEAE&biw=1280&bih=607#imgrc=hpGPQjTkLaIRlM:
-          
-          13. Tutorialspoint.com. (n.d.). ReactJS Tutorial. Retrieved from https://www.tutorialspoint.com/reactjs/
-          
-
-**4.** **Repository Link:** 
-   https://git.cs.dal.ca/singh2/a2_manpreet_singh
+           Reference Code:
+           
+           window.location.reload(true);
+        
+           Reference:
+           FreeCodeCamp. Location Reload Method. Retrieved from https://guide.freecodecamp.org/javascript/location-reload-method/
+           
+        
