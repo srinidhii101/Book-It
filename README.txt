@@ -4,7 +4,8 @@ The web application provides a platform for persons with various technical skill
 and expertise to announce their presence and the services they can provide to people
 living in the Halifax community or region. ("Nketia", 2019)
 
-Some of the features of the application include Registration and Login. Registration
+One of the features of the application is Profile management which per our scope
+as defined in the Proposal includes Registration and Login. Registration
 allow users to register/signup to have an account and the Login allows users to login 
 with their account details.
 
