@@ -2,7 +2,7 @@ Introduction
 Book It is one stop potential destination for ordinary services one might need. 
 The web application provides a platform for persons with various technical skills
 and expertise to announce their presence and the services they can provide to people
-living in the Halifax community or region. ("Nketia", 2019)
+living in the Halifax community or region. ("Group 9", 2019)
 
 One of the features of the application is Profile management which per our scope
 as defined in the Proposal includes Registration and Login. Registration
@@ -77,7 +77,7 @@ I followed a video tutorial from https://www.youtube.com/watch?time_continue=180
 References:
 1. Nketia, A (2019). CSCI 5709-Advance Web Development - Assignment 3, Unpublished manuscript, Dalhousie University
 
-2.Group 9, Advance Web Summer 2019 (2019). CSCI 5709-Advance Web Development - Assignment 1, Unpublished manuscript, Dalhousie University
+2.Group 9, Advance Web Summer 2019 (2019). CSCI 5709-Advance Web Development - Project Proposal, Unpublished manuscript, Dalhousie University
 
 3. Building a Login System for a MERN (MongoDB, Express.js, React.js, Node.js) Web App. (2019). 
 Retrieved 10 July 2019, from https://www.youtube.com/watch?time_continue=180&v=s1swJLYxLAA
