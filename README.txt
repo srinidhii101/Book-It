@@ -1,8 +1,8 @@
 Introduction 
-Book It is one stop potential destination for ordinary services one might need. 
-The web application provides a platform for persons with various technical skills
+Book It is one stop potential destination for ordinary services one might need.
+("Group 9", 2019). The web application provides a platform for persons with various technical skills
 and expertise to announce their presence and the services they can provide to people
-living in the Halifax community or region. ("Group 9", 2019)
+living in the Halifax community or region. ("Nketia", 2019)
 
 One of the features of the application is Profile management which per our scope
 as defined in the Proposal includes Registration and Login. Registration
