@@ -278,16 +278,18 @@ class Login extends React.Component {
                     {/* Dynamically listed services */}
                       {this.state.services &&
                         this.state.services.map((service, index) => {
-                          return (
-                            <ListGroupItem
-                              action
-                              key={index}
-                              id={index}
-                              active={index == this.state.serviceIndex}
-                              className="listItem"
-                              onClick={this.handleServiceIndexChange.bind(this, index)}>
-                                {service.name}
-                            </ListGroupItem>)
+                          if(service) {
+                            return (
+                              <ListGroupItem
+                                action
+                                key={index}
+                                id={index}
+                                active={index == this.state.serviceIndex}
+                                className="listItem"
+                                onClick={this.handleServiceIndexChange.bind(this, index)}>
+                                  {service.name}
+                              </ListGroupItem>)
+                          }
                         })
                       }
                     </ListGroup>
