@@ -50,7 +50,7 @@ class Login extends React.Component {
     fetch('http://localhost:3001/api/users/'+ checkUserId() +'/services')
       .then((data) => data.json())
       .then((res) => this.setState({ services: res.data }))
-      .then(() => this.loadFirstService())
+      .then(() => this.loadService(0))
       .catch((err)=>{toast.warn("There were issues connecting to the server. Please check your connection.")});
   }
 
@@ -115,7 +115,7 @@ class Login extends React.Component {
     this.setState({ ...this.state, addServicePrice: e.currentTarget.value});
   }
 
-  //Handling the submit event in the application
+  //Editting a selected service in the application
   handleEditServiceSubmit(e) {
     e.preventDefault();
     e.stopPropagation();
@@ -126,10 +126,14 @@ class Login extends React.Component {
         serviceUpdate.price = this.state.servicePrice;
         serviceUpdate.description = this.state.serviceDescription;
         const config = { headers: {'Content-Type': 'application/json'} };
-
         axios.put('http://localhost:3001/api/services/' + this.state.services[this.state.serviceIndex]._id, serviceUpdate, config).then(res=>{
-          res.data.success ? toast.success("The service has been successfully updated!")
-                            : toast.warn("There were issues updating your service.");
+          if(res.data.success) {
+            this.forceUpdate();
+            toast.success("The service has been successfully updated!");
+          }
+          else{
+            toast.warn("There were issues updating your service.");
+          }
         });
       }
       catch(err) {
@@ -138,6 +142,7 @@ class Login extends React.Component {
     }
   }
 
+  //Adding service to application
   async handleAddServiceFormSubmit(e) {
     e.preventDefault();
     e.stopPropagation();
@@ -145,21 +150,21 @@ class Login extends React.Component {
       // TODO: actually apply changes to the JSON object
       axios.defaults.headers.common = {};
       axios.defaults.headers.common.accept = "application/json";
-
       try {
-        const res = await axios.post('http://localhost:3001/api/services', {
-           "user": checkUserId(),
-           "lastBooked": null,
-           "numberOfBookings": 0,
-           "name": this.state.addServiceName,
-           "description": this.state.addServiceDescription || '',
-           "price": this.state.addServicePrice || 0,
-           "cloud_name": this.state.uploadedFile ? this.state.uploadedFile.path : '',
-           "cloud_url": this.state.uploadedFileCloudinaryUrl ? this.state.uploadedFileCloudinaryUrl : ''
-        });
-
+        const service = {
+          "user": checkUserId(),
+          "lastBooked": null,
+          "numberOfBookings": 0,
+          "name": this.state.addServiceName,
+          "description": this.state.addServiceDescription || '',
+          "price": this.state.addServicePrice || 0,
+          "cloud_name": this.state.uploadedFile ? this.state.uploadedFile.path : '',
+          "cloud_url": this.state.uploadedFileCloudinaryUrl ? this.state.uploadedFileCloudinaryUrl : ''
+        }
+        const res = await axios.post('http://localhost:3001/api/services', service);
         if(res.data.success) {
           toast.success("The service has been added!");
+          this.state.services.push(res.data.service);
           this.setState({
             ...this.state,
             addServiceModal: false,
@@ -167,8 +172,15 @@ class Login extends React.Component {
             addServicePrice: 0,
             addServiceDescription: '',
             uploadedFile: null,
-            uploadedFileCloudinaryUrl: ''
+            uploadedFileCloudinaryUrl: '',
+            serviceIndex: this.state.services.length - 1,
+            serviceName: this.state.services[this.state.services.length-1].name || '',
+            serviceDescription: this.state.services[this.state.services.length-1].description || '',
+            servicePrice: this.state.services[this.state.services.length-1].price || 0,
+            serviceImagePath: this.state.services[this.state.services.length-1].cloud_url || '',
+            serviceImageName: this.state.services[this.state.services.length-1].cloud_name || '',
           });
+          this.forceUpdate();
         }
         else {
           toast.warn("There were issues adding your service.");
@@ -180,6 +192,7 @@ class Login extends React.Component {
     }
   }
 
+  //handle event for canceling the delete modal
   handleDeleteServiceFormCancel(e) {
     e.preventDefault();
     e.stopPropagation();
@@ -189,34 +202,44 @@ class Login extends React.Component {
     });
   }
 
+  //deleting a service from the application
   handleDeleteServiceFormConfirm(e) {
     e.preventDefault();
     e.stopPropagation();
-
     if(this.state.services[this.state.serviceIndex]._id){
-      axios.delete('http://localhost:3001/api/services/' + checkUserId() + '/' + this.state.services[this.state.serviceIndex]._id).then(response => {
+      const index = this.state.serviceIndex;
+      axios.delete('http://localhost:3001/api/services/' + checkUserId() + '/' + this.state.services[index]._id).then(response => {
+        this.state.services.splice(index, 1);
         this.setState({
           ...this.state,
           deleteServiceModal: false,
+          serviceIndex: 0,
+          serviceName: this.state.services[0].name || '',
+          serviceDescription: this.state.services[0].description || '',
+          servicePrice: this.state.services[0].price || 0,
+          serviceImagePath: this.state.services[0].cloud_url || '',
+          serviceImageName: this.state.services[0].cloud_name || '',
         });
-        // TODO: actually delete it
+        this.forceUpdate();
         toast.success("The service has been successfully deleted!");
       }).catch(err=> { toast.warn('There were issues connecting to the server.')});
     }
   }
 
-  loadFirstService() {
+  //helper function to choose to load a service at a certain index
+  loadService(index) {
     this.setState({
       ...this.state,
-      serviceName: this.state.services[0].name,
-      serviceDescription: this.state.services[0].description || '',
-      servicePrice: this.state.services[0].price || 0,
-      serviceImagePath: this.state.services[0].cloud_url || '',
-      serviceImageName: this.state.services[0].cloud_name || '',
-      serviceIndex: 0
+      serviceName: this.state.services[index].name,
+      serviceDescription: this.state.services[index].description || '',
+      servicePrice: this.state.services[index].price || 0,
+      serviceImagePath: this.state.services[index].cloud_url || '',
+      serviceImageName: this.state.services[index].cloud_name || '',
+      serviceIndex: index
     });
   }
 
+  //handler for the event where a new service is clicked in the sidemenu
   handleServiceIndexChange(index, e) {
     this.setState({
       ...this.state,
@@ -252,12 +275,13 @@ class Login extends React.Component {
                   <Col className="pb-16">
                     <label className="text-muted">Results:</label>
                     <ListGroup className="searchResultList mb-8">
+                    {/* Dynamically listed services */}
                       {this.state.services &&
                         this.state.services.map((service, index) => {
                           return (
                             <ListGroupItem
                               action
-                              key={service._id}
+                              key={index}
                               id={index}
                               active={index == this.state.serviceIndex}
                               className="listItem"
@@ -313,15 +337,13 @@ class Login extends React.Component {
 
                       <Fade in>
                       {this.state.serviceImagePath &&
-                        <img className="serviceImage mb-8" src={this.state.serviceImagePath} alt={this.state.serviceImageName} />
+                        <img className="height-auto serviceImage mb-8" src={this.state.serviceImagePath} alt={this.state.serviceImageName} />
                       }
                       {!this.state.serviceImagePath &&
                         <div className="serviceImage backgroundImage mb-8"></div>
                       }
                       </Fade>
-
                     </Col>
-
                     <Col s={12} lg={6}>
                       {/* Price of Service */}
                       <Label className="text-muted">Service Price</Label>
@@ -369,9 +391,7 @@ class Login extends React.Component {
                             Save Changes
                         </Button>
                       </div>
-
                     </Col>
-
                   </Row>
                 </Container>
               </Form>

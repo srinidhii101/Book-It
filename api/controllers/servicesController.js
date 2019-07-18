@@ -29,7 +29,7 @@ class ServicesModel {
         if (error) return res.json({ success: false, error: error });
         user.services.push({"id": service._id});
         user.save();
-        return res.json({ success: true });
+        return res.json({ success: true, service: service });
       });
     });
   }

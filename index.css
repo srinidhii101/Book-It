@@ -47,6 +47,10 @@
   padding-bottom: 1rem;
 }
 
+.height-auto {
+  height: auto !important;
+}
+
 /* Navigation Header */
 .logo-icon {
   margin-top: 0;
