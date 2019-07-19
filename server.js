@@ -58,6 +58,11 @@ router.post('/users', (req, res) => {
   return UsersController.createUser(req, res);
 });
 
+//update user role
+router.post('/users/update', (req, res) => {
+  return UsersController.updateUserRole(req, res);
+});
+
 //add service
 router.post('/services', (req, res) => {
   return ServiceController.createService(req, res);
