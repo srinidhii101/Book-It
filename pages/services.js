@@ -21,6 +21,8 @@ class Login extends React.Component {
     super(...args);
 
     this.state = {
+      searchResults:[],
+      searchInput:[],
       uploadedFile: null,
       uploadedFileCloudinaryUrl: '',
       addServiceName: '',
@@ -49,9 +51,20 @@ class Login extends React.Component {
     }
     fetch('http://bluenose.cs.dal.ca:25057/api/users/'+ checkUserId() +'/services')
       .then((data) => data.json())
-      .then((res) => this.setState({ services: res.data }))
+      .then((res) => this.setState({ services: res.data, searchResults: res.data }))
       .then(() => this.loadService(0))
       .catch((err)=>{toast.warn("There were issues connecting to the server. Please check your connection.")});
+  }
+
+  //handling changes to the search field
+  handleSearchInputChange(e) {
+    if(e.currentTarget.value.length > 0) {
+      let results = this.state.services.filter(service => service.name.toLowerCase().includes(e.currentTarget.value.toLowerCase()) || service.description.toLowerCase().includes(e.currentTarget.value.toLowerCase()));
+      this.setState({ ...this.state, "searchInput": e.currentTarget.value, "searchResults": results })
+    }
+    else {
+      this.setState({...this.state, "searchInput": '', "searchResults": this.state.services});
+    }
   }
 
   //toggling add service modal
@@ -135,6 +148,7 @@ class Login extends React.Component {
             toast.warn("There were issues updating your service.");
           }
         });
+        this.forceUpdate();
       }
       catch(err) {
         toast.warn("There were issues updating your service.");
@@ -147,7 +161,7 @@ class Login extends React.Component {
     e.preventDefault();
     e.stopPropagation();
     if(!isEmptyString(this.state.addServiceName) && isPositiveNumber(this.state.addServicePrice)) {
-      // TODO: actually apply changes to the JSON object
+
       axios.defaults.headers.common = {};
       axios.defaults.headers.common.accept = "application/json";
       try {
@@ -222,6 +236,7 @@ class Login extends React.Component {
         });
         this.forceUpdate();
         toast.success("The service has been successfully deleted!");
+        this.forceUpdate();
       }).catch(err=> { toast.warn('There were issues connecting to the server.')});
     }
   }
@@ -243,11 +258,11 @@ class Login extends React.Component {
   handleServiceIndexChange(index, e) {
     this.setState({
       ...this.state,
-      serviceName: this.state.services[e.currentTarget.id].name,
-      serviceDescription: this.state.services[e.currentTarget.id].description || '',
-      servicePrice: this.state.services[e.currentTarget.id].price || 0,
-      serviceImagePath: this.state.services[e.currentTarget.id].cloud_url || '',
-      serviceImageName: this.state.services[e.currentTarget.id].cloud_name || '',
+      serviceName: this.state.searchResults[e.currentTarget.id].name,
+      serviceDescription: this.state.searchResults[e.currentTarget.id].description || '',
+      servicePrice: this.state.searchResults[e.currentTarget.id].price || 0,
+      serviceImagePath: this.state.searchResults[e.currentTarget.id].cloud_url || '',
+      serviceImageName: this.state.searchResults[e.currentTarget.id].cloud_name || '',
       serviceIndex: index
     });
   }
@@ -267,7 +282,10 @@ class Login extends React.Component {
               <Container>
                 <Row>
                   <Col>
-                     <Input type="search" placeholder="Search..." autoFocus className="mt-1"/>
+                     <Input type="search"
+                      placeholder="Search a Service..."
+                      autoFocus className="mt-1"
+                      onChange={this.handleSearchInputChange.bind(this)}/>
                   </Col>
                 </Row>
                 <hr/>
@@ -275,21 +293,20 @@ class Login extends React.Component {
                   <Col className="pb-16">
                     <label className="text-muted">Results:</label>
                     <ListGroup className="searchResultList mb-8">
-                    {/* Dynamically listed services */}
-                      {this.state.services &&
-                        this.state.services.map((service, index) => {
+                      {this.state.searchResults &&
+                        this.state.searchResults.map((service, index) => {
                           if(service) {
-                            return (
-                              <ListGroupItem
-                                action
-                                key={index}
-                                id={index}
-                                active={index == this.state.serviceIndex}
-                                className="listItem"
-                                onClick={this.handleServiceIndexChange.bind(this, index)}>
-                                  {service.name}
-                              </ListGroupItem>)
-                          }
+                          return (
+                            <ListGroupItem
+                              action
+                              key={service._id}
+                              id={index}
+                              active={index == this.state.serviceIndex}
+                              className="listItem"
+                              onClick={this.handleServiceIndexChange.bind(this, index)}>
+                                {service.name}
+                            </ListGroupItem>
+                          )}
                         })
                       }
                     </ListGroup>

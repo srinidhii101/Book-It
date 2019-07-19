@@ -3,47 +3,6 @@ Team Book-it
 Members:
 Kirby Hackett - B00733131
 
-*** ASSIGNMENT 4 ***
-
-In assignment 4 I decided to include 2 features:
-- Upload an image,
-- CRUD for services (Create, Read, Update, and Delete).
-
-In order to access the services section you must login. As long as you type in a valid
-username and password (front-end validate) the app will give you a vendor account. With This
-you will be able to access this part of the assignment under the route /services
-
-* Note - Some of my work was done on the dev branch to configure a common backend for the
-team. In result I developed the following folders/files:
-
-- /api
-  - controllers (and all of the files it contains)
-  - models (and all of the files it contains)
-- /functions/auth.js
-  ~ the bare minimum to create a localSession
-- /pages/services.js
-  ~ This is where the CRUD for services and upload image api comes into play
-- /index.css
-  ~ A bit of styling
-- /server.js
-  ~ Routes and backend api started here
-
-In addition to the above files, I created all of the non-static files in the application or contributed to
-most of them when assisting my group members in showing them how react/node/mongodb/next.js etc...
-works.
-
-The standard listed by the sails.js documentation was used as reference when developing the structure for the
-backend of the application as brought forward by my group member Alfred.
-https://sailsjs.com/documentation/anatomy
-
-The application will be hosted at:
-- http://bluenose.cs.dal.ca:15057/
-
-
-*** END OF ASSIGNMENT 4 COMMENT ***
-
-
-
 1. Starting up the application
   a. For development
     - "npm run dev"
