@@ -3,7 +3,6 @@ import DefaultLayout from '../layouts/default';
 import { checkRole } from '../functions/auth';
 import axios from 'axios';
 
-
 /* Put the reactstrap components in here that are needed */
 import { Table, Button, Form, FormGroup, Label, Container, Row, Col, ListGroup, ListGroupItem, Input, Nav, NavItem, ButtonGroup, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
@@ -18,13 +17,13 @@ class Admin extends React.Component {
     super(...args);
 
     this.state = {
-      users:[],
-      userIndex:0,
-      role:"customer",
-      email:""
-
+      users: [],
+      userIndex: 0,
+      role: "customer",
+      email: ""
     };
   }
+
   //when the component mounts, redirecting if the user does not possess the correct permissions.
   componentDidMount() {
     if(checkRole(['admin'])) {
@@ -34,14 +33,33 @@ class Admin extends React.Component {
       .then((data) => data.json())
       .then((res) => this.setState({ users: res.data }))
       .then(() => this.loadFirstUser())
-      .then(()=> console.log(this.state))
       .catch((err)=>{toast.warn("There were issues connecting to the server. Please check your connection.")});
   }
 
-  handleSaveChanges() {
-    toast.success("Changes have been successfully saved!");
+  //save changes clicked
+  async handleSaveChanges(e) {
+    try {
+      // hosted server : http://bluenose.cs.dal.ca:25057/api/users/
+      let userUpdate = this.state.users[this.state.userIndex];
+      userUpdate.role = this.state.role;
+      const config = { headers: {'Content-Type': 'application/json'} };
+      axios.put('http://localhost:3001/api/users/' + this.state.users[this.state.userIndex]._id, userUpdate, config).then(res=>{
+        if(res.data.success) {
+          this.forceUpdate();
+          toast.success("The user has been successfully updated!");
+        }
+        else{
+          toast.warn("There were issues updating the user.");
+        }
+      });
+    }
+    catch(err) {
+      toast.warn("There were issues updating the user.");
+      console.log(err);
+    }
   }
 
+  //loading the first user in the list of users
   loadFirstUser() {
     this.setState({
       ...this.state,
@@ -51,6 +69,7 @@ class Admin extends React.Component {
     });
   }
 
+  //when the
   onChangeOption(e) {
     if(e.target.value) {
       e.currentTarget.childNodes[0].innerHTML = e.target.value;
@@ -58,10 +77,13 @@ class Admin extends React.Component {
     }
   }
 
+  //no submit events
   handleSubmit(e) {
     e.preventDefault();
     e.stopPropagation();
   }
+
+  //selecting a new user from the sidebar
   handleUserIndexChange(index, e) {
     this.setState({
       ...this.state,
@@ -71,20 +93,16 @@ class Admin extends React.Component {
     });
   }
 
-  handleRoleChange = async (e) => {
-   await axios.post('http://localhost:3001/api/users/update', {
-        "email": this.state.email,
-        "newRole": e.currentTarget.id
-     });  
-
-    this.setState({ ...this.state, role: e.currentTarget.id});
-
+  //setting the local state when a user is changed
+  async handleRoleChange(e) {
+    this.setState({
+      ...this.state,
+      role: e.currentTarget.id,
+      email: this.state.users[this.state.userIndex].email
+    });
   }
 
   render() {
-    /* Define variables here */
-    //const { username, password } = this.state;
-
     return (
       <DefaultLayout>
         {/* Your HTML/JSX goes here... I'll probably do this one */}
@@ -96,7 +114,7 @@ class Admin extends React.Component {
               <Container>
                 <Row>
                   <Col>
-                     <Input type="search" placeholder="Search user here..." />
+                     <Input type="search" className="mt-1" placeholder="Search user here..." />
                   </Col>
                 </Row>
                 <hr/>
@@ -211,14 +229,15 @@ class Admin extends React.Component {
 
                       <Label className="text-muted">Role:</Label><br/>
                       <ButtonGroup className="mb-8">
-                        <Button active={this.state.role==="admin"} id="admin" onClick={this.handleRoleChange.bind(this)}><FontAwesomeIcon className="icon-height" icon={faUserCog}/> Admin</Button>
-                        <Button active={this.state.role==="vendor"} id="vendor" onClick={this.handleRoleChange.bind(this)}><FontAwesomeIcon className="icon-height" icon={faUserTie}/> Vendor</Button>
-                        <Button active={this.state.role==="customer"} id="customer" onClick={this.handleRoleChange.bind(this)}><FontAwesomeIcon className="icon-height"icon={faUser}/> Customer</Button>
+                        <Button active={this.state.role==="admin"} disabled={this.state.users.length < 1} id="admin" onClick={this.handleRoleChange.bind(this)}><FontAwesomeIcon className="icon-height" icon={faUserCog}/> Admin</Button>
+                        <Button active={this.state.role==="vendor"} disabled={this.state.users.length < 1} id="vendor" onClick={this.handleRoleChange.bind(this)}><FontAwesomeIcon className="icon-height" icon={faUserTie}/> Vendor</Button>
+                        <Button active={this.state.role==="customer"} disabled={this.state.users.length < 1} id="customer" onClick={this.handleRoleChange.bind(this)}><FontAwesomeIcon className="icon-height"icon={faUser}/> Customer</Button>
                       </ButtonGroup>
 
                       <Button
                         color="success"
-                        onClick={this.handleSaveChanges}>
+                        onClick={this.handleSaveChanges.bind(this)}
+                        disabled={this.state.users.length < 1}>
                         Update Changes
                       </Button>
 
