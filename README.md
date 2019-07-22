@@ -125,3 +125,72 @@ https://sailsjs.com/documentation/anatomy
 https://mongoosejs.com/docs/deprecations.html#-findandmodify-
 - Fix console errors on line 21 of server.js
 - Took the code to hide errors "mongoose.set('useFindAndModify', false)"
+
+1. Modified Code:
+
+      var receiptOutput = receipt.create([{
+           type: 'text',
+           value: [
+               'Book It',
+               'Thanks for supporting Local!',
+               ]     
+
+      Reference Code:
+
+      const output = receipt.create([
+           { type: 'text', value: [
+               'MY AWESOME STORE',
+               '123 STORE ST',
+               ]
+           }
+
+       Reference:
+       Receipt. Retrieved from https://www.npmjs.com/package/receipt
+
+       This reference has been used to create the receipt for the customer as per the requirement.
+
+   2. Modified Code:
+
+       await transporter.sendMail({
+           from: 'singh.manpreet4664@gmail.com',
+           to: request.body.email,
+           subject: "Your Order Receipt",
+           text: receiptOutput,
+
+
+      Reference Code:
+
+      const mailOptions = {
+           from: "nicklaus.roach@gmail.com",
+           to: "nicklaus.roach@gmail.com",
+           subject: "Node.js Email with Secure OAuth",
+           generateTextFromHTML: true,
+           html: "<b>test</b>"
+       };
+
+      Reference:
+      (2019, June 04). Sending Emails with Node.js Using SMTP, Gmail, and OAuth2.
+      Retrieved from https://medium.com/@nickroach_50526/sending-emails-with-node-js-using-smtp-gmail-and-oauth2-316fe9c790a1
+
+      This tutorial has been used to create the email server.
+
+   3. Modified Code:
+
+      setTimeout(function () {
+       window.location.reload();
+       }, 3000);
+
+      Reference Code:
+
+      window.location.reload(true);
+
+      Reference:
+      FreeCodeCamp. Location Reload Method. Retrieved from https://guide.freecodecamp.org/javascript/location-reload-method/
+
+      1. ObjectID()¶. Retrieved from https://mongodb.github.io/node-mongodb-native/api-bson-generated/objectid.html
+
+      2. Reading and Writing Files With NodeJS. Retrieved from https://tutorialedge.net/nodejs/reading-writing-files-with-nodejs/
+
+      3. React-stripe-checkout. Retrieved from https://www.npmjs.com/package/react-stripe-checkout
+
+      4. Dateformat. Retrieved from https://www.npmjs.com/package/dateformat
