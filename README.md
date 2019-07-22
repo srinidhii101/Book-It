@@ -1,35 +1,3 @@
-Team Book-it
-
-Members:
-Kirby Hackett - B00733131
-
-1. Starting up the application
-  a. For development
-    - "npm run dev"
-  b. Check production version
-    = "npm run build"
-    - "npm run start"
-  c. Host on remote server (for our production build)
-    - after signing up for github and linking your account to zeit "now login"
-    - "npm run now-build"
-    - "now"
-    - if you want it to run at another address "now alias **OLD_URL** **NEW_NAME"
-      + ex: "now alias https://book-it.kirbyhackett.now.sh book-it"
-
-This project can be accessed at the following URL
-- http://bluenose.cs.dal.ca:15057/
-
-The project folders exist in the following directory on bluenose
-~/public_html/csci4177/a2/
-
-Gitlab username: khackett
-Project url: https://git.cs.dal.ca/khackett/a2_kirby_hackett/
-
-This implementation utilizes React.js as a framework, Next.js for routing, and react-bootstrap
-for styling.
-
-References:
-
 https://github.com/zeit/next.js
 - This was used to configure the next.js environment and understand what this variant is
 
@@ -194,3 +162,18 @@ https://mongoosejs.com/docs/deprecations.html#-findandmodify-
       3. React-stripe-checkout. Retrieved from https://www.npmjs.com/package/react-stripe-checkout
 
       4. Dateformat. Retrieved from https://www.npmjs.com/package/dateformat
+
+      To understand how user cration and login are done in Mongo Express React and Node application
+      I followed a video tutorial from https://www.youtube.com/watch?time_continue=180&v=s1swJLYxLAA
+
+      References:
+      1. Nketia, A (2019). CSCI 5709-Advance Web Development - Assignment 3, Unpublished manuscript, Dalhousie University
+
+      2.Group 9, Advance Web Summer 2019 (2019). CSCI 5709-Advance Web Development - Project Proposal, Unpublished manuscript, Dalhousie University
+
+      3. Building a Login System for a MERN (MongoDB, Express.js, React.js, Node.js) Web App. (2019).
+      Retrieved 10 July 2019, from https://www.youtube.com/watch?time_continue=180&v=s1swJLYxLAA
+      - I followed this tutorial to understand how user creation and login are implemented on MERN
+
+      4. crypto-js. (2019). Retrieved 10 July 2019, from https://www.npmjs.com/package/crypto-js
+      - I utilized this Library to implement AES encryption and decryption of user passwords
