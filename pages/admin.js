@@ -28,12 +28,13 @@ class Admin extends React.Component {
   componentDidMount() {
     if(checkRole(['admin'])) {
       Router.push('/login');
+    } else {
+      fetch('http://localhost:3001/api/users/')
+        .then((data) => data.json())
+        .then((res) => this.setState({ users: res.data }))
+        .then(() => this.loadFirstUser())
+        .catch((err)=>{toast.warn("There were issues connecting to the server. Please check your connection.")});
     }
-    fetch('http://localhost:3001/api/users/')
-      .then((data) => data.json())
-      .then((res) => this.setState({ users: res.data }))
-      .then(() => this.loadFirstUser())
-      .catch((err)=>{toast.warn("There were issues connecting to the server. Please check your connection.")});
   }
 
   //save changes clicked
@@ -109,7 +110,7 @@ class Admin extends React.Component {
         <Container fluid={true} className="mt-16">
           <Row>
             {/* Sidebar */}
-            <Col sm={3} className="searchContentContainer">
+            <Col md={4} className="searchContentContainer">
               {/* Bottom display lists */}
               <Container>
                 <Row>
@@ -146,19 +147,15 @@ class Admin extends React.Component {
             </Col>
 
             {/* Content */}
-            <Col sm={9}>
+            <Col md={8}>
 
               <Form
               name="editServiceForm">
-                <Nav className="serviceNav">
-                  <NavItem>
-                    <h3>Admin Panel</h3>
-                  </NavItem>
-                </Nav>
 
                 <Container className="mt-8">
                   <Row>
-                    <Col s={12} lg={8}>
+                    <Col lg={12} xl={8}>
+                      <h3>Admin Panel</h3>
                       <Label className="text-muted">Manage User Orders:</Label>
                       {/* Service name and service picture */}
                       <Table bordered responsive hover className="">
@@ -222,7 +219,7 @@ class Admin extends React.Component {
                       </Table>
                     </Col>
 
-                    <Col s={12} lg={4}>
+                    <Col lg={12} xl={4}>
                       {/* Price of Service */}
                       <Label className="text-muted">User Email:</Label>
                       <p>{this.state.email}</p>
@@ -232,7 +229,7 @@ class Admin extends React.Component {
                         <Button active={this.state.role==="admin"} disabled={this.state.users.length < 1} id="admin" onClick={this.handleRoleChange.bind(this)}><FontAwesomeIcon className="icon-height" icon={faUserCog}/> Admin</Button>
                         <Button active={this.state.role==="vendor"} disabled={this.state.users.length < 1} id="vendor" onClick={this.handleRoleChange.bind(this)}><FontAwesomeIcon className="icon-height" icon={faUserTie}/> Vendor</Button>
                         <Button active={this.state.role==="customer"} disabled={this.state.users.length < 1} id="customer" onClick={this.handleRoleChange.bind(this)}><FontAwesomeIcon className="icon-height"icon={faUser}/> Customer</Button>
-                      </ButtonGroup>
+                      </ButtonGroup><br/>
 
                       <Button
                         color="success"

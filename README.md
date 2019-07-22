@@ -19,7 +19,7 @@ https://github.com/damonbauer/react-cloudinary/blob/master/src/App.js
   work with my codebase.
 
 https://github.com/zeit/next.js#custom-document
-- pages/_document.js file was copied to edit the html tag
+- pages/\_document.js file was copied to edit the html tag
 - This was required to become w3c complaint as required, specifically the lang="en" portion
 - Most of the document remains the same with a few unneeded parts cut out
 

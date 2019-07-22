@@ -46,14 +46,16 @@ class Login extends React.Component {
 
   //when the component mounts, redirecting if the user does not possess the correct permissions.
   componentDidMount() {
+
     if(checkRole(['admin', 'vendor'])) {
       Router.push('/login');
+    } else {
+      fetch('http://localhost:3001/api/users/'+ checkUserId() +'/services')
+        .then((data) => data.json())
+        .then((res) => this.setState({ services: res.data, searchResults: res.data }))
+        .then(() => this.loadService(0))
+        .catch((err)=>{toast.warn("There were issues connecting to the server. Please check your connection.")});
     }
-    fetch('http://localhost:3001/api/users/'+ checkUserId() +'/services')
-      .then((data) => data.json())
-      .then((res) => this.setState({ services: res.data, searchResults: res.data }))
-      .then(() => this.loadService(0))
-      .catch((err)=>{toast.warn("There were issues connecting to the server. Please check your connection.")});
   }
 
   //handling changes to the search field
@@ -243,15 +245,18 @@ class Login extends React.Component {
 
   //helper function to choose to load a service at a certain index
   loadService(index) {
-    this.setState({
-      ...this.state,
-      serviceName: this.state.services[index].name,
-      serviceDescription: this.state.services[index].description || '',
-      servicePrice: this.state.services[index].price || 0,
-      serviceImagePath: this.state.services[index].cloud_url || '',
-      serviceImageName: this.state.services[index].cloud_name || '',
-      serviceIndex: index
-    });
+    //null check
+    if(this.state.services.length > 0) {
+      this.setState({
+        ...this.state,
+        serviceName: this.state.services[index].name,
+        serviceDescription: this.state.services[index].description || '',
+        servicePrice: this.state.services[index].price || 0,
+        serviceImagePath: this.state.services[index].cloud_url || '',
+        serviceImageName: this.state.services[index].cloud_name || '',
+        serviceIndex: index
+      });
+    }
   }
 
   //handler for the event where a new service is clicked in the sidemenu
@@ -345,6 +350,7 @@ class Login extends React.Component {
                         <Label className="text-muted">Service Name</Label>
                         <Input type="text"
                         placeholder="Service Name"
+                        disabled={this.state.services.length < 1}
                         value={this.state.serviceName}
                         onChange={this.handleServiceNameChange}
                         valid={!isEmptyString(this.state.serviceName)}
@@ -373,6 +379,7 @@ class Login extends React.Component {
                           type="number"
                           value={this.state.servicePrice}
                           min="0"
+                          disabled={this.state.services.length < 1}
                           onChange={this.handleServicePriceChange}
                           valid={isPositiveNumber(this.state.servicePrice)}
                           invalid={!isPositiveNumber(this.state.servicePrice)} />
@@ -391,6 +398,7 @@ class Login extends React.Component {
                           valid={true}
                           rows={8}
                           onChange={this.handleServiceDescriptionChange}
+                          disabled={this.state.services.length < 1}
                           value={this.state.serviceDescription} />
                       </FormGroup>
 

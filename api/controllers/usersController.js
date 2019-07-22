@@ -9,7 +9,7 @@ const OAuth2 = google.auth.OAuth2;
 const fileStream = require("fs");
 const dateFormatter = require('dateformat');
 const CryptoJS = require("crypto-js");
-const UserSessions = require('../models/userSessions');
+// const UserSessions = require('../models/userSessions');
 
 class UsersModel {
   //get all users
@@ -233,6 +233,7 @@ class UsersModel {
     let user = new Users();
     user.username = req.body.username;
     user.password = req.body.password;
+
     //decrypting incoming password from the user
     var passdecryptIncoming  = (CryptoJS.AES.decrypt(user.password.toString(), 'quick Oats')).toString(CryptoJS.enc.Utf8); //decrypt incoming password
     //checking if a user exist for the username provided by the user
@@ -245,24 +246,25 @@ class UsersModel {
       if (users.length !== 1) {
         return res.send ({ success: false, message: "Email ID does not exists"});
       }
-
       //decrypting the stored password for the user and checking against the one supplied for login
       const userdb = users[0];
       var passdecrypt  = (CryptoJS.AES.decrypt(userdb.password.toString(), 'quick Oats')).toString(CryptoJS.enc.Utf8); //decrypt stored password
-      if (passdecrypt !== passdecryptIncoming) {
-
-        return res.send ({ success: false, message: "Password is incorrect"});
+      if (passdecrypt === passdecryptIncoming) {
+        return res.send({ success: true, userId: userdb._id, role: userdb.role });
+      } else {
+        return res.send({ success: false, message: "Invalid credentials."})
       }
 
       //create session for user if authentication is successful
-      const userSession = new UserSessions();
-      userSession.userId = user._id;
-      userSession.save((err, secRecord) => {
-        if (err) {
-         return res.send({success: false, message: "Error, could not save session"} );
-        }
-        return res.send ({ success: true, message: "Login successful"});
-      });
+      // const userSession = new UserSessions();
+      // userSession.userId = user._id;
+      // userSession.save((err, secRecord) => {
+      //   console.log(secRecord);
+      //   if (err) {
+      //    return res.send({ success: false, message: "Error, could not save session" });
+      //   }
+      //   return res.send ({ success: true, message: "Login successful"});
+      // });
     });
   }
 }
