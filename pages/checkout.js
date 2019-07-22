@@ -54,9 +54,9 @@ class Checkout extends React.Component {
         paymentSuccess = false;
       }
       if (paymentSuccess) {
-        toast.success("Payment Successful and receipt has been emailed to you.");
+        toast.success("Thank you! A receipt has been emailed to your address.");
       } else {
-        toast.error("Payment Service is down, please try again !!!");
+        toast.error("The payment service is down, please try again!");
       }
 
       // Start for reloading the page when payment is successful

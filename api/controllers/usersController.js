@@ -51,8 +51,15 @@ class UsersModel {
     });
   }
 
+  //update user
+  updateUser(req, res) {
+    Users.findByIdAndUpdate(req.params._id, req.body, (err) => {
+      if(err) return res.json({ success: false, error: err });
+      return res.json({ success: true});
+    })
+  }
+
   // Method to update the payment details of a user
-  // Reference: https://mongoosejs.com/docs/api.html
   updateUserPaymentDetails(request, response, db) {
     var usersCollection = db.collection('users');
     usersCollection.updateOne({
@@ -192,13 +199,6 @@ class UsersModel {
     }
     emailReceipt().catch(console.error);
     // End code for emailing the order receipt to the customer
-  }
-  //update user
-  updateUser(req, res) {
-    Users.findByIdAndUpdate(req.params._id, req.body, (err) => {
-      if(err) return res.json({ success: false, error: err });
-      return res.json({ success: true});
-    })
   }
 
 }
