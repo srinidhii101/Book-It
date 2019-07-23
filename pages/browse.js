@@ -1,9 +1,10 @@
 /* This gives the header, navigation, and footer */
 import DefaultLayout from '../layouts/default';
+import { addToCart } from '../functions/cart';
 
 /* Put the reactstrap components in here that are needed */
 import { Modal, Progress, ModalHeader, ModalBody, ModalTitle, ModalFooter, Button, Form, FormGroup, Label, Input, FormFeedback, FormText, InputGroup, InputGroupAddon, Container, Row, Col, ListGroup, ListGroupItem, Nav, NavItem, Fade } from 'reactstrap';
-import {ToastContainer, toast} from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 
 class Browse extends React.Component {
   constructor(...args) {
@@ -37,6 +38,7 @@ class Browse extends React.Component {
     if(this.state.services.length > 0) {
       this.setState({
         ...this.state,
+        serviceId: this.state.services[index]._id,
         serviceName: this.state.services[index].name,
         serviceDescription: this.state.services[index].description || '',
         servicePrice: this.state.services[index].price || 0,
@@ -52,11 +54,12 @@ class Browse extends React.Component {
   handleServiceIndexChange(index, e) {
     this.setState({
       ...this.state,
-      serviceName: this.state.searchResults[e.currentTarget.id].name,
-      serviceDescription: this.state.searchResults[e.currentTarget.id].description || '',
-      servicePrice: this.state.searchResults[e.currentTarget.id].price || 0,
-      serviceImagePath: this.state.searchResults[e.currentTarget.id].cloud_url || '',
-      serviceImageName: this.state.searchResults[e.currentTarget.id].cloud_name || '',
+      serviceId: this.state.searchResults[index]._id,
+      serviceName: this.state.searchResults[index].name,
+      serviceDescription: this.state.searchResults[index].description || '',
+      servicePrice: this.state.searchResults[index].price || 0,
+      serviceImagePath: this.state.searchResults[index].cloud_url || '',
+      serviceImageName: this.state.searchResults[index].cloud_name || '',
       serviceReviews: this.state.services[index].reviews || [],
       serviceIndex: index
     });
@@ -65,6 +68,7 @@ class Browse extends React.Component {
   handleBookService(e) {
   	e.preventDefault();
   	e.stopPropagation();
+    addToCart(this.state.serviceId);
   	toast.success("The service has been added to your cart.");
   }
 
