@@ -1,6 +1,5 @@
 import Header from './header';
 import Link from 'next/link';
-
 import {
   Collapse,
   Navbar,
@@ -13,9 +12,10 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem } from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAddressBook } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAddressBook } from '@fortawesome/free-solid-svg-icons';
 
+import { checkRole, isLoggedIn, logout } from '../functions/auth';
 
 export default class Navigation extends React.Component {
   constructor(props) {
@@ -23,15 +23,21 @@ export default class Navigation extends React.Component {
 
      this.toggle = this.toggle.bind(this);
      this.state = {
-       isOpen: false
+       isOpen: false,
      };
+
+     this.showAdmin = !checkRole(['admin']),
+     this.showServices = !checkRole(['admin','vendor'])
    }
+
    toggle() {
      this.setState({
        isOpen: !this.state.isOpen
      });
    }
+
    render() {
+
      return (
        <div>
         <Header/>
@@ -44,26 +50,26 @@ export default class Navigation extends React.Component {
            <NavbarToggler onClick={this.toggle} />
            <Collapse isOpen={this.state.isOpen} navbar>
              <Nav className="ml-auto" navbar>
-               <NavItem>
-                  <Link href="/admin">
-                      <NavLink>
-                        Admin
-                      </NavLink>
-                  </Link>
-               </NavItem>
-               <NavItem>
-                  <Link href="/browse">
-                      <NavLink>
-                        Browse
-                      </NavLink>
-                  </Link>
-               </NavItem>
-               <NavItem>
-                  <Link href="/services">
+               {this.showAdmin &&
+                 <NavItem>
+                   <Link href="/admin">
+                     <NavLink>Admin</NavLink>
+                   </Link>
+                 </NavItem>
+               }
+               {this.showServices &&
+                 <NavItem>
+                    <Link href="/services">
                       <NavLink>
                         Services
                       </NavLink>
-                  </Link>
+                    </Link>
+                  </NavItem>
+               }
+               <NavItem>
+                <Link href="/browse">
+                  <NavLink>Browse</NavLink>
+                </Link>
                </NavItem>
                <UncontrolledDropdown nav inNavbar>
                  <DropdownToggle nav caret>
@@ -85,24 +91,26 @@ export default class Navigation extends React.Component {
                       <a>Orders</a>
                      </DropdownItem>
                    </Link>
-
                  </DropdownMenu>
                </UncontrolledDropdown>
-               <NavItem>
-                  <Link href="/register">
+
+               {isLoggedIn() ?
+                 <NavItem onClick={logout()}>
+                  <Link href="/login">
+                    <NavLink>
+                      Logout
+                    </NavLink>
+                  </Link>
+                 </NavItem>
+                 :
+                 <NavItem>
+                    <Link href="/register">
                       <NavLink>
                         Register
                       </NavLink>
-                  </Link>
-               </NavItem>
-               <NavItem>
-               <Link href="/login">
-                
-                      <NavLink>
-                        Logout
-                      </NavLink>
-                  </Link>
-               </NavItem>
+                    </Link>
+                 </NavItem>
+               }
              </Nav>
            </Collapse>
          </Navbar>

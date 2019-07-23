@@ -18,3 +18,12 @@ export function checkUserId() {
   const bookit = ls.get('bookit');
   return bookit.id;
 }
+
+export function isLoggedIn() {
+  const bookit = ls.get('bookit');
+  return !!bookit;
+}
+
+export function logout() {
+  ls.remove('bookit');
+}
