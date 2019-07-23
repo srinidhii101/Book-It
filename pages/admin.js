@@ -20,8 +20,21 @@ class Admin extends React.Component {
       users: [],
       userIndex: 0,
       role: "customer",
-      email: ""
+      email: "",
+      searchResults: [],
+      searchInput: ""
     };
+  }
+
+  // Search input changed
+  handleSearchInputChange(e) {
+    if(e.currentTarget.value.length > 0) {
+      let results= this.state.searchResults.filter(users => users.email.toLowerCase().includes(e.currentTarget.value.toLowerCase()));
+      this.setState({ ...this.state, "searchInput": e.currentTarget.value, "searchResults": results })
+    }
+    else {
+      this.setState({...this.state, "searchInput": '', "searchResults": this.state.users});
+    }
   }
 
   //when the component mounts, redirecting if the user does not possess the correct permissions.
@@ -31,7 +44,7 @@ class Admin extends React.Component {
     } else {
       fetch('http://localhost:3001/api/users/')
         .then((data) => data.json())
-        .then((res) => this.setState({ users: res.data }))
+        .then((res) => this.setState({ users: res.data, searchResults: res.data  }))
         .then(() => this.loadFirstUser())
         .catch((err)=>{toast.warn("There were issues connecting to the server. Please check your connection.")});
     }
@@ -115,7 +128,9 @@ class Admin extends React.Component {
               <Container>
                 <Row>
                   <Col>
-                     <Input type="search" className="mt-1" placeholder="Search user here..." />
+                     <Input type="search" className="mt-1" placeholder="Search user here..." 
+                     autoFocus className="mt-1"
+                    onChange={this.handleSearchInputChange.bind(this)}/>
                   </Col>
                 </Row>
                 <hr/>
@@ -124,8 +139,8 @@ class Admin extends React.Component {
                     <label className="text-muted">Results:</label>
                     {/* Emulating an overflowing list of users */}
                     <ListGroup className="searchResultList mb-8">
-                    {this.state.users &&
-                        this.state.users.map((user, index) => {
+                    {this.state.searchResults &&
+                        this.state.searchResults.map((user, index) => {
                           return (
                             <ListGroupItem
                               action
