@@ -36,6 +36,12 @@ export default class Navigation extends React.Component {
      });
    }
 
+   handleLogout(e) {
+     e.preventDefault();
+     e.stopPropagation();
+     logout();
+   }
+
    render() {
 
      return (
@@ -95,7 +101,7 @@ export default class Navigation extends React.Component {
                </UncontrolledDropdown>
 
                {isLoggedIn() ?
-                 <NavItem onClick={logout()}>
+                 <NavItem onClick={this.handleLogout.bind(this)}>
                   <Link href="/login">
                     <NavLink>
                       Logout
