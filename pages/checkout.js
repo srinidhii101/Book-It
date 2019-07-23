@@ -1,8 +1,17 @@
-/* This gives the header, navigation, and footer */
+/* This file will be used to implement the
+ **payments feature of the application
+ **Author - Manpreet Singh (B00821998) */
 import DefaultLayout from '../layouts/default';
 import { Col,ButtonDropdown,Dropdown,ListGroup,ListGroupItem,DropdownMenu,DropdownItem,DropdownToggle, Row, Button, Form, FormGroup, Label, Input, FormText,FormFeedback,Container } from 'reactstrap';
 import StripeCheckout from 'react-stripe-checkout';
 import { isValidPhone, isValidEmail, isEmptyString, isPostalCodeValid } from '../functions/validate';
+import axios from 'axios';
+import { checkUserId } from '../functions/auth';
+import { ToastContainer,toast } from 'react-toastify';
+import '../node_modules/react-toastify/dist/ReactToastify.css';
+
+var paymentSuccess = true;
+const STRIPE_KEY = process.env.STRIPE_KEY;
 
 class Checkout extends React.Component {
   /* If you need to track variables, put them here in state */
@@ -16,17 +25,48 @@ class Checkout extends React.Component {
       firstName: '',
       lastName:'',
       province:'',
-      town:'',
+      city:'',
       street:'',
       postalCode:'',
       phone:'',
-      email:''
+      email:'',
+      companyName:'',
+      additionalInfo:''
     };
    }
 
-  onToken = (token,addresses) =>{
-    //TODO
-  };
+    // This method is callback for Pay with card button
+    onToken = (token, addresses) => {
+      try {
+        axios.put('http://localhost:3001/api/payment/' + checkUserId(), {
+          "firstName": this.state.firstName,
+          "lastName": this.state.lastName,
+          "companyName": this.state.companyName,
+          "province": this.state.province,
+          "city": this.state.city,
+          "street": this.state.street,
+          "postalCode": this.state.postalCode,
+          "phone": this.state.phone,
+          "email": this.state.email,
+          "additionalInfo": this.state.additionalInfo
+        });
+      } catch (exception) {
+        paymentSuccess = false;
+      }
+      if (paymentSuccess) {
+        toast.success("Thank you! A receipt has been emailed to your address.");
+      } else {
+        toast.error("The payment service is down, please try again!");
+      }
+
+      // Start for reloading the page when payment is successful
+      // Reference: https://guide.freecodecamp.org/javascript/location-reload-method/
+      setTimeout(function () {
+        window.location.reload();
+      }, 3000);
+      // End for reloading the page when payment is successful
+
+    };
 
   handleFirstNameChange = (e) => {
     this.setState({ ...this.state, firstName: e.currentTarget.value})
@@ -37,8 +77,8 @@ class Checkout extends React.Component {
   handleProvinceChange = (e) => {
     this.setState({ ...this.state, province: e.currentTarget.value})
   }
-  handleTownChange = (e) => {
-    this.setState({ ...this.state, town: e.currentTarget.value})
+  handleCityChange = (e) => {
+    this.setState({ ...this.state, city: e.currentTarget.value})
   }
   handleStreetChange = (e) => {
     this.setState({ ...this.state, street: e.currentTarget.value})
@@ -53,6 +93,14 @@ class Checkout extends React.Component {
     this.setState({ ...this.state, email: e.currentTarget.value})
   }
 
+  handleCompanyNameChange = (e) => {
+    this.setState({ ...this.state, companyName: e.currentTarget.value})
+  }
+
+  handleAdditionalInfoChange = (e) => {
+    this.setState({ ...this.state, additionalInfo: e.currentTarget.value})
+  }
+
   toggle() {
     this.setState({
       isOpen: !this.state.isOpen,
@@ -61,7 +109,7 @@ class Checkout extends React.Component {
   }
 
   isValidForm() {
-    return !isEmptyString(this.state.firstName) && !isEmptyString(this.state.lastName) && !isEmptyString(this.state.province) && !isEmptyString(this.state.town) &&
+    return !isEmptyString(this.state.firstName) && !isEmptyString(this.state.lastName) && !isEmptyString(this.state.province) && !isEmptyString(this.state.city) &&
       !isEmptyString(this.state.street) && isPostalCodeValid(this.state.postalCode) && isValidPhone(this.state.phone) && isValidEmail(this.state.email);
   }
 
@@ -138,7 +186,8 @@ class Checkout extends React.Component {
                       <Label>Company Name:</Label>
                       <Input
                         type="text"
-                        placeholder="Enter your company name" />
+                        placeholder="Enter your company name"
+                        onChange={this.handleCompanyNameChange} />
                     </FormGroup>
                   </Col>
                 </Row>
@@ -180,9 +229,9 @@ class Checkout extends React.Component {
                         type="text"
                         placeholder="Enter town name"
                         required
-                        valid={!isEmptyString(this.state.town)}
-                        invalid={isEmptyString(this.state.town)}
-                        onChange={this.handleTownChange} />
+                        valid={!isEmptyString(this.state.city)}
+                        invalid={isEmptyString(this.state.city)}
+                        onChange={this.handleCityChange} />
                       <FormFeedback>
                         Please enter town name.
                       </FormFeedback>
@@ -268,12 +317,13 @@ class Checkout extends React.Component {
                   <Col md={12}>
                     <FormGroup>
                       <Label>Additional Information:</Label>
-                      <Input type="textarea"/>
+                      <Input type="textarea"
+                      onChange={this.handleAdditionalInfoChange}/>
                     </FormGroup>
 
                     <FormGroup className="checkoutTotalGroup">
                       <Label>Your Total:</Label><br/>
-                      <h1>220$</h1>
+                      <h1 id="totalAmount">$220</h1>
                       <StripeCheckout
                         name="Book it"
                         description="Thanks for supporting Local!"
@@ -281,7 +331,7 @@ class Checkout extends React.Component {
                         email={this.state.email}
                         amount={22000}
                         disabled={!this.isValidForm()}
-                        stripeKey="pk_test_wXtDaiHSEDQ55g1paPXsydVJ00xeVKA6LM"
+                        stripeKey={STRIPE_KEY}
                         token={this.onToken}
                         zipcode />
                     </FormGroup>
@@ -291,6 +341,7 @@ class Checkout extends React.Component {
             </Col>
           </Row>
         </Container>
+        <ToastContainer autoClose={5000}/>
       </DefaultLayout>
     );
   }

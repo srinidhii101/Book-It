@@ -1,6 +1,7 @@
 /* This gives the header, navigation, and footer */
 import DefaultLayout from '../layouts/default';
 import { checkRole } from '../functions/auth';
+import axios from 'axios';
 
 /* Put the reactstrap components in here that are needed */
 import { Table, Button, Form, FormGroup, Label, Container, Row, Col, ListGroup, ListGroupItem, Input, Nav, NavItem, ButtonGroup, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
@@ -12,17 +13,64 @@ import { faUser, faUserTie, faUserCog } from '@fortawesome/free-solid-svg-icons'
 import Router from 'next/router';
 
 class Admin extends React.Component {
+  constructor(...args) {
+    super(...args);
+
+    this.state = {
+      users: [],
+      userIndex: 0,
+      role: "customer",
+      email: ""
+    };
+  }
+
   //when the component mounts, redirecting if the user does not possess the correct permissions.
   componentDidMount() {
     if(checkRole(['admin'])) {
       Router.push('/login');
+    } else {
+      fetch('http://localhost:3001/api/users/')
+        .then((data) => data.json())
+        .then((res) => this.setState({ users: res.data }))
+        .then(() => this.loadFirstUser())
+        .catch((err)=>{toast.warn("There were issues connecting to the server. Please check your connection.")});
     }
   }
 
-  handleSaveChanges() {
-    toast.success("Changes have been successfully saved!");
+  //save changes clicked
+  async handleSaveChanges(e) {
+    try {
+      // hosted server : http://bluenose.cs.dal.ca:25057/api/users/
+      let userUpdate = this.state.users[this.state.userIndex];
+      userUpdate.role = this.state.role;
+      const config = { headers: {'Content-Type': 'application/json'} };
+      axios.put('http://localhost:3001/api/users/' + this.state.users[this.state.userIndex]._id, userUpdate, config).then(res=>{
+        if(res.data.success) {
+          this.forceUpdate();
+          toast.success("The user has been successfully updated!");
+        }
+        else{
+          toast.warn("There were issues updating the user.");
+        }
+      });
+    }
+    catch(err) {
+      toast.warn("There were issues updating the user.");
+      console.log(err);
+    }
   }
 
+  //loading the first user in the list of users
+  loadFirstUser() {
+    this.setState({
+      ...this.state,
+      role: this.state.users[0].role,
+      email:this.state.users[0].email,
+      userIndex: 0
+    });
+  }
+
+  //when the
   onChangeOption(e) {
     if(e.target.value) {
       e.currentTarget.childNodes[0].innerHTML = e.target.value;
@@ -30,55 +78,67 @@ class Admin extends React.Component {
     }
   }
 
+  //no submit events
   handleSubmit(e) {
     e.preventDefault();
     e.stopPropagation();
   }
 
-  render() {
-    /* Define variables here */
-    //const { username, password } = this.state;
+  //selecting a new user from the sidebar
+  handleUserIndexChange(index, e) {
+    this.setState({
+      ...this.state,
+      role:this.state.users[e.currentTarget.id].role,
+      email:this.state.users[e.currentTarget.id].email,
+      userIndex: index
+    });
+  }
 
+  //setting the local state when a user is changed
+  async handleRoleChange(e) {
+    this.setState({
+      ...this.state,
+      role: e.currentTarget.id,
+      email: this.state.users[this.state.userIndex].email
+    });
+  }
+
+  render() {
     return (
       <DefaultLayout>
         {/* Your HTML/JSX goes here... I'll probably do this one */}
         <Container fluid={true} className="mt-16">
           <Row>
             {/* Sidebar */}
-            <Col sm={3} className="searchContentContainer">
+            <Col md={4} className="searchContentContainer">
               {/* Bottom display lists */}
               <Container>
                 <Row>
                   <Col>
-                     <Input type="search" placeholder="Search user here..." />
+                     <Input type="search" className="mt-1" placeholder="Search user here..." />
                   </Col>
                 </Row>
                 <hr/>
                 <Row>
                   <Col className="pb-16">
                     <label className="text-muted">Results:</label>
-                    {/* Emulating an overflowing list of services */}
+                    {/* Emulating an overflowing list of users */}
                     <ListGroup className="searchResultList mb-8">
-                      <ListGroupItem action active>Larry's Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
-                      <ListGroupItem action>Techical Support</ListGroupItem>
-                      <ListGroupItem action>Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
-                      <ListGroupItem action>Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
-                      <ListGroupItem action>Techical Support</ListGroupItem>
-                      <ListGroupItem action>Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
-                      <ListGroupItem action>Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
-                      <ListGroupItem action>Techical Support</ListGroupItem>
-                      <ListGroupItem action>Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
-                      <ListGroupItem action>Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
-                      <ListGroupItem action>Techical Support</ListGroupItem>
-                      <ListGroupItem action>Landscaping</ListGroupItem>
-                      <ListGroupItem action>Haircuts</ListGroupItem>
+                    {this.state.users &&
+                        this.state.users.map((user, index) => {
+                          return (
+                            <ListGroupItem
+                              action
+                              key={user._id}
+                              id={index}
+                              active={index == this.state.userIndex}
+                              className="listItem"
+                              onClick={this.handleUserIndexChange.bind(this, index)}>
+                                {user.email}
+                            </ListGroupItem>)
+                        })
+                      }
+
                     </ListGroup>
                   </Col>
 
@@ -87,19 +147,15 @@ class Admin extends React.Component {
             </Col>
 
             {/* Content */}
-            <Col sm={9}>
+            <Col md={8}>
 
               <Form
               name="editServiceForm">
-                <Nav className="serviceNav">
-                  <NavItem>
-                    <h3>Admin Panel</h3>
-                  </NavItem>
-                </Nav>
 
                 <Container className="mt-8">
                   <Row>
-                    <Col s={12} lg={8}>
+                    <Col lg={12} xl={8}>
+                      <h3>Admin Panel</h3>
                       <Label className="text-muted">Manage User Orders:</Label>
                       {/* Service name and service picture */}
                       <Table bordered responsive hover className="">
@@ -163,22 +219,23 @@ class Admin extends React.Component {
                       </Table>
                     </Col>
 
-                    <Col s={12} lg={4}>
+                    <Col lg={12} xl={4}>
                       {/* Price of Service */}
                       <Label className="text-muted">User Email:</Label>
-                      <p>kr732968@dal.ca</p>
+                      <p>{this.state.email}</p>
 
                       <Label className="text-muted">Role:</Label><br/>
                       <ButtonGroup className="mb-8">
-                        <Button color="primary"><FontAwesomeIcon className="icon-height" icon={faUserCog}/> Admin</Button>
-                        <Button color="light"><FontAwesomeIcon className="icon-height" icon={faUserTie}/> Vendor</Button>
-                        <Button color="light"><FontAwesomeIcon className="icon-height"icon={faUser}/> Customer</Button>
-                      </ButtonGroup>
+                        <Button active={this.state.role==="admin"} disabled={this.state.users.length < 1} id="admin" onClick={this.handleRoleChange.bind(this)}><FontAwesomeIcon className="icon-height" icon={faUserCog}/> Admin</Button>
+                        <Button active={this.state.role==="vendor"} disabled={this.state.users.length < 1} id="vendor" onClick={this.handleRoleChange.bind(this)}><FontAwesomeIcon className="icon-height" icon={faUserTie}/> Vendor</Button>
+                        <Button active={this.state.role==="customer"} disabled={this.state.users.length < 1} id="customer" onClick={this.handleRoleChange.bind(this)}><FontAwesomeIcon className="icon-height"icon={faUser}/> Customer</Button>
+                      </ButtonGroup><br/>
 
                       <Button
                         color="success"
-                        onClick={this.handleSaveChanges}>
-                        Add New Service
+                        onClick={this.handleSaveChanges.bind(this)}
+                        disabled={this.state.users.length < 1}>
+                        Update Changes
                       </Button>
 
                     </Col>

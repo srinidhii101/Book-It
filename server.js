@@ -53,9 +53,20 @@ router.get('/services', (req, res) => {
   return ServiceController.getServices(req, res);
 });
 
+
+//user login
+router.post('/login', (req, res) => {
+  return UsersController.userLogin(req, res);
+});
+
 //add user
 router.post('/users', (req, res) => {
   return UsersController.createUser(req, res);
+});
+
+//update user
+router.put('/users/:_id', (req, res) => {
+  return UsersController.updateUser(req, res);
 });
 
 //add service
@@ -68,9 +79,15 @@ router.put('/services/:id', (req, res) => {
   return ServiceController.updateService(req, res);
 });
 
+
 //delete a user's service by id
 router.delete('/services/:user/:id', (req, res) => {
   return ServiceController.deleteService(req, res);
+});
+
+// update the payment details for a customer service
+router.put('/payment/:id', (req, res) => {
+  return UsersController.updateUserPaymentDetails(req, res, db);
 });
 
 // append /api for requests

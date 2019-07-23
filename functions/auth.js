@@ -2,7 +2,6 @@ import ls, { get } from "local-storage";
 
 export function checkRole(allowedRoles) {
   let redirectFlag = true;
-
   allowedRoles.map(role => {
     const bookit = ls.get('bookit');
     if(bookit) {
@@ -18,4 +17,13 @@ export function checkRole(allowedRoles) {
 export function checkUserId() {
   const bookit = ls.get('bookit');
   return bookit.id;
+}
+
+export function isLoggedIn() {
+  const bookit = ls.get('bookit');
+  return !!bookit;
+}
+
+export function logout() {
+  ls.remove('bookit');
 }
