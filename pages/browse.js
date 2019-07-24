@@ -32,6 +32,16 @@ class Browse extends React.Component {
       .catch((err)=>{toast.warn("There were issues connecting to the server. Please check your connection.")});
   }
 
+    handleSearchInputChange(e) {
+    if(e.currentTarget.value.length > 0) {
+      let results = this.state.services.filter(service => service.name.toLowerCase().includes(e.currentTarget.value.toLowerCase()) || service.description.toLowerCase().includes(e.currentTarget.value.toLowerCase()));
+      this.setState({ ...this.state, "searchInput": e.currentTarget.value, "searchResults": results })
+    }
+    else {
+      this.setState({...this.state, "searchInput": '', "searchResults": this.state.services});
+    }
+  }
+
   //helper function to choose to load a service at a certain index
   loadService(index) {
     //null check
@@ -93,7 +103,10 @@ class Browse extends React.Component {
               <Container>
                 <Row>
                   <Col>
-                     <Input type="search" placeholder="Search service here..." className="mt-1" />
+                     <Input type="search"
+                      placeholder="Search a Service..."
+                      autoFocus className="mt-1"
+                      onChange={this.handleSearchInputChange.bind(this)}/>
                   </Col>
                 </Row>
                 <hr/>
