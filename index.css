@@ -109,6 +109,10 @@
   background-size: cover;
 }
 
+.booking-rating {
+  padding: 2rem;
+}
+
 /* Login Form */
 .loginContainer {
   min-height: calc(100vh - 56px);

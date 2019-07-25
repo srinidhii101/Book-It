@@ -52,6 +52,22 @@ class ServicesModel {
     });
   }
 
+  createServiceRating(req, res) {
+    // Services.findOne(req.params.id, (error, response) => {
+    //   if (error) return res.json({ success: false, error: error });
+    //   response.reviews.push({
+    //     userId: req.body.userId,
+    //     rating: req.body.rating,
+    //     description: '',
+    //     created: new Date()
+    //   });
+    //   Services.findByIdAndUpdate(req.params.id, response, (err) => {
+    //     if (err) return res.json({ success: false, error: err });
+    //     return res.json({ success: true });
+    //   });
+    // })
+  }
+
   deleteService(req, res) {
     Services.findByIdAndRemove(req.params.id, (err, response) => {
       if (err) return response.send(err);

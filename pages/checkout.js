@@ -43,7 +43,7 @@ class Checkout extends React.Component {
 
   componentDidMount() {
     //getting the order obj
-    if(getCartList.length > 1) {
+    // if(getCartList.length > 0) {
       fetch('http://localhost:3001/api/services/list/'+getCartList().map(x=>x.id))
         .then((data) => data.json())
         .then((res) => this.setState({ ...this.state, services: res.data }))
@@ -71,7 +71,7 @@ class Checkout extends React.Component {
           additionalInfo: res.data[0].info.additionalInfo || '',
          }))
         .catch((err)=>{console.log(err);});
-    }
+    // }
   }
 
     // This method is callback for Pay with card button

@@ -28,6 +28,14 @@ class UsersModel {
     });
   }
 
+  //get a user by id
+  getUserBookings(req, res) {
+    Users.findOne({'_id': req.params._id},(err, data)=> {
+      if (err) return res.json({ success: false, error: err });
+      return res.json({ success: true, data: data.bookings });
+    });
+  }
+
   //get user services by user id
   getUserServices(req, res) {
     Users.findOne({'_id': req.params._id},(err, data)=> {

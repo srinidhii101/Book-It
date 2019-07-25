@@ -26,7 +26,7 @@ class Cart extends React.Component {
   }
 
   componentDidMount() {
-    if(getCartList().length > 1) {
+    if(getCartList().length > 0) {
       fetch('http://localhost:3001/api/services/list/'+getCartList().map(x=>x.id))
         .then((data) => data.json())
         .then((res) => this.setState({ services: res.data, searchResults: res.data }))
