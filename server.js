@@ -48,9 +48,14 @@ router.get('/users/:_id/services', (req, res) => {
   return UsersController.getUserServices(req, res);
 });
 
-//fetch all users
+//fetch all services
 router.get('/services', (req, res) => {
   return ServiceController.getServices(req, res);
+});
+
+//fetch all services in list
+router.get('/services/list/:list', (req, res) => {
+  return ServiceController.getServicesList(req, res);
 });
 
 router.get('/services/stats', (req, res) => {

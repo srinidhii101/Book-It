@@ -10,6 +10,13 @@ class ServicesModel {
     });
   }
 
+  getServicesList(req, res) {
+    Services.find({'_id': { $in: req.params.list.split(',') }}, (err, data)=>{
+      if (err) return res.json({ success: false, error: err });
+      return res.json({ success: true, data: data});
+    });
+  }
+
   getServiceStats(req, res) {
     Promise.all([
       Services.find().sort({ createdAt: -1 }).select('name').limit(3),
