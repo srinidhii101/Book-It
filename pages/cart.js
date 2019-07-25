@@ -29,10 +29,7 @@ class Cart extends React.Component {
     fetch('http://localhost:3001/api/services/list/'+getCartList().map(x=>x.id))
       .then((data) => data.json())
       .then((res) => this.setState({ services: res.data, searchResults: res.data }))
-      .then(() => {
-        console.log(this.state);
-        this.loadService(0);
-      })
+      .then(()=> this.loadService(0))
       .catch((err)=>{toast.warn("There were issues connecting to the server. Please check your connection.")});
   }
 
