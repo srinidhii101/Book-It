@@ -10,6 +10,17 @@ class ServicesModel {
     });
   }
 
+  getServiceStats(req, res) {
+    Promise.all([
+      Services.find().sort({ createdAt: -1 }).select('name').limit(3),
+      Services.find().sort('-lastBooked').select('name').limit(3),
+      Services.find().sort('-numberOfBookings').select('name').limit(3)
+    ]).then((result, err) => {
+      if(err) return res.json({ success: false, error: err });
+      res.json({'recent': result[0],'last': result[1], 'popular': result[2]});
+    });
+  }
+
   createService(req, res) {
     //creating instance and setting variables for the new service
     let service = new Services();

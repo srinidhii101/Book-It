@@ -53,6 +53,10 @@ router.get('/services', (req, res) => {
   return ServiceController.getServices(req, res);
 });
 
+router.get('/services/stats', (req, res) => {
+  return ServiceController.getServiceStats(req, res);
+})
+
 
 //user login
 router.post('/login', (req, res) => {

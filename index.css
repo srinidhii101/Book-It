@@ -95,6 +95,12 @@
   margin-bottom: 1rem;
 }
 
+.hero-image {
+  background: url('https://res.cloudinary.com/kirby-cloud/image/upload/v1564012998/Cover-Halifax-Waterfront-Hero-1-1400x500_a1qjqk.jpg') 50% 50% no-repeat;
+  background-size: cover;
+  border-radius: 0 !important;
+}
+
 .backgroundImage {
   background: url("https://res.cloudinary.com/kirby-cloud/image/upload/v1563819156/man-holding-shipping-box-on-red-brick_925x_ulftzt.jpg") no-repeat center center;
   -webkit-background-size: cover;
