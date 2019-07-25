@@ -62,19 +62,13 @@ class UsersModel {
 
       }
       //saving a new user after validation has been successfully performed
-     user.save((err) => {
-        if (err)
-         {
+      user.save((err) => {
+        if (err) {
            return res.json({ success: false, error: err });
-         }
+        }
         return res.json({ success: true, message: "Account created" });
-
-      }
-
-    );
+      });
     });
-
-
   }
 
   //update user
@@ -87,8 +81,7 @@ class UsersModel {
 
   // Method to update the payment details of a user
   updateUserPaymentDetails(request, response, db) {
-    var usersCollection = db.collection('users');
-    usersCollection.updateOne({
+    Users.updateOne({
       _id: new ObjectID(request.params.id)
     }, {
       $set: {
@@ -104,12 +97,16 @@ class UsersModel {
           phone: request.body.phone,
           email: request.body.email,
           additionalInfo: request.body.additionalInfo,
-          totalAmount: 200 // this amount will be changed when add to cart feture is implemented
-        }
+          totalAmount: request.body.total,
+        },
+        bookings: request.body.bookings
       }
     }, {
       upsert: true
     });
+
+    //update all lastBooked and numberOfBookings ******************
+    Services.
 
     // Start code for receipt generation
     // Reference: https://www.npmjs.com/package/receipt
@@ -157,7 +154,7 @@ class UsersModel {
           },
           {
             name: 'Amount Received',
-            value: "220$"
+            value: request.body.total
           },
         ]
       },
@@ -178,7 +175,7 @@ class UsersModel {
     // Tutorial used to know how to write to file in Node.js
     fileStream.writeFile("receipt.txt", receiptOutput, (err) => {
       if (err) console.log(receiptOutput);
-      console.log("Successfully Written to File.");
+      // console.log("Successfully Written to File.");
     });
     // End code for saving the receipt to a text file
 
@@ -215,7 +212,7 @@ class UsersModel {
         to: request.body.email,
         subject: "Your Order Receipt",
         text: receiptOutput,
-        html: " Hi,<br><br> PFA the order receipt.<br><br>Regards,<br>Team Book it",
+        html: " Hi,<br><br> Here is a receipt for your recent purchase.<br><br>Regards,<br>Team Book it<br>",
         attachments: [{
           filename: 'receipt.txt',
           path: 'receipt.txt',
@@ -226,9 +223,9 @@ class UsersModel {
     emailReceipt().catch(console.error);
     // End code for emailing the order receipt to the customer
   }
-    //user login
-    //followed video tutorial from https://www.youtube.com/watch?time_continue=180&v=s1swJLYxLAA
 
+  //user login
+  //followed video tutorial from https://www.youtube.com/watch?time_continue=180&v=s1swJLYxLAA
   userLogin(req, res) {
     let user = new Users();
     user.username = req.body.username;

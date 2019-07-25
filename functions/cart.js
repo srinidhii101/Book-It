@@ -27,3 +27,7 @@ export function removeFromCart(index) {
   ls('bookit-cart', cart);
   return ls.get(cart);
 }
+
+export function emptyCart() {
+  ls('bookit-cart', []);
+}

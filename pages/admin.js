@@ -128,7 +128,7 @@ class Admin extends React.Component {
               <Container>
                 <Row>
                   <Col>
-                     <Input type="search" className="mt-1" placeholder="Search user here..." 
+                     <Input type="search" className="mt-1" placeholder="Search user here..."
                      autoFocus className="mt-1"
                     onChange={this.handleSearchInputChange.bind(this)}/>
                   </Col>
@@ -167,12 +167,11 @@ class Admin extends React.Component {
               <Form
               name="editServiceForm">
 
-                <Container className="mt-8">
+                <Container>
                   <Row>
-                    <Col lg={12} xl={8}>
+                    {/*}<Col lg={12} xl={8}>
                       <h3>Admin Panel</h3>
                       <Label className="text-muted">Manage User Orders:</Label>
-                      {/* Service name and service picture */}
                       <Table bordered responsive hover className="">
                         <thead>
                           <tr>
@@ -232,7 +231,7 @@ class Admin extends React.Component {
                           </tr>
                         </tbody>
                       </Table>
-                    </Col>
+                    </Col> */}
 
                     <Col lg={12} xl={4}>
                       {/* Price of Service */}
