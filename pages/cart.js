@@ -26,11 +26,13 @@ class Cart extends React.Component {
   }
 
   componentDidMount() {
-    fetch('http://localhost:3001/api/services/list/'+getCartList().map(x=>x.id))
-      .then((data) => data.json())
-      .then((res) => this.setState({ services: res.data, searchResults: res.data }))
-      .then(()=> this.loadService(0))
-      .catch((err)=>{toast.warn("There were issues connecting to the server. Please check your connection.")});
+    if(getCartList().length > 1) {
+      fetch('http://localhost:3001/api/services/list/'+getCartList().map(x=>x.id))
+        .then((data) => data.json())
+        .then((res) => this.setState({ services: res.data, searchResults: res.data }))
+        .then(()=> this.loadService(0))
+        .catch((err)=>{toast.warn("There were issues connecting to the server. Please check your connection.")});
+    }
   }
 
   handleSearchInputChange(e) {
@@ -86,16 +88,35 @@ class Cart extends React.Component {
     e.preventDefault();
     e.stopPropagation();
     removeFromCart(this.state.serviceIndex);
-    this.state.services.splice(this.state.serviceIndex, 1);
-    this.setState({
-      ...this.state,
-      serviceIndex: 0,
-      serviceName: this.state.services[0].name || '',
-      serviceDescription: this.state.services[0].description || '',
-      servicePrice: this.state.services[0].price || 0,
-      serviceImagePath: this.state.services[0].cloud_url || '',
-      serviceImageName: this.state.services[0].cloud_name || '',
-    });
+
+    if(this.state.services.length > 1) {
+      this.state.services.splice(this.state.serviceIndex, 1),
+      this.setState({
+        ...this.state,
+        serviceIndex: 0,
+        serviceName: this.state.services[0].name || '',
+        serviceDescription: this.state.services[0].description || '',
+        servicePrice: this.state.services[0].price || 0,
+        serviceImagePath: this.state.services[0].cloud_url || '',
+        serviceImageName: this.state.services[0].cloud_name || '',
+        serviceReviews: this.state.services[0].reviews || [],
+      });
+    }
+    else {
+      this.setState({
+        ...this.state,
+        services: [],
+        serviceIndex: 0,
+        serviceName: '',
+        serviceDescription: '',
+        servicePrice: 0,
+        serviceImagePath: '',
+        serviceImageName: '',
+        serviceReviews: [],
+        searchResults:[],
+      });
+    }
+
     this.forceUpdate();
   }
 
@@ -166,12 +187,14 @@ class Cart extends React.Component {
                   <NavItem className="ml-auto">
                     <Button
                       color="danger"
+                      disabled={this.state.services.length < 1}
                       onClick={this.handleRemoveFromCart.bind(this)}>
                       Remove from Cart
                     </Button>
                     &nbsp;
                     <Button
                       color="primary"
+                      disabled={this.state.services.length < 1}
                       onClick={this.handleCheckout.bind(this)}>
                       Proceed to Checkout
                     </Button>

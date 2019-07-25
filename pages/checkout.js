@@ -43,34 +43,35 @@ class Checkout extends React.Component {
 
   componentDidMount() {
     //getting the order obj
-    fetch('http://localhost:3001/api/services/list/'+getCartList().map(x=>x.id))
-      .then((data) => data.json())
-      .then((res) => this.setState({ ...this.state, services: res.data }))
-      .then(()=> {
-        let total = 0;
-        this.state.services.map(x=>{total += x.price * 1.15});
-        this.setState({ ...this.state, total: total });
-      })
-      .catch((err)=>{toast.warn("There were issues connecting to the server. Please check your connection.")});
+    if(getCartList.length > 1) {
+      fetch('http://localhost:3001/api/services/list/'+getCartList().map(x=>x.id))
+        .then((data) => data.json())
+        .then((res) => this.setState({ ...this.state, services: res.data }))
+        .then(()=> {
+          let total = 0;
+          this.state.services.map(x=>{total += x.price * 1.15});
+          this.setState({ ...this.state, total: total });
+        })
+        .catch((err)=>{toast.warn("There were issues connecting to the server. Please check your connection.")});
 
-    //load default info if it exists
-    fetch('http://localhost:3001/api/users/'+checkUserId())
-      .then((data) => data.json())
-      .then((res) => this.setState({
-        ...this.state,
-        firstName: res.data[0].info.firstName || '',
-        lastName: res.data[0].info.lastName || '',
-        province: res.data[0].info.province || '',
-        city: res.data[0].info.city || '',
-        street: res.data[0].info.street || '',
-        postalCode: res.data[0].info.postalCode || '',
-        phone: res.data[0].info.phone || '',
-        email: res.data[0].info.email || '',
-        companyName: res.data[0].info.companyName || '',
-        additionalInfo: res.data[0].info.additionalInfo || '',
-       }))
-      .catch((err)=>{console.log(err);});
-
+      //load default info if it exists
+      fetch('http://localhost:3001/api/users/'+checkUserId())
+        .then((data) => data.json())
+        .then((res) => this.setState({
+          ...this.state,
+          firstName: res.data[0].info.firstName || '',
+          lastName: res.data[0].info.lastName || '',
+          province: res.data[0].info.province || '',
+          city: res.data[0].info.city || '',
+          street: res.data[0].info.street || '',
+          postalCode: res.data[0].info.postalCode || '',
+          phone: res.data[0].info.phone || '',
+          email: res.data[0].info.email || '',
+          companyName: res.data[0].info.companyName || '',
+          additionalInfo: res.data[0].info.additionalInfo || '',
+         }))
+        .catch((err)=>{console.log(err);});
+    }
   }
 
     // This method is callback for Pay with card button
@@ -387,7 +388,7 @@ class Checkout extends React.Component {
                         label="Pay with 💳"
                         email={this.state.email}
                         amount={this.state.total * 100}
-                        disabled={!this.isValidForm()}
+                        disabled={!this.isValidForm() || this.state.services.length < 1}
                         stripeKey={STRIPE_KEY}
                         token={this.onToken}
                         zipcode />
