@@ -2,10 +2,11 @@
 import DefaultLayout from '../layouts/default';
 import { isValidEmail, isValidPassword, isEmptyString } from '../functions/validate';
 import { ToastContainer, toast } from 'react-toastify';
-import '../node_modules/react-toastify/dist/ReactToastify.css'; 
+import '../node_modules/react-toastify/dist/ReactToastify.css';
 import Router from 'next/router';
 import axios from 'axios';
-const CryptoJS = require("crypto-js")
+import ls, { get } from "local-storage";
+const CryptoJS = require("crypto-js");
 
 
 import Link from 'next/link';
@@ -26,62 +27,47 @@ class Register extends React.Component {
 
   //handling the submit event and routing to the landing page if valid
  async handleSubmit(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      //validating to esnure form is populated with username and password and valid email is supplied
-      if(this.state.username.length > 0 && this.state.password.length > 0 && isValidEmail(this.state.email)) {
-       
-      
-      this.setState({ validForm: true });
-      
-      //encrypting user password before sending via the network
-      const encryptedPass = CryptoJS.AES.encrypt(this.state.password, 'quick Oats');
-      
-  
+    e.preventDefault();
+    e.stopPropagation();
+    //validating to esnure form is populated with username and password and valid email is supplied
+    if(this.state.username.length > 0 && this.state.password.length > 0 && isValidEmail(this.state.email)) {
+    this.setState({ validForm: true });
+    //encrypting user password before sending via the network
+    const encryptedPass = CryptoJS.AES.encrypt(this.state.password, 'quick Oats');
+    try {
+      const res = await axios.post('http://localhost:3001/api/users', {
+         "role": "customer",
+         "username": this.state.username,
+         "email": this.state.email,
+         "password": encryptedPass.toString()
+      });
 
-
-      try {
-            const res = await axios.post('http://localhost:3001/api/users', 
-         {
-           "role": "customer",
-           "username": this.state.username,
-           "email": this.state.email,
-           "password": encryptedPass.toString()
-           
-        });
-
-
-        //successful account creation, redirects to the home page
-        if(res.data.success) 
-        {
-          toast.success("Account created!");
-          Router.push('/');
-        }
-
-        //if email provided by user already exists in repository
-       else if(!res.data.success) 
-        {
-          toast.warn("Account already Exist!");
-        }
-
-        else {
-          toast.warn("There were issues connecting to Database.");
-          console.log(res.data)
-             }
+      //successful account creation, redirects to the home page
+      if(res.data.success) {
+        const bookit = { "username": this.state.username, 'role': res.data.data.role, 'id': res.data.data._id };
+        ls.set('bookit', bookit);
+        toast.success("Account created!");
+        Router.push('/');
       }
 
-  
-
-  catch(err) {
-    toast.warn("Problem connecting to DB.");
-    console.log(err);
-  }
-
+      //if email provided by user already exists in repository
+      else if(!res.data.success) {
+        toast.warn("Account already Exist!");
+      }
+      else {
+        toast.warn("There were issues connecting to Database.");
+        console.log(res.data);
+      }
+    }
+    catch(err) {
+      toast.warn("Problem connecting to DB.");
+      console.log(err);
+    }
   }
 
 }
 
-  
+
 
 
 
@@ -181,7 +167,7 @@ class Register extends React.Component {
           </Form>
 
 
-         
+
         </div>
         <ToastContainer autoClose={5000}/>
       </DefaultLayout>

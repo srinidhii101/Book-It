@@ -70,11 +70,11 @@ class UsersModel {
 
       }
       //saving a new user after validation has been successfully performed
-      user.save((err) => {
+      user.save((err, data) => {
         if (err) {
            return res.json({ success: false, error: err });
         }
-        return res.json({ success: true, message: "Account created" });
+        return res.json({ success: true, message: "Account created", data: data });
       });
     });
   }
@@ -89,7 +89,8 @@ class UsersModel {
 
   // Method to update the payment details of a user
   updateUserPaymentDetails(request, response, db) {
-    Users.updateOne({
+    var usersCollection = db.collection('users');
+    usersCollection.updateOne({
       _id: new ObjectID(request.params.id)
     }, {
       $set: {
@@ -105,7 +106,7 @@ class UsersModel {
           phone: request.body.phone,
           email: request.body.email,
           additionalInfo: request.body.additionalInfo,
-          totalAmount: request.body.total,
+          totalAmount: request.body.total
         },
         bookings: request.body.bookings
       }
@@ -113,8 +114,30 @@ class UsersModel {
       upsert: true
     });
 
+    // console.log(request.body);
+    // Users.update({_id: new ObjectID(request.params.id)}, {
+    //   $set: {
+    //     "info": {
+    //       "firstName": request.body.firstName,
+    //       "lastName": request.body.lastName,
+    //       "companyName": request.body.companyName,
+    //       "country": "Canada",
+    //       "province": request.body.province,
+    //       "city": request.body.city,
+    //       "street": request.body.street,
+    //       "postalCode": request.body.postalCode,
+    //       "phone": request.body.phone,
+    //       "email": request.body.email,
+    //       "additionalInfo": request.body.additionalInfo,
+    //       "totalAmount": request.body.total,
+    //     },
+    //     "bookings": request.body.bookings
+    //   }
+    // }, {
+    //   upsert: true
+    // });
+
     //update all lastBooked and numberOfBookings ******************
-    Services.
 
     // Start code for receipt generation
     // Reference: https://www.npmjs.com/package/receipt

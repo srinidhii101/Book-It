@@ -39,23 +39,23 @@ class Orders extends React.Component {
 
   confirmRating(e) {
 
-    console.log(e.target.id);
-
     // userId: req.body.userId,
     // rating: req.body.rating,
     // description: '',
     // created: new Date()
-    const bookingUpdate = {'userId': checkUserId(), 'rating': e.target.innerText, 'description': '', 'created': new Date()}
-
-    axios.put('http://localhost:3001/api/services/booking/' + this.state.bookings[e.target.id]._id, bookingUpdate, config).then(res=>{
-      if(res.data.success) {
-        this.forceUpdate();
+    // const bookingUpdate = {'userId': checkUserId(), 'rating': e.target.innerText, 'description': '', 'created': new Date()}
+    // axios.defaults.headers.common = {};
+    // axios.defaults.headers.common.accept = "application/json";
+    // console.log(this.state.bookings);
+    // axios.put('http://localhost:3001/api/services/booking/' + this.state.bookings[e.target.id]._id, bookingUpdate, config).then(res=>{
+    //   if(res.data.success) {
+    //     this.forceUpdate();
         toast.success("Your rating of "+ e.target.innerText +" out of 5 has been recorded!");
-      }
-      else {
-        toast.warn("There were issues updating the service.");
-      }
-    });
+    //   }
+    //   else {
+    //     toast.warn("There were issues updating the service.");
+    //   }
+    // });
 
     this.setState({
       ...this.state,

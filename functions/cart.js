@@ -10,7 +10,6 @@ export function addToCart(id) {
   ls('bookit-cart', cart);
 }
 
-
 export function getCartList() {
   if(!ls.get('bookit-cart')) {
     ls('bookit-cart', []);

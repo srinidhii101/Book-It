@@ -44,34 +44,32 @@ class Checkout extends React.Component {
   componentDidMount() {
     //getting the order obj
     // if(getCartList.length > 0) {
-      fetch('http://localhost:3001/api/services/list/'+getCartList().map(x=>x.id))
-        .then((data) => data.json())
-        .then((res) => this.setState({ ...this.state, services: res.data }))
-        .then(()=> {
-          let total = 0;
-          this.state.services.map(x=>{total += x.price * 1.15});
-          this.setState({ ...this.state, total: total });
-        })
-        .catch((err)=>{toast.warn("There were issues connecting to the server. Please check your connection.")});
+    fetch('http://localhost:3001/api/services/list/'+getCartList().map(x=>x.id))
+      .then((data) => data.json())
+      .then((res) => this.setState({ ...this.state, services: res.data }))
+      .then(()=> {
+        let total = 0;
+        this.state.services.map(x=>{total += x.price * 1.15});
+        this.setState({ ...this.state, total: total });
+      })
+      .catch((err)=>{toast.warn("There were issues connecting to the server. Please check your connection.")});
 
-      //load default info if it exists
-      fetch('http://localhost:3001/api/users/'+checkUserId())
-        .then((data) => data.json())
-        .then((res) => this.setState({
-          ...this.state,
-          firstName: res.data[0].info.firstName || '',
-          lastName: res.data[0].info.lastName || '',
-          province: res.data[0].info.province || '',
-          city: res.data[0].info.city || '',
-          street: res.data[0].info.street || '',
-          postalCode: res.data[0].info.postalCode || '',
-          phone: res.data[0].info.phone || '',
-          email: res.data[0].info.email || '',
-          companyName: res.data[0].info.companyName || '',
-          additionalInfo: res.data[0].info.additionalInfo || '',
-         }))
-        .catch((err)=>{console.log(err);});
-    // }
+    //load default info if it exists
+    fetch('http://localhost:3001/api/users/'+checkUserId())
+      .then((data) => data.json())
+      .then((res) => this.setState({
+        ...this.state,
+        firstName: res.data[0].info ? res.data[0].info.firstName : '',
+        lastName: res.data[0].info ? res.data[0].info.lastName : '',
+        province: res.data[0].info ? res.data[0].info.province : '',
+        city: res.data[0].info ? res.data[0].info.city : '',
+        street: res.data[0].info ? res.data[0].info.street : '',
+        postalCode: res.data[0].info ? res.data[0].info.postalCode : '',
+        phone: res.data[0].info ? res.data[0].info.phone : '',
+        email: res.data[0].info ? res.data[0].info.email : '',
+        companyName: res.data[0].info ? res.data[0].info.companyName : '',
+        additionalInfo: res.data[0].info ? res.data[0].info.additionalInfo : ''
+       })).catch((err)=>{console.log(err)});
   }
 
     // This method is callback for Pay with card button
@@ -79,6 +77,8 @@ class Checkout extends React.Component {
       let orderedServices = [];
       this.state.services.map(x=> orderedServices.push({'name': x.name, 'description': x.description, 'price': x.price, 'created': Date.now()}));
       try {
+        console.log(this.state);
+        console.log(orderedServices);
         axios.put('http://localhost:3001/api/payment/' + checkUserId(), {
           "firstName": this.state.firstName,
           "lastName": this.state.lastName,
@@ -92,24 +92,24 @@ class Checkout extends React.Component {
           "additionalInfo": this.state.additionalInfo,
           "total": this.state.total,
           "bookings": orderedServices
-        });
+        })
       } catch (exception) {
         paymentSuccess = false;
       }
       if (paymentSuccess) {
         toast.success("Thank you! A receipt has been emailed to your address.");
+        setTimeout(function () {
+          Router.push('/orders');
+        }, 3000);
       } else {
         toast.error("The payment service is down, please try again!");
       }
 
       // Start for reloading the page when payment is successful
       // Reference: https://guide.freecodecamp.org/javascript/location-reload-method/
-      setTimeout(function () {
-        Router.push('/');
-      }, 3000);
       // End for reloading the page when payment is successful
 
-    };
+  };
 
   handleFirstNameChange = (e) => {
     this.setState({ ...this.state, firstName: e.currentTarget.value})
