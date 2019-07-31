@@ -27,7 +27,7 @@ class Cart extends React.Component {
 
   componentDidMount() {
     if(getCartList().length > 0) {
-      fetch('http://localhost:3001/api/services/list/'+getCartList().map(x=>x.id))
+      fetch('http://http://bluenose.cs.dal.ca:25057/api/services/list/'+getCartList().map(x=>x.id))
         .then((data) => data.json())
         .then((res) => this.setState({ services: res.data, searchResults: res.data }))
         .then(()=> this.loadService(0))
@@ -88,8 +88,9 @@ class Cart extends React.Component {
     e.preventDefault();
     e.stopPropagation();
     removeFromCart(this.state.serviceIndex);
-
+    console.log(this.state);
     if(this.state.services.length > 1) {
+      console.log(this.state.serviceIndex);
       this.state.services.splice(this.state.serviceIndex, 1),
       this.setState({
         ...this.state,

@@ -25,7 +25,7 @@ class Browse extends React.Component {
   }
 
   componentDidMount() {
-    fetch('http://localhost:3001/api/services')
+    fetch('http://http://bluenose.cs.dal.ca:25057/api/services')
       .then((data) => data.json())
       .then((res) => this.setState({ services: res.data, searchResults: res.data }))
       .then(() => this.loadService(0))

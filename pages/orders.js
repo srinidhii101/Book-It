@@ -22,7 +22,7 @@ class Orders extends React.Component {
   componentDidMount() {
 
     //load default info if it exists
-    fetch('http://localhost:3001/api/users/'+checkUserId()+'/bookings')
+    fetch('http://http://bluenose.cs.dal.ca:25057/api/users/'+checkUserId()+'/bookings')
       .then((data) => data.json())
       .then((res) => this.setState({
         ...this.state,
@@ -47,7 +47,7 @@ class Orders extends React.Component {
     // axios.defaults.headers.common = {};
     // axios.defaults.headers.common.accept = "application/json";
     // console.log(this.state.bookings);
-    // axios.put('http://localhost:3001/api/services/booking/' + this.state.bookings[e.target.id]._id, bookingUpdate, config).then(res=>{
+    // axios.put('http://http://bluenose.cs.dal.ca:25057/api/services/booking/' + this.state.bookings[e.target.id]._id, bookingUpdate, config).then(res=>{
     //   if(res.data.success) {
     //     this.forceUpdate();
         toast.success("Your rating of "+ e.target.innerText +" out of 5 has been recorded!");

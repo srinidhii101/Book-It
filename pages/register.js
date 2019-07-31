@@ -35,7 +35,7 @@ class Register extends React.Component {
     //encrypting user password before sending via the network
     const encryptedPass = CryptoJS.AES.encrypt(this.state.password, 'quick Oats');
     try {
-      const res = await axios.post('http://localhost:3001/api/users', {
+      const res = await axios.post('http://http://bluenose.cs.dal.ca:25057/api/users', {
          "role": "customer",
          "username": this.state.username,
          "email": this.state.email,

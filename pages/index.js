@@ -20,7 +20,7 @@ class Index extends React.Component {
   }
 
   componentDidMount() {
-    fetch('http://localhost:3001/api/services/stats')
+    fetch('http://http://bluenose.cs.dal.ca:25057/api/services/stats')
       .then((data) => data.json())
       .then((res) => {
         let recentlyCreated = [];

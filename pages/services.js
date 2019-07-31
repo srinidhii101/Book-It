@@ -50,7 +50,7 @@ class Login extends React.Component {
     if(checkRole(['admin', 'vendor'])) {
       Router.push('/login');
     } else {
-      fetch('http://localhost:3001/api/users/'+ checkUserId() +'/services')
+      fetch('http://http://bluenose.cs.dal.ca:25057/api/users/'+ checkUserId() +'/services')
         .then((data) => data.json())
         .then((res) => this.setState({ services: res.data, searchResults: res.data }))
         .then(() => this.loadService(0))
@@ -141,7 +141,7 @@ class Login extends React.Component {
         serviceUpdate.price = this.state.servicePrice;
         serviceUpdate.description = this.state.serviceDescription;
         const config = { headers: {'Content-Type': 'application/json'} };
-        axios.put('http://localhost:3001/api/services/' + this.state.services[this.state.serviceIndex]._id, serviceUpdate, config).then(res=>{
+        axios.put('http://http://bluenose.cs.dal.ca:25057/api/services/' + this.state.services[this.state.serviceIndex]._id, serviceUpdate, config).then(res=>{
           if(res.data.success) {
             this.forceUpdate();
             toast.success("The service has been successfully updated!");
@@ -177,7 +177,7 @@ class Login extends React.Component {
           "cloud_name": this.state.uploadedFile ? this.state.uploadedFile.path : '',
           "cloud_url": this.state.uploadedFileCloudinaryUrl ? this.state.uploadedFileCloudinaryUrl : ''
         }
-        const res = await axios.post('http://localhost:3001/api/services', service);
+        const res = await axios.post('http://http://bluenose.cs.dal.ca:25057/api/services', service);
         if(res.data.success) {
           toast.success("The service has been added!");
           this.state.services.push(res.data.service);
@@ -224,7 +224,7 @@ class Login extends React.Component {
     e.stopPropagation();
     if(this.state.services[this.state.serviceIndex]._id){
       const index = this.state.serviceIndex;
-      axios.delete('http://localhost:3001/api/services/' + checkUserId() + '/' + this.state.services[index]._id).then(response => {
+      axios.delete('http://http://bluenose.cs.dal.ca:25057/api/services/' + checkUserId() + '/' + this.state.services[index]._id).then(response => {
         this.state.services.splice(index, 1);
         this.setState({
           ...this.state,

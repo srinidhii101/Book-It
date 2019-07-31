@@ -42,7 +42,7 @@ class Admin extends React.Component {
     if(checkRole(['admin'])) {
       Router.push('/login');
     } else {
-      fetch('http://localhost:3001/api/users/')
+      fetch('http://http://bluenose.cs.dal.ca:25057/api/users/')
         .then((data) => data.json())
         .then((res) => this.setState({ users: res.data, searchResults: res.data  }))
         .then(() => this.loadFirstUser())
@@ -57,7 +57,7 @@ class Admin extends React.Component {
       let userUpdate = this.state.users[this.state.userIndex];
       userUpdate.role = this.state.role;
       const config = { headers: {'Content-Type': 'application/json'} };
-      axios.put('http://localhost:3001/api/users/' + this.state.users[this.state.userIndex]._id, userUpdate, config).then(res=>{
+      axios.put('http://http://bluenose.cs.dal.ca:25057/api/users/' + this.state.users[this.state.userIndex]._id, userUpdate, config).then(res=>{
         if(res.data.success) {
           this.forceUpdate();
           toast.success("The user has been successfully updated!");
