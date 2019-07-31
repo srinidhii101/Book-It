@@ -44,7 +44,7 @@ class Checkout extends React.Component {
   componentDidMount() {
     //getting the order obj
     // if(getCartList.length > 0) {
-    fetch('http://http://bluenose.cs.dal.ca:25057/api/services/list/'+getCartList().map(x=>x.id))
+    fetch('http://bluenose.cs.dal.ca:25057/api/services/list/'+getCartList().map(x=>x.id))
       .then((data) => data.json())
       .then((res) => this.setState({ ...this.state, services: res.data }))
       .then(()=> {
@@ -55,7 +55,7 @@ class Checkout extends React.Component {
       .catch((err)=>{toast.warn("There were issues connecting to the server. Please check your connection.")});
 
     //load default info if it exists
-    fetch('http://http://bluenose.cs.dal.ca:25057/api/users/'+checkUserId())
+    fetch('http://bluenose.cs.dal.ca:25057/api/users/'+checkUserId())
       .then((data) => data.json())
       .then((res) => this.setState({
         ...this.state,
@@ -79,7 +79,7 @@ class Checkout extends React.Component {
       try {
         console.log(this.state);
         console.log(orderedServices);
-        axios.put('http://http://bluenose.cs.dal.ca:25057/api/payment/' + checkUserId(), {
+        axios.put('http://bluenose.cs.dal.ca:25057/api/payment/' + checkUserId(), {
           "firstName": this.state.firstName,
           "lastName": this.state.lastName,
           "companyName": this.state.companyName,

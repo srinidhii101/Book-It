@@ -27,7 +27,7 @@ class Cart extends React.Component {
 
   componentDidMount() {
     if(getCartList().length > 0) {
-      fetch('http://http://bluenose.cs.dal.ca:25057/api/services/list/'+getCartList().map(x=>x.id))
+      fetch('http://bluenose.cs.dal.ca:25057/api/services/list/'+getCartList().map(x=>x.id))
         .then((data) => data.json())
         .then((res) => this.setState({ services: res.data, searchResults: res.data }))
         .then(()=> this.loadService(0))
