@@ -43,15 +43,32 @@ router.get('/users/:_id', (req, res) => {
   return UsersController.getUser(req, res);
 })
 
+//fetch user by id
+router.get('/users/:_id/bookings', (req, res) => {
+  if(typeof req.params.id === String) {
+    req.params.id = mongoose.Types.ObjectId(req.params.id);
+  }
+  return UsersController.getUserBookings(req, res);
+})
+
 //fetch user services by user id
 router.get('/users/:_id/services', (req, res) => {
   return UsersController.getUserServices(req, res);
 });
 
-//fetch all users
+//fetch all services
 router.get('/services', (req, res) => {
   return ServiceController.getServices(req, res);
 });
+
+//fetch all services in list
+router.get('/services/list/:list', (req, res) => {
+  return ServiceController.getServicesList(req, res);
+});
+
+router.get('/services/stats', (req, res) => {
+  return ServiceController.getServiceStats(req, res);
+})
 
 
 //user login
@@ -67,6 +84,11 @@ router.post('/users', (req, res) => {
 //update user
 router.put('/users/:_id', (req, res) => {
   return UsersController.updateUser(req, res);
+});
+
+//update user booking
+router.put('/services/booking/:_id', (req, res) => {
+  return ServiceController.createServiceRating(req, res);
 });
 
 //add service

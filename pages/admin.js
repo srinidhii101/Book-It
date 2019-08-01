@@ -20,8 +20,21 @@ class Admin extends React.Component {
       users: [],
       userIndex: 0,
       role: "customer",
-      email: ""
+      email: "",
+      searchResults: [],
+      searchInput: ""
     };
+  }
+
+  // Search input changed
+  handleSearchInputChange(e) {
+    if(e.currentTarget.value.length > 0) {
+      let results= this.state.searchResults.filter(users => users.email.toLowerCase().includes(e.currentTarget.value.toLowerCase()));
+      this.setState({ ...this.state, "searchInput": e.currentTarget.value, "searchResults": results })
+    }
+    else {
+      this.setState({...this.state, "searchInput": '', "searchResults": this.state.users});
+    }
   }
 
   //when the component mounts, redirecting if the user does not possess the correct permissions.
@@ -29,9 +42,9 @@ class Admin extends React.Component {
     if(checkRole(['admin'])) {
       Router.push('/login');
     } else {
-      fetch('http://localhost:3001/api/users/')
+      fetch('http://bluenose.cs.dal.ca:25057/api/users/')
         .then((data) => data.json())
-        .then((res) => this.setState({ users: res.data }))
+        .then((res) => this.setState({ users: res.data, searchResults: res.data  }))
         .then(() => this.loadFirstUser())
         .catch((err)=>{toast.warn("There were issues connecting to the server. Please check your connection.")});
     }
@@ -44,7 +57,7 @@ class Admin extends React.Component {
       let userUpdate = this.state.users[this.state.userIndex];
       userUpdate.role = this.state.role;
       const config = { headers: {'Content-Type': 'application/json'} };
-      axios.put('http://localhost:3001/api/users/' + this.state.users[this.state.userIndex]._id, userUpdate, config).then(res=>{
+      axios.put('http://bluenose.cs.dal.ca:25057/api/users/' + this.state.users[this.state.userIndex]._id, userUpdate, config).then(res=>{
         if(res.data.success) {
           this.forceUpdate();
           toast.success("The user has been successfully updated!");
@@ -115,7 +128,9 @@ class Admin extends React.Component {
               <Container>
                 <Row>
                   <Col>
-                     <Input type="search" className="mt-1" placeholder="Search user here..." />
+                     <Input type="search" className="mt-1" placeholder="Search user here..."
+                     autoFocus className="mt-1"
+                    onChange={this.handleSearchInputChange.bind(this)}/>
                   </Col>
                 </Row>
                 <hr/>
@@ -124,8 +139,8 @@ class Admin extends React.Component {
                     <label className="text-muted">Results:</label>
                     {/* Emulating an overflowing list of users */}
                     <ListGroup className="searchResultList mb-8">
-                    {this.state.users &&
-                        this.state.users.map((user, index) => {
+                    {this.state.searchResults &&
+                        this.state.searchResults.map((user, index) => {
                           return (
                             <ListGroupItem
                               action
@@ -152,12 +167,11 @@ class Admin extends React.Component {
               <Form
               name="editServiceForm">
 
-                <Container className="mt-8">
+                <Container>
                   <Row>
-                    <Col lg={12} xl={8}>
+                    {/*}<Col lg={12} xl={8}>
                       <h3>Admin Panel</h3>
                       <Label className="text-muted">Manage User Orders:</Label>
-                      {/* Service name and service picture */}
                       <Table bordered responsive hover className="">
                         <thead>
                           <tr>
@@ -217,7 +231,7 @@ class Admin extends React.Component {
                           </tr>
                         </tbody>
                       </Table>
-                    </Col>
+                    </Col> */}
 
                     <Col lg={12} xl={4}>
                       {/* Price of Service */}

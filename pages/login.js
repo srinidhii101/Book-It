@@ -32,7 +32,7 @@ class Login extends React.Component {
       //encrypting user password before sending via the network
       var encryptedPass = CryptoJS.AES.encrypt(this.state.password, 'quick Oats');
       try {
-        const res = await axios.post('http://localhost:3001/api/login', {
+        const res = await axios.post('http://bluenose.cs.dal.ca:25057/api/login', {
           "username": this.state.username,
           "password": encryptedPass.toString()
         });
