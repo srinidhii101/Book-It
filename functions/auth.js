@@ -10,13 +10,15 @@ export function checkRole(allowedRoles) {
       }
     }
   });
-
   return redirectFlag;
 }
 
 export function checkUserId() {
   const bookit = ls.get('bookit');
-  return bookit.id;
+  if(bookit) {
+    return bookit.id;
+  }
+  return null;
 }
 
 export function isLoggedIn() {
@@ -26,4 +28,5 @@ export function isLoggedIn() {
 
 export function logout() {
   ls.remove('bookit');
+  ls.remove('bookit-cart');
 }

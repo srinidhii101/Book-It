@@ -10,6 +10,24 @@ class ServicesModel {
     });
   }
 
+  getServicesList(req, res) {
+    Services.find({'_id': { $in: req.params.list.split(',') }}, (err, data)=>{
+      if (err) return res.json({ success: false, error: err });
+      return res.json({ success: true, data: data});
+    });
+  }
+
+  getServiceStats(req, res) {
+    Promise.all([
+      Services.find().sort({ createdAt: -1 }).select('name').limit(3),
+      Services.find().sort('-lastBooked').select('name').limit(3),
+      Services.find().sort('-numberOfBookings').select('name').limit(3)
+    ]).then((result, err) => {
+      if(err) return res.json({ success: false, error: err });
+      res.json({'recent': result[0],'last': result[1], 'popular': result[2]});
+    });
+  }
+
   createService(req, res) {
     //creating instance and setting variables for the new service
     let service = new Services();
@@ -32,6 +50,22 @@ class ServicesModel {
         return res.json({ success: true, service: service });
       });
     });
+  }
+
+  createServiceRating(req, res) {
+    // Services.findOne(req.params.id, (error, response) => {
+    //   if (error) return res.json({ success: false, error: error });
+    //   response.reviews.push({
+    //     userId: req.body.userId,
+    //     rating: req.body.rating,
+    //     description: '',
+    //     created: new Date()
+    //   });
+    //   Services.findByIdAndUpdate(req.params.id, response, (err) => {
+    //     if (err) return res.json({ success: false, error: err });
+    //     return res.json({ success: true });
+    //   });
+    // })
   }
 
   deleteService(req, res) {

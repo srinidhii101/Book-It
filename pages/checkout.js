@@ -9,36 +9,77 @@ import axios from 'axios';
 import { checkUserId } from '../functions/auth';
 import { ToastContainer,toast } from 'react-toastify';
 import '../node_modules/react-toastify/dist/ReactToastify.css';
+import { getCartList, emptyCart } from '../functions/cart';
+import Router from 'next/router';
 
 var paymentSuccess = true;
 const STRIPE_KEY = process.env.STRIPE_KEY;
 
 class Checkout extends React.Component {
   /* If you need to track variables, put them here in state */
-   constructor(props) {
-     super(props);
-     this.toggle = this.toggle.bind(this);
-     this.handleFirstNameChange=this.handleFirstNameChange.bind(this);
-     this.state = {
+  constructor(props) {
+    super(props);
+
+    this.state = {
       isOpen: false,
       dropdownOpen: false,
+      services: [],
       firstName: '',
-      lastName:'',
-      province:'',
-      city:'',
-      street:'',
-      postalCode:'',
-      phone:'',
-      email:'',
-      companyName:'',
-      additionalInfo:''
+      lastName: '',
+      province: '',
+      city: '',
+      street: '',
+      postalCode: '',
+      phone: '',
+      email: '',
+      companyName: '',
+      additionalInfo: '',
+      total: 0
     };
-   }
+
+    this.toggle = this.toggle.bind(this);
+    this.handleFirstNameChange=this.handleFirstNameChange.bind(this);
+  }
+
+  componentDidMount() {
+    //getting the order obj
+    // if(getCartList.length > 0) {
+    fetch('http://bluenose.cs.dal.ca:25057/api/services/list/'+getCartList().map(x=>x.id))
+      .then((data) => data.json())
+      .then((res) => this.setState({ ...this.state, services: res.data }))
+      .then(()=> {
+        let total = 0;
+        this.state.services.map(x=>{total += x.price * 1.15});
+        this.setState({ ...this.state, total: total });
+      })
+      .catch((err)=>{toast.warn("There were issues connecting to the server. Please check your connection.")});
+
+    //load default info if it exists
+    fetch('http://bluenose.cs.dal.ca:25057/api/users/'+checkUserId())
+      .then((data) => data.json())
+      .then((res) => this.setState({
+        ...this.state,
+        firstName: res.data[0].info ? res.data[0].info.firstName : '',
+        lastName: res.data[0].info ? res.data[0].info.lastName : '',
+        province: res.data[0].info ? res.data[0].info.province : '',
+        city: res.data[0].info ? res.data[0].info.city : '',
+        street: res.data[0].info ? res.data[0].info.street : '',
+        postalCode: res.data[0].info ? res.data[0].info.postalCode : '',
+        phone: res.data[0].info ? res.data[0].info.phone : '',
+        email: res.data[0].info ? res.data[0].info.email : '',
+        companyName: res.data[0].info ? res.data[0].info.companyName : '',
+        additionalInfo: res.data[0].info ? res.data[0].info.additionalInfo : ''
+       })).catch((err)=>{console.log(err)});
+  }
 
     // This method is callback for Pay with card button
     onToken = (token, addresses) => {
+      let orderedServices = [];
+      this.state.services.map(x=> orderedServices.push({'name': x.name, 'description': x.description, 'price': x.price, 'created': Date.now()}));
       try {
-        axios.put('http://localhost:3001/api/payment/' + checkUserId(), {
+        console.log(this.state);
+        console.log(orderedServices);
+        axios.put('http://bluenose.cs.dal.ca:25057/api/payment/' + checkUserId(), {
           "firstName": this.state.firstName,
           "lastName": this.state.lastName,
           "companyName": this.state.companyName,
@@ -48,25 +89,27 @@ class Checkout extends React.Component {
           "postalCode": this.state.postalCode,
           "phone": this.state.phone,
           "email": this.state.email,
-          "additionalInfo": this.state.additionalInfo
-        });
+          "additionalInfo": this.state.additionalInfo,
+          "total": this.state.total,
+          "bookings": orderedServices
+        })
       } catch (exception) {
         paymentSuccess = false;
       }
       if (paymentSuccess) {
         toast.success("Thank you! A receipt has been emailed to your address.");
+        setTimeout(function () {
+          Router.push('/orders');
+        }, 3000);
       } else {
         toast.error("The payment service is down, please try again!");
       }
 
       // Start for reloading the page when payment is successful
       // Reference: https://guide.freecodecamp.org/javascript/location-reload-method/
-      setTimeout(function () {
-        window.location.reload();
-      }, 3000);
       // End for reloading the page when payment is successful
 
-    };
+  };
 
   handleFirstNameChange = (e) => {
     this.setState({ ...this.state, firstName: e.currentTarget.value})
@@ -132,9 +175,13 @@ class Checkout extends React.Component {
                 <Col className="pb-16">
                   <Label className="text-muted">Cart Details:</Label>
                   <ListGroup className="searchResultList mb-8">
-                    <ListGroupItem action active>20$ - Haircut</ListGroupItem>
-                    <ListGroupItem action>100$ - Gym</ListGroupItem>
-                    <ListGroupItem action>100$ - Tutor</ListGroupItem>
+                    {this.state.services &&
+                      this.state.services.map((service, index)=> {
+                        return (
+                          <ListGroupItem action key={index}><span className="text-primary">${service.price}</span> {service.name}</ListGroupItem>
+                        );
+                      })
+                    }
                   </ListGroup>
                 </Col>
               </Row>
@@ -154,6 +201,7 @@ class Checkout extends React.Component {
                         placeholder="Enter your first name"
                         required
                         autoFocus
+                        defaultValue={this.state.firstName}
                         valid={!isEmptyString(this.state.firstName)}
                         invalid={isEmptyString(this.state.firstName)}
                         onChange={this.handleFirstNameChange}/>
@@ -170,6 +218,7 @@ class Checkout extends React.Component {
                         type="text"
                         placeholder="Enter your last name"
                         required
+                        defaultValue={this.state.lastName}
                         valid={!isEmptyString(this.state.lastName)}
                         invalid={isEmptyString(this.state.lastName)}
                         onChange={this.handleLastNameChange} />
@@ -187,6 +236,7 @@ class Checkout extends React.Component {
                       <Input
                         type="text"
                         placeholder="Enter your company name"
+                        defaultValue={this.state.companyName}
                         onChange={this.handleCompanyNameChange} />
                     </FormGroup>
                   </Col>
@@ -213,6 +263,7 @@ class Checkout extends React.Component {
                         type="text"
                         placeholder="Enter Province"
                         required
+                        defaultValue={this.state.province}
                         valid={!isEmptyString(this.state.province)}
                         invalid={isEmptyString(this.state.province)}
                         onChange={this.handleProvinceChange} />
@@ -229,6 +280,7 @@ class Checkout extends React.Component {
                         type="text"
                         placeholder="Enter town name"
                         required
+                        defaultValue={this.state.city}
                         valid={!isEmptyString(this.state.city)}
                         invalid={isEmptyString(this.state.city)}
                         onChange={this.handleCityChange} />
@@ -247,6 +299,7 @@ class Checkout extends React.Component {
                         type="text"
                         placeholder="Enter street name"
                         required
+                        defaultValue={this.state.street}
                         valid={!isEmptyString(this.state.street)}
                         invalid={isEmptyString(this.state.street)}
                         onChange={this.handleStreetChange}/>
@@ -265,6 +318,7 @@ class Checkout extends React.Component {
                         type="text"
                         placeholder="Enter your postal code"
                         required
+                        defaultValue={this.state.postalCode}
                         valid={isPostalCodeValid(this.state.postalCode)}
                         invalid={!isPostalCodeValid(this.state.postalCode)}
                         onChange={this.handlePostalCodeChange} />
@@ -279,6 +333,7 @@ class Checkout extends React.Component {
                       <Label>Phone Number:</Label>
                       <Input
                         type="text"
+                        defaultValue={this.state.phone}
                         placeholder="Enter your phone number"
                         required
                         valid={isValidPhone(this.state.phone)}
@@ -303,6 +358,7 @@ class Checkout extends React.Component {
                         type="email"
                         required
                         placeholder="example@bookit.com"
+                        defaultValue={this.state.email}
                         valid={isValidEmail(this.state.email)}
                         invalid={!isValidEmail(this.state.email)}
                         onChange={this.handleEmailChange} />
@@ -317,20 +373,22 @@ class Checkout extends React.Component {
                   <Col md={12}>
                     <FormGroup>
                       <Label>Additional Information:</Label>
-                      <Input type="textarea"
-                      onChange={this.handleAdditionalInfoChange}/>
+                      <Input
+                        type="textarea"
+                        value={this.state.additionalInfo}
+                        onChange={this.handleAdditionalInfoChange}/>
                     </FormGroup>
 
                     <FormGroup className="checkoutTotalGroup">
                       <Label>Your Total:</Label><br/>
-                      <h1 id="totalAmount">$220</h1>
+                      <h1 id="totalAmount">${this.state.total}</h1>
                       <StripeCheckout
                         name="Book it"
                         description="Thanks for supporting Local!"
                         label="Pay with 💳"
                         email={this.state.email}
-                        amount={22000}
-                        disabled={!this.isValidForm()}
+                        amount={this.state.total * 100}
+                        disabled={!this.isValidForm() || this.state.services.length < 1}
                         stripeKey={STRIPE_KEY}
                         token={this.onToken}
                         zipcode />
